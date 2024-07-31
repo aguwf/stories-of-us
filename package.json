@@ -1,0 +1,102 @@
+{
+  "name": "stories-of-us",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun run db:migrate && next build",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio",
+    "dev": "next dev",
+    "lint": "next lint",
+    "start": "next start",
+    "predev": "rimraf .next",
+    "prebuild": "rimraf .next",
+    "build-stats": "cross-env ANALYZE=true bun run build",
+    "clean": "rimraf .next .swc out coverage",
+    "format": "next lint --fix && prettier '**/*.{json,yaml}' --write --ignore-path .gitignore",
+    "check-types": "tsc --noEmit --pretty",
+    "commit": "cz",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@ant-design/nextjs-registry": "^1.0.0",
+    "@auth/drizzle-adapter": "^1.4.2",
+    "@clerk/nextjs": "^5.2.8",
+    "@nextui-org/react": "^2.4.6",
+    "@t3-oss/env-nextjs": "^0.10.1",
+    "@tanstack/react-query": "^5.51.15",
+    "@trpc/client": "^11.0.0-rc.467",
+    "@trpc/react-query": "^11.0.0-rc.467",
+    "@trpc/server": "^11.0.0-rc.467",
+    "antd": "^5.19.3",
+    "autoprefixer": "^10.4.19",
+    "drizzle-orm": "^0.30.10",
+    "framer-motion": "^11.3.19",
+    "geist": "^1.3.1",
+    "hugeicons-react": "^0.3.0",
+    "imagekit": "^5.0.1",
+    "next": "^14.2.5",
+    "next-auth": "^4.24.7",
+    "next-intl": "^3.17.2",
+    "next-themes": "^0.3.0",
+    "postgres": "^3.4.4",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "server-only": "^0.0.1",
+    "styled-jsx": "^5.1.6",
+    "superjson": "^2.2.1",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@next/bundle-analyzer": "^14.2.5",
+    "@types/eslint": "^8.56.11",
+    "@types/node": "^20.14.13",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.17.0",
+    "@typescript-eslint/parser": "^7.17.0",
+    "drizzle-kit": "^0.21.4",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.5",
+    "eslint-plugin-drizzle": "^0.2.3",
+    "jiti": "^1.21.6",
+    "pino": "^9.3.2",
+    "postcss-load-config": "^6.0.1",
+    "prettier": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.6.5",
+    "tailwindcss": "^3.4.7",
+    "rimraf": "^6.0.1",
+    "ts_dependency_graph": "^2.1.1",
+    "typescript": "^5.5.4",
+    "postcss": "^8.4.39"
+  },
+  "ct3aMetadata": {
+    "initVersion": "7.36.2"
+  },
+  "release": {
+    "branches": [
+      "main"
+    ],
+    "plugins": [
+      [
+        "@semantic-release/commit-analyzer",
+        {
+          "preset": "conventionalcommits"
+        }
+      ],
+      "@semantic-release/release-notes-generator",
+      "@semantic-release/changelog",
+      [
+        "@semantic-release/npm",
+        {
+          "npmPublish": false
+        }
+      ],
+      "@semantic-release/git",
+      "@semantic-release/github"
+    ]
+  }
+}

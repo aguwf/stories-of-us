@@ -1,6 +1,7 @@
 "use client";
 
 import { api } from "@/trpc/react";
+import { handleUploadImage } from "@/utils/uploadHelper";
 import {
   Modal,
   ModalBody,
@@ -12,7 +13,6 @@ import { Button, Input, Textarea } from "@nextui-org/react";
 import type { GetProp, PopconfirmProps, UploadFile, UploadProps } from "antd";
 import { message, Popconfirm, Upload } from "antd";
 import { PlusSignIcon } from "hugeicons-react";
-import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 
 const uploadButton = (
@@ -33,9 +33,6 @@ const getBase64 = (file: FileType): Promise<string> =>
   });
 
 export default function CreateStoryModal({ isOpen, onOpenChange }: any) {
-  // const t = useTranslations("Index");
-  // const [previewOpen, setPreviewOpen] = useState(false);
-  // const [previewImage, setPreviewImage] = useState("");
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [data, setData] = useState<any>();
@@ -53,15 +50,13 @@ export default function CreateStoryModal({ isOpen, onOpenChange }: any) {
     });
   }, []);
 
-  // const handlePreview = (file: UploadFile) => {
-  //   if (!file.url && !file.preview) {
-  //     getBase64(file.originFileObj as FileType).then(
-  //       (res) => (file.preview = res),
-  //     );
-  //   }
-  //   setPreviewImage(file.url || (file.preview as string));
-  //   setPreviewOpen(true);
-  // };
+  const handlePreview = (file: UploadFile) => {
+    if (!file.url && !file.preview) {
+      getBase64(file.originFileObj as FileType).then(
+        (res) => (file.preview = res),
+      );
+    }
+  };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
     setFileList(newFileList);
@@ -72,16 +67,24 @@ export default function CreateStoryModal({ isOpen, onOpenChange }: any) {
     localStorage.setItem("data", JSON.stringify(data));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (fileList.length === 0) {
       message.error("You need to select at least one image");
       return;
     }
+    
+    const files = fileList.map((file) => file.originFileObj);
+    const images: any = await handleUploadImage(files);
 
-    const filesConverted = fileList.map(
-      (file) => file.originFileObj as FileType,
-    );
-    uploadImage.mutate({ images: filesConverted });
+    const uploadData: any = {
+      name: data.title,
+      description: data.description,
+      coverImage: images?.[0] || "",
+      images: images,
+      userId: "Thai test",
+    };
+    createStory.mutate(uploadData);
+    onOpenChange(false);
   };
 
   const createStory = api.story.create.useMutation({
@@ -90,26 +93,7 @@ export default function CreateStoryModal({ isOpen, onOpenChange }: any) {
     },
   });
 
-  const uploadImage = api.upload.uploadImage.useMutation({
-    onSuccess: (images) => {
-      const imageUrls = images.map((image) => image.url);
-      const uploadData = {
-        name: data.title,
-        description: data.description,
-        coverImage: imageUrls[0] || "",
-        images: imageUrls,
-        userId: "Thai test",
-      };
-
-      createStory.mutate(uploadData);
-
-      onOpenChange(false);
-    },
-  });
-
   const _resetModal = () => {
-    // setPreviewOpen(false);
-    // setUploadResults([]);
     setFileList([]);
     setIsUploading(false);
     setData({ title: "", description: "" });
@@ -162,6 +146,7 @@ export default function CreateStoryModal({ isOpen, onOpenChange }: any) {
                   listType="picture-card"
                   fileList={fileList}
                   onChange={handleChange}
+                  onPreview={handlePreview}
                   multiple
                 >
                   {uploadButton}

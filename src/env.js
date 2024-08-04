@@ -20,6 +20,9 @@ export const env = createEnv({
    */
   client: {
     // NEXT_PUBLIC_CLIENTVAR: z.string(),
+    NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY: z.string(),
+    NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY: z.string(),
+    NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT: z.string().url(),
   },
 
   /**
@@ -29,6 +32,12 @@ export const env = createEnv({
   runtimeEnv: {
     DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY:
+      process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
+    NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY:
+      process.env.NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY,
+    NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT:
+      process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

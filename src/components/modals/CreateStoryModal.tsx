@@ -32,22 +32,33 @@ const getBase64 = (file: FileType): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
+interface StoryData {
+  title: string;
+  description: string;
+}
+
 export default function CreateStoryModal({ isOpen, onOpenChange }: any) {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [data, setData] = useState<any>();
+  const [data, setData] = useState<StoryData>({ title: "", description: "" });
+
+  const utils = api.useUtils();
 
   useEffect(() => {
     const localData = localStorage.getItem("data");
     if (localData) {
       setData(JSON.parse(localData));
-    } else {
-      setData({ title: "", description: "" });
     }
     // Before reload browser
     window.addEventListener("beforeunload", () => {
       localStorage.removeItem("data");
     });
+
+    return () => {
+      window.removeEventListener("beforeunload", () => {
+        localStorage.removeItem("data");
+      });
+    };
   }, []);
 
   const handlePreview = (file: UploadFile) => {
@@ -72,7 +83,9 @@ export default function CreateStoryModal({ isOpen, onOpenChange }: any) {
       message.error("You need to select at least one image");
       return;
     }
-    
+
+    setIsUploading(true);
+
     const files = fileList.map((file) => file.originFileObj);
     const images: any = await handleUploadImage(files);
 
@@ -84,12 +97,16 @@ export default function CreateStoryModal({ isOpen, onOpenChange }: any) {
       userId: "Thai test",
     };
     createStory.mutate(uploadData);
-    onOpenChange(false);
   };
 
   const createStory = api.story.create.useMutation({
-    onSuccess: () => {
+    onSuccess: async () => {
+      await utils.story.invalidate();
       onOpenChange(false);
+      _resetModal();
+    },
+    onError: () => {
+      setIsUploading(false);
     },
   });
 

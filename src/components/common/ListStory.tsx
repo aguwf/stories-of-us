@@ -1,7 +1,11 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { Card } from "@nextui-org/react";
+import { Card, useDisclosure } from "@nextui-org/react";
+import DetailStoryModal from "../modals/DetailStoryModal";
+import Image from "next/image";
+import ImageK from "@/app/_components/common/ImageK";
+import { useState } from "react";
 
 interface Story {
   id: number;
@@ -13,6 +17,9 @@ interface Story {
 }
 
 export default function ListStory() {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+
   const month = new Date()
     .toLocaleString("en-US", { month: "long" })
     .slice(0, 3);
@@ -25,6 +32,7 @@ export default function ListStory() {
           <Card
             className="mt-12 flex flex-row gap-8 p-4 first:mt-0"
             key={item.id}
+            onClick={onOpen}
           >
             <div className="mx-4 flex flex-col items-center">
               <div className="font-medium text-[#9f9f9f]">{month}</div>
@@ -36,10 +44,17 @@ export default function ListStory() {
               </div>
             </div>
             <div>
-              <img
+              <ImageK
+                width={500}
+                height={300}
+                quality={80}
                 className="rounded-2xl"
-                src={item.coverImage}
+                src={item.coverImage.split("/").pop()}
                 alt={item.name}
+                onClick={() => {
+                  onOpen();
+                  setSelectedImages(item.images);
+                }}
               />
               {/* <FacebookMediaGrid images={item.images}/> */}
               <h3 className="mt-4 font-bold">{item.name}</h3>
@@ -52,6 +67,11 @@ export default function ListStory() {
           <h1 className="text-2xl">No stories found</h1>
         </div>
       )}
+      <DetailStoryModal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        images={selectedImages}
+      />
     </div>
   );
 }

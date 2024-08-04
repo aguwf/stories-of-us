@@ -18,8 +18,7 @@
     "clean": "rimraf .next .swc out coverage",
     "format": "next lint --fix && prettier '**/*.{json,yaml}' --write --ignore-path .gitignore",
     "check-types": "tsc --noEmit --pretty",
-    "commit": "cz",
-    "prepare": "husky"
+    "commit": "cz"
   },
   "dependencies": {
     "@ant-design/nextjs-registry": "^1.0.0",

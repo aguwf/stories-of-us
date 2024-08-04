@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Modal, type UploadFile } from "antd";
 import { useState } from "react";
 

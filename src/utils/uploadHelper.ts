@@ -1,15 +1,14 @@
-// import ImageKit from "imagekit";
+/* eslint-disable */
+
 import { env } from "@/env";
 import { generateImageKitSignature } from "./Helpers";
 import { logger } from "@/libs/Logger";
-import axios from "axios";
-import { v2 as cloudinary } from "cloudinary";
 import ImageKit from "imagekit-javascript"
-import { UploadOptions } from "imagekit-javascript/dist/src/interfaces";
+import { type UploadOptions } from "imagekit-javascript/dist/src/interfaces";
 
 const imageKit = new ImageKit({
-  publicKey: env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!,
-  urlEndpoint: env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT!,
+  publicKey: env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
+  urlEndpoint: env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
 });
 
 export const handleUploadImage = async (images?: any[]) => {

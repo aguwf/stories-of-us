@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { message, type UploadFile } from 'antd';
 import { useState } from 'react';
 

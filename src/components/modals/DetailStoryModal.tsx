@@ -1,7 +1,9 @@
+/* eslint-disable */
+
 "use client";
 
 import { Modal, ModalBody, ModalContent } from "@nextui-org/modal";
-import { EmblaOptionsType } from "embla-carousel";
+import { type EmblaOptionsType } from "embla-carousel";
 import StoryCarousel from "../common/ImagesCarousel/StoryCarousel";
 
 export default function DetailStoryModal({

@@ -1,5 +1,4 @@
 import { AppConfig } from "@/utils/AppConfig";
-import { Typography } from "antd";
 import React from "react";
 
 export const TextOnlyLogo = ({ size }: { size: string }) => (

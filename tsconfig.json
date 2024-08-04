@@ -56,13 +56,13 @@
     ]
   },
   "include": [
-    ".eslintrc.js",
+    ".eslintrc.cjs",
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
     "**/*.cjs",
     "**/*.js",
-    ".next/types/**/*.ts",
+    ".next/types/**/*.ts"
   ],
   "exclude": ["./out/**/*", "node_modules"]
 }

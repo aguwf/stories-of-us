@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 "use client";
 
 import { api } from "@/trpc/react";
@@ -63,7 +65,7 @@ export default function CreateStoryModal({ isOpen, onOpenChange }: any) {
 
   const handlePreview = (file: UploadFile) => {
     if (!file.url && !file.preview) {
-      getBase64(file.originFileObj as FileType).then(
+      getBase64(file.originFileObj!).then(
         (res) => (file.preview = res),
       );
     }

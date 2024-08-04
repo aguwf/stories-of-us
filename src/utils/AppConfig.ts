@@ -1,4 +1,4 @@
-import { LocalePrefix } from "node_modules/next-intl/dist/types/src/routing/types";
+import { type LocalePrefix } from "node_modules/next-intl/dist/types/src/routing/types";
 
 
 const localePrefix: LocalePrefix = 'as-needed';

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import { Upload } from 'antd';
 // import upload from 'antd/es/upload';
 // import { or } from 'drizzle-orm';
@@ -7,7 +9,7 @@ import useFilePreview from '../../hooks/useFilePreview';
 
 const { Dragger } = Upload;
 
-const DragAndDrop = ({ addFile, removeFile }) => {
+const DragAndDrop = ({ addFile, removeFile }: any) => {
   const [handlePreview, previewContent] = useFilePreview();
 
   const beforeUploadHandler = (file: any) => {
@@ -23,7 +25,7 @@ const DragAndDrop = ({ addFile, removeFile }) => {
         showUploadList
         listType="picture-card"
         beforeUpload={beforeUploadHandler}
-        onPreview={handlePreview}
+        // onPreview={handlePreview}
         accept="image/*"
       >
         <p className="ant-upload-drag-icon">

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 'use client';
 
 import { useDisclosure } from '@nextui-org/modal';

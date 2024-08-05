@@ -24,7 +24,7 @@ export default function DetailStoryModal({
       size="full"
     >
       <ModalContent>
-        {(onClose) => (
+        {(_onClose) => (
           <>
             <ModalBody>
               <StoryCarousel slides={images} options={OPTIONS} />

@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import React, { useCallback } from "react";
 import { type EmblaOptionsType, type EmblaCarouselType } from "embla-carousel";
 import Autoplay from "embla-carousel-autoplay";

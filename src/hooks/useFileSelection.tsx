@@ -13,8 +13,8 @@ const useFileSelection = () => {
       return;
     }
     setIsUploading(true);
-    const uploadResults = [];
-    files.forEach((file) => {
+    // const uploadResults = [];
+    // files.forEach((file) => {
       // Image upload method
       // uploadImage({
       //   file,
@@ -26,7 +26,7 @@ const useFileSelection = () => {
       //     }
       //   },
       // });
-    });
+    // });
   };
   return [isUploading, uploadSelection];
 };

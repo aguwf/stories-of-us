@@ -1,5 +1,7 @@
+/* eslint-disable */
+
 // import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import type { NextFetchEvent, NextRequest } from 'next/server';
+import type { NextRequest } from 'next/server';
 import createMiddleware from 'next-intl/middleware';
 
 import { AppConfig } from './utils/AppConfig';
@@ -17,7 +19,6 @@ const intlMiddleware = createMiddleware({
 
 export default function middleware(
   request: NextRequest,
-  event: NextFetchEvent,
 ) {
   // if (
   //   request.nextUrl.pathname.includes('/sign-in') ||

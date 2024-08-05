@@ -10,7 +10,7 @@ import useFilePreview from '../../hooks/useFilePreview';
 const { Dragger } = Upload;
 
 const DragAndDrop = ({ addFile, removeFile }: any) => {
-  const [handlePreview, previewContent] = useFilePreview();
+  const [previewContent] = useFilePreview();
 
   const beforeUploadHandler = (file: any) => {
     addFile(file);

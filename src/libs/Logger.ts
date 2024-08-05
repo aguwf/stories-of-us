@@ -1,7 +1,5 @@
 import pino from 'pino';
 
-import { env } from '@/env';
-
 // let options = {};
 
 // if (env.LOGTAIL_SOURCE_TOKEN) {

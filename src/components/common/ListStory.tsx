@@ -5,7 +5,6 @@
 import { api } from "@/trpc/react";
 import { Card, useDisclosure } from "@nextui-org/react";
 import DetailStoryModal from "../modals/DetailStoryModal";
-import Image from "next/image";
 import ImageK from "@/app/_components/common/ImageK";
 import { useState } from "react";
 

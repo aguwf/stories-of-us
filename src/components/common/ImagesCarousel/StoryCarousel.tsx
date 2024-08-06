@@ -11,6 +11,7 @@ import {
   usePrevNextButtons,
 } from "./StoryCarouselArrowButton";
 import styles from "./StoryCarousel.module.css";
+import { Image } from "antd";
 
 type PropType = {
   slides: string[];
@@ -49,13 +50,13 @@ const StoryCarousel: React.FC<PropType> = (props) => {
     <section className={styles.embla}>
       <div className={styles.embla__viewport} ref={emblaRef}>
         <div className={styles.embla__container}>
-          {slides.map((src, index) => (
-            <div className={styles.embla__slide} key={index + src}>
-              <div className={styles.embla__slide__number}>
-                <img src={src} alt="" />
+          <Image.PreviewGroup>
+            {slides.map((src, index) => (
+              <div className={styles.embla__slide} key={index + src}>
+                <Image src={src} alt="" />
               </div>
-            </div>
-          ))}
+            ))}
+          </Image.PreviewGroup>
         </div>
       </div>
 

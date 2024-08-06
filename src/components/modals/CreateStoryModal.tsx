@@ -39,7 +39,11 @@ interface StoryData {
   description: string;
 }
 
-export default function CreateStoryModal({ isOpen, onOpenChange }: any) {
+export default function CreateStoryModal({
+  isOpen,
+  onOpenChange,
+  selectedStory,
+}: any) {
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [data, setData] = useState<StoryData>({ title: "", description: "" });
@@ -63,11 +67,28 @@ export default function CreateStoryModal({ isOpen, onOpenChange }: any) {
     };
   }, []);
 
+  useEffect(() => {
+    if (selectedStory) {
+      setData({
+        title: selectedStory.name,
+        description: selectedStory.description,
+      });
+
+      const selectedFile = selectedStory.images.map((image: string) => {
+        return {
+          uid: image,
+          name: image,
+          status: "done",
+          url: image,
+        };
+      });
+      setFileList(selectedFile);
+    }
+  }, [selectedStory]);
+
   const handlePreview = (file: UploadFile) => {
     if (!file.url && !file.preview) {
-      getBase64(file.originFileObj!).then(
-        (res) => (file.preview = res),
-      );
+      getBase64(file.originFileObj!).then((res) => (file.preview = res));
     }
   };
 

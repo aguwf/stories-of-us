@@ -1,9 +1,13 @@
 .embla {
     max-width: 48rem;
-    margin: auto;
+    margin-top: 3rem;
+    margin-left: auto;
+    margin-right: auto;
     --slide-height: 19rem;
     --slide-spacing: 1rem;
-    --slide-size: 90%;
+    --slide-size: 80%;
+    --detail-medium-contrast: rgb(234, 234, 234);
+    --text-body: rgb(54, 49, 61);
   }
   .embla__viewport {
     overflow: hidden;
@@ -18,6 +22,7 @@
     flex: 0 0 var(--slide-size);
     min-width: 0;
     padding-left: var(--slide-spacing);
+    display: flex;
   }
   .embla__slide__number {
     box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);

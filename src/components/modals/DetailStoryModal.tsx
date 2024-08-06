@@ -5,12 +5,11 @@
 import { Modal, ModalBody, ModalContent } from "@nextui-org/modal";
 import { type EmblaOptionsType } from "embla-carousel";
 import StoryCarousel from "../common/ImagesCarousel/StoryCarousel";
+import { Typography } from "antd";
 
-export default function DetailStoryModal({
-  isOpen,
-  onOpenChange,
-  images,
-}: any) {
+const { Title } = Typography;
+
+export default function DetailStoryModal({ isOpen, onOpenChange, story }: any) {
   const OPTIONS: EmblaOptionsType = { loop: true };
 
   return (
@@ -22,12 +21,22 @@ export default function DetailStoryModal({
       isKeyboardDismissDisabled
       scrollBehavior="inside"
       size="full"
+      className="max-h-screen top"
+      classNames={{
+        closeButton: "top-8 right-6",
+      }}
     >
       <ModalContent>
         {(_onClose) => (
           <>
+            {/* <ModalHeader></ModalHeader> */}
             <ModalBody>
-              <StoryCarousel slides={images} options={OPTIONS} />
+              <StoryCarousel slides={story?.images} options={OPTIONS} />
+              {/* Info */}
+              <Title level={3} className="mt-4">
+                {story?.name}
+              </Title>
+              <p className="mt-2">{story?.description}</p>
             </ModalBody>
           </>
         )}

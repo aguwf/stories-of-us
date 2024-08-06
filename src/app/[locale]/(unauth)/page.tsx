@@ -1,8 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { HydrateClient } from "@/trpc/server";
-
-import ListStory from "@/components/common/ListStory";
-import Toolbar from "@/components/common/Toolbar";
+import StoryTimelineContainer from "@/app/_containers/StoryTimelineContainer";
 
 export async function generateMetadata(props: { params: { locale: string } }) {
   const t = await getTranslations({
@@ -19,10 +17,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 export default async function Index() {
   return (
     <HydrateClient>
-      <div className="container px-4">
-        <Toolbar />
-        <ListStory />
-      </div>
+      <StoryTimelineContainer />
     </HydrateClient>
   );
 }

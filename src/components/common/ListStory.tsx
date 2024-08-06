@@ -3,10 +3,20 @@
 "use client";
 
 import { api } from "@/trpc/react";
-import { Card, useDisclosure } from "@nextui-org/react";
+import {
+  Button,
+  Card,
+  Dropdown,
+  DropdownItem,
+  DropdownMenu,
+  DropdownTrigger,
+  useDisclosure,
+} from "@nextui-org/react";
 import DetailStoryModal from "../modals/DetailStoryModal";
 import ImageK from "@/app/_components/common/ImageK";
 import { useState } from "react";
+import { MoreVerticalCircle01Icon } from "hugeicons-react";
+import { message } from "antd";
 
 interface Story {
   id: number;
@@ -17,14 +27,43 @@ interface Story {
   createdAt: Date | string | null;
 }
 
-export default function ListStory() {
+interface ListStoryProps {
+  setSelectedStory: (story: Story) => void;
+}
+
+export default function ListStory(props: ListStoryProps) {
+  const { setSelectedStory } = props;
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
-  const [selectedImages, setSelectedImages] = useState<string[]>([]);
+  const [selectedImages, setSelectedImages] = useState<Story>();
 
   const month = new Date()
     .toLocaleString("en-US", { month: "long" })
     .slice(0, 3);
+
   const [stories] = api.story.getAll.useSuspenseQuery();
+  const utils = api.useUtils();
+  const deleteStory = api.story.delete.useMutation({
+    onSuccess: async () => {
+      message.success("Delete successfully");
+      await utils.story.invalidate();
+    },
+  });
+
+
+  const handleActionMenu = (key: any, story: Story) => {
+    const id = story.id;
+    switch(key) {
+      case "delete":
+        message.info("Deleting...")
+        deleteStory.mutate({ id });
+        break;
+      case "edit":
+        setSelectedStory(story);
+        break;
+      default:
+        break;
+    }
+  }
 
   return (
     <div>
@@ -54,12 +93,37 @@ export default function ListStory() {
                 alt={item.name}
                 onClick={() => {
                   onOpen();
-                  setSelectedImages(item.images);
+                  setSelectedImages(item);
                 }}
               />
               {/* <FacebookMediaGrid images={item.images}/> */}
-              <h3 className="mt-4 font-bold">{item.name}</h3>
-              <p className="mt-2 line-clamp-5">{item.description}</p>
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="mt-4 font-bold">{item.name}</h3>
+                  <p className="mt-2 line-clamp-5">{item.description}</p>
+                </div>
+                <Dropdown>
+                  <DropdownTrigger>
+                    <Button variant="flat" className="rounded-full bg-transparent" isIconOnly>
+                      <MoreVerticalCircle01Icon />
+                    </Button>
+                  </DropdownTrigger>
+                  <DropdownMenu
+                    aria-label="Static Actions"
+                    onAction={(key) => handleActionMenu(key, item)}
+                  >
+                    <DropdownItem key="copy">Copy link</DropdownItem>
+                    <DropdownItem key="edit">Edit file</DropdownItem>
+                    <DropdownItem
+                      key="delete"
+                      className="text-danger"
+                      color="danger"
+                    >
+                      Delete file
+                    </DropdownItem>
+                  </DropdownMenu>
+                </Dropdown>
+              </div>
             </div>
           </Card>
         ))
@@ -71,7 +135,7 @@ export default function ListStory() {
       <DetailStoryModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
-        images={selectedImages}
+        story={selectedImages}
       />
     </div>
   );

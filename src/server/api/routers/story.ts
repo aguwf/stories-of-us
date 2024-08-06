@@ -5,6 +5,8 @@ import {
 } from "@/server/api/trpc";
 import { stories } from "@/server/db/schema";
 import { StoryValidation } from "@/validations/StoryValidation";
+import { eq } from "drizzle-orm";
+import { z } from "zod";
 
 export const storyRouter = createTRPCRouter({
   create: publicProcedure
@@ -29,4 +31,10 @@ export const storyRouter = createTRPCRouter({
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";
   }),
+
+  delete: publicProcedure
+    .input(z.object({ id: z.number() })) // Define the input type
+    .mutation(async ({ ctx, input }) => {
+      await ctx.db.delete(stories).where(eq(stories.id, input.id));
+    }),
 });

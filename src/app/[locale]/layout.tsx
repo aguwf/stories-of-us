@@ -54,11 +54,11 @@ export default function RootLayout(props: {
           "min-h-screen bg-background antialiased " + GeistSans.className
         }
       >
-        <NextIntlClientProvider
-          locale={props.params.locale}
-          messages={messages}
-        >
-          <TRPCReactProvider>
+        <TRPCReactProvider>
+          <NextIntlClientProvider
+            locale={props.params.locale}
+            messages={messages}
+          >
             <AntdRegistry>
               <ThemeProvider
                 attribute="class"
@@ -69,8 +69,8 @@ export default function RootLayout(props: {
                 <NextUIProvider>{props.children}</NextUIProvider>
               </ThemeProvider>
             </AntdRegistry>
-          </TRPCReactProvider>
-        </NextIntlClientProvider>
+          </NextIntlClientProvider>
+        </TRPCReactProvider>
       </body>
     </html>
   );

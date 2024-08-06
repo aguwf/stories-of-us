@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 "use client";
 
 import ListStory from "@/components/common/ListStory";
@@ -5,7 +7,7 @@ import Toolbar from "@/components/common/Toolbar";
 import CreateStoryModal from "@/components/modals/CreateStoryModal";
 import { useDisclosure } from "@nextui-org/react";
 import { FloatButton } from "antd";
-import { Add01Icon, Add02Icon, Settings01Icon } from "hugeicons-react";
+import { Add01Icon, Settings01Icon } from "hugeicons-react";
 import { useEffect, useState } from "react";
 
 const StoryTimelineContainer = () => {

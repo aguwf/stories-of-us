@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import {
   createTRPCRouter,
   protectedProcedure,
@@ -5,7 +7,7 @@ import {
 } from "@/server/api/trpc";
 import { stories } from "@/server/db/schema";
 import { StoryValidation } from "@/validations/StoryValidation";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { z } from "zod";
 
 export const storyRouter = createTRPCRouter({
@@ -21,12 +23,99 @@ export const storyRouter = createTRPCRouter({
       });
     }),
 
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    const stories = await ctx.db.query.stories.findMany({
-      orderBy: (stories, { desc }) => [desc(stories.createdAt)],
-    });
-    return stories;
-  }),
+  getAll: publicProcedure
+    .input(
+      z.object({
+        page: z.number(),
+        totalItems: z.number(),
+        sort: z.enum(["createdAt", "name"]),
+        orderBy: z.enum(["asc", "desc"]),
+      }),
+    )
+    .query(async ({ ctx, input }) => {
+      const offset = (input.page - 1) * input.totalItems;
+      const limit = input.totalItems;
+      const orderBy = input.sort
+        ? (stories: any, { desc, asc }: any) => [
+            input.orderBy === "asc"
+              ? asc(stories[input.sort])
+              : desc(stories[input.sort]),
+          ]
+        : (stories: any, { desc, asc }: any) => [
+            input.orderBy === "asc"
+              ? asc(stories.createdAt)
+              : desc(stories.createdAt),
+          ];
+
+      const [totalCount] = await ctx.db
+        .select({ count: count() })
+        .from(stories);
+
+      if (!totalCount || totalCount.count === 0) {
+        return [];
+      }
+
+      const totalPages = Math.ceil(totalCount.count / limit);
+
+      const storyList = await ctx.db.query.stories.findMany({
+        orderBy,
+        offset,
+        limit,
+      });
+
+      return {
+        storyList,
+        totalPages,
+        totalCount: totalCount.count,
+      };
+    }),
+
+  getById: publicProcedure
+    .input(z.object({ id: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const story = await ctx.db.query.stories.findFirst({
+        where: eq(stories.id, input.id),
+      });
+
+      if (!story) {
+        return null;
+      }
+
+      return {
+        ...story,
+      };
+    }),
+
+  update: protectedProcedure
+    .input(
+      z.object({
+        id: z.number(),
+        name: z.string(),
+        description: z.string(),
+        coverImage: z.string(),
+        images: z.array(z.string()).nonempty(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      const story = await ctx.db.query.stories.findFirst({
+        where: eq(stories.id, input.id),
+      });
+
+      if (!story) {
+        return null;
+      }
+
+      await ctx.db.update(stories).set({
+        name: input.name,
+        description: input.description,
+        coverImage: input.coverImage,
+        images: input.images,
+      });
+
+      return {
+        ...story,
+      };
+    }),
 
   getSecretMessage: protectedProcedure.query(() => {
     return "you can now see this secret message!";

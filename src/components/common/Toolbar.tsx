@@ -9,43 +9,32 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from '@nextui-org/react';
-import { FilterIcon, PlusSignIcon } from 'hugeicons-react';
+import { FilterIcon } from 'hugeicons-react';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/navigation';
 import React, { useMemo, useState } from 'react';
 
-const Toolbar = ({ onOpenCreateModal }: any) => {
+const Toolbar = () => {
   const t = useTranslations('Index');
-  const [selectedKeys, setSelectedKeys] = useState<any>(new Set(['Sort by']));
+  const router = useRouter();
+  const [selectedKeys, setSelectedKeys] = useState<any>('Sort by');
 
-  const selectedValue = useMemo(
-    () => Array.from(selectedKeys).join(', ').replaceAll('_', ' '),
-    [selectedKeys],
-  );
+  const handleChangeOrder = (key: any) => {
+    setSelectedKeys(key);
+    router.push(`?orderBy=${key}`);
+  }
 
   return (
     <section>
-      <div className="mb-6 flex flex-row justify-between">
-        <h1 className="inline w-full text-center font-bold">
-          {t('tools-bar-title')}
-        </h1>
-        <Button
-          isIconOnly
-          className="bg-transparent"
-          aria-label="Like"
-          onClick={onOpenCreateModal}
-        >
-          <PlusSignIcon />
-        </Button>
-      </div>
-      <div className="mb-6">
+      <div className="mb-6 text-right">
         <Dropdown className="mb-6">
           <DropdownTrigger>
             <Button
               variant="light"
-              className="bg-transparent capitalize"
+              className="bg-transparent"
               startContent={<FilterIcon size={18} />}
             >
-              {selectedValue}
+              {selectedKeys}
             </Button>
           </DropdownTrigger>
           <DropdownMenu
@@ -54,7 +43,7 @@ const Toolbar = ({ onOpenCreateModal }: any) => {
             disallowEmptySelection
             selectionMode="single"
             selectedKeys={selectedKeys}
-            onSelectionChange={setSelectedKeys}
+            onAction={handleChangeOrder}
           >
             <DropdownItem key="newest">Newest</DropdownItem>
             <DropdownItem key="oldest">Oldest</DropdownItem>

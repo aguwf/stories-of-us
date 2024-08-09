@@ -13,7 +13,7 @@ import {
 } from "@nextui-org/modal";
 import { Button, Input, Textarea } from "@nextui-org/react";
 import type { GetProp, PopconfirmProps, UploadFile, UploadProps } from "antd";
-import { message, Popconfirm, Upload } from "antd";
+import { Image, message, Popconfirm, Upload } from "antd";
 import { PlusSignIcon } from "hugeicons-react";
 import { useEffect, useState } from "react";
 
@@ -44,6 +44,8 @@ export default function CreateStoryModal({
   onOpenChange,
   selectedStory,
 }: any) {
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const [data, setData] = useState<StoryData>({ title: "", description: "" });
@@ -86,10 +88,13 @@ export default function CreateStoryModal({
     }
   }, [selectedStory]);
 
-  const handlePreview = (file: UploadFile) => {
+  const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {
-      getBase64(file.originFileObj!).then((res) => (file.preview = res));
+      file.preview = await getBase64(file.originFileObj as FileType);
     }
+
+    setPreviewImage(file.url || (file.preview as string));
+    setPreviewOpen(true);
   };
 
   const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
@@ -117,7 +122,7 @@ export default function CreateStoryModal({
       description: data.description,
       coverImage: images?.[0] || "",
       images: images,
-      userId: "Thai test",
+      userId: "",
     };
     createStory.mutate(uploadData);
   };
@@ -191,6 +196,17 @@ export default function CreateStoryModal({
                 >
                   {uploadButton}
                 </Upload>
+                {previewImage && (
+                  <Image
+                    wrapperStyle={{ display: 'none' }}
+                    preview={{
+                      visible: previewOpen,
+                      onVisibleChange: (visible) => setPreviewOpen(visible),
+                      afterOpenChange: (visible) => !visible && setPreviewImage(''),
+                    }}
+                    src={previewImage}
+                  />
+                )}
               </div>
             </ModalBody>
             <ModalFooter>

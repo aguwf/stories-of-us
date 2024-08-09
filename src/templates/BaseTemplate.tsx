@@ -23,7 +23,6 @@ const BaseTemplate = (props: {
           </div> */}
 
           <div className="flex justify-between">
-            {/* Nav bar */}
             <NavigationBar />
           </div>
         </header>

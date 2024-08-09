@@ -27,7 +27,7 @@ const StoryTimelineContainer = () => {
 
   return (
     <div className="container mx-auto px-4">
-      <Toolbar onOpenCreateModal={onOpenCreateModal} />
+      <Toolbar />
       <ListStory setSelectedStory={setSelectedStory} />
       <FloatButton.Group
         trigger="click"

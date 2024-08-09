@@ -1,8 +1,10 @@
 /* eslint-disable */
 
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
+  index,
   pgTableCreator,
+  primaryKey,
   serial,
   text,
   timestamp,
@@ -34,6 +36,37 @@ export const stories = createTable("story", {
     () => new Date(),
   ),
 });
+
+// const storiesRelations = relations(stories, ({ many }) => ({
+//   images: many(images),
+// }));
+
+// export const images = createTable(
+//   "image",
+//   {
+//     id: serial("id").primaryKey(),
+//     url: varchar("url", { length: 255 }).notNull(),
+//     storyId: varchar("story_id")
+//       .notNull()
+//       .references(() => stories.id),
+//     createdAt: timestamp("created_at", { withTimezone: true })
+//       .default(sql`CURRENT_TIMESTAMP`)
+//       .notNull(),
+//     updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+//       () => new Date(),
+//     ),
+//   },
+//   (image) => ({
+//     compoundKey: primaryKey({
+//       columns: [image.storyId, image.url],
+//     }),
+//     storyIdIdx: index("story_id_idx").on(image.storyId),
+//   }),
+// );
+
+// const imagesRelations = relations(stories, ({ one }) => ({
+//   story: one(stories, { fields: [stories.id], references: [stories.id] }),
+// }));
 
 // export const posts = createTable(
 //   "post",

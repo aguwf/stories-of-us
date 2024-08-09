@@ -10,12 +10,10 @@ import {
   DropdownTrigger,
 } from '@nextui-org/react';
 import { FilterIcon } from 'hugeicons-react';
-import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 
 const Toolbar = () => {
-  const t = useTranslations('Index');
   const router = useRouter();
   const [selectedKeys, setSelectedKeys] = useState<any>('Sort by');
 

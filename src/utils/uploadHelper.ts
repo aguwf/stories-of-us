@@ -1,28 +1,26 @@
-/* eslint-disable */
-
 import { env } from "@/env";
-import { generateImageKitSignature } from "./Helpers";
 import { logger } from "@/libs/Logger";
-import ImageKit from "imagekit-javascript"
-import { type UploadOptions } from "imagekit-javascript/dist/src/interfaces";
+import ImageKit from "imagekit-javascript";
+import type { UploadOptions } from "imagekit-javascript/dist/src/interfaces";
+import { generateImageKitSignature } from "./Helpers";
 
 const imageKit = new ImageKit({
-  publicKey: env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
-  urlEndpoint: env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
+	publicKey: env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
+	urlEndpoint: env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
 });
 
 export const handleUploadImage = async (images?: any[]) => {
-  if (!images) return;
+	if (!images) return;
 
-  if (!images.length) {
-    return [];
-  }
+	if (!images.length) {
+		return [];
+	}
 
-  const uploadedImages = await Promise.all(
-    images.map((image) => uploadImage(image)),
-  );
+	const uploadedImages = await Promise.all(
+		images.map((image) => uploadImage(image)),
+	);
 
-  return uploadedImages;
+	return uploadedImages;
 };
 
 // const uploadImageToCloudinary = async (image: File) => {
@@ -51,37 +49,37 @@ export const handleUploadImage = async (images?: any[]) => {
 // };
 
 const uploadImage = async (image: File) => {
-  try {
-    // !Old
-    // const arrayBuffer = await image.arrayBuffer();
-    // const buffer = Buffer.from(arrayBuffer);
-    // const response = await imageKit.upload({
-    //   file: buffer,
-    //   fileName: image.name,
-    // });
-    // return response.url;
+	try {
+		// !Old
+		// const arrayBuffer = await image.arrayBuffer();
+		// const buffer = Buffer.from(arrayBuffer);
+		// const response = await imageKit.upload({
+		//   file: buffer,
+		//   fileName: image.name,
+		// });
+		// return response.url;
 
-    // *New
-    const folder = "stories-of-us";
+		// *New
+		const folder = "stories-of-us";
 
-    const ikSign = generateImageKitSignature({
-      expireTime: 1000,
-    });
+		const ikSign = generateImageKitSignature({
+			expireTime: 1000,
+		});
 
-    const ikPayload: UploadOptions = {
-      file: image,
-      fileName: image.name,
-      signature: ikSign.signature,
-      expire: ikSign.expire,
-      token: ikSign.token,
-      folder,
-    };
+		const ikPayload: UploadOptions = {
+			file: image,
+			fileName: image.name,
+			signature: ikSign.signature,
+			expire: ikSign.expire,
+			token: ikSign.token,
+			folder,
+		};
 
-    const imageRes = await imageKit.upload(ikPayload);
+		const imageRes = await imageKit.upload(ikPayload);
 
-    return imageRes.url;
-  } catch (error) {
-    logger.error(error);
-    return null;
-  }
+		return imageRes.url;
+	} catch (error) {
+		logger.error(error);
+		return null;
+	}
 };

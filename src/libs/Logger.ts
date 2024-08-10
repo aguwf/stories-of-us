@@ -1,4 +1,4 @@
-import pino from 'pino';
+import pino from "pino";
 
 // let options = {};
 
@@ -21,12 +21,12 @@ import pino from 'pino';
 // }
 
 const options = {
-  transport: {
-    target: 'pino-pretty',
-    options: {
-      colorize: true,
-    },
-  },
+	transport: {
+		target: "pino-pretty",
+		options: {
+			colorize: true,
+		},
+	},
 };
 
 export const logger = pino(options);

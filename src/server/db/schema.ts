@@ -1,12 +1,10 @@
-/* eslint-disable */
-
 import { sql } from "drizzle-orm";
 import {
-  pgTableCreator,
-  serial,
-  text,
-  timestamp,
-  varchar,
+	pgTableCreator,
+	serial,
+	text,
+	timestamp,
+	varchar,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -18,21 +16,18 @@ import {
 export const createTable = pgTableCreator((name) => `stories-of-us_${name}`);
 
 export const stories = createTable("story", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 256 }).notNull(),
-  description: text("description"),
-  coverImage: varchar("cover_image", { length: 255 }).notNull(),
-  images: text("images")
-    .array()
-    .default(sql`'{}'::text[]`)
-    .notNull(),
-  userId: varchar("user_id", { length: 255 }).notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
-    .default(sql`CURRENT_TIMESTAMP`)
-    .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-    () => new Date(),
-  ),
+	id: serial("id").primaryKey(),
+	name: varchar("name", { length: 256 }).notNull(),
+	description: text("description"),
+	coverImage: varchar("cover_image", { length: 255 }).notNull(),
+	images: text("images").array().default(sql`'{}'::text[]`).notNull(),
+	userId: varchar("user_id", { length: 255 }).notNull(),
+	createdAt: timestamp("created_at", { withTimezone: true })
+		.default(sql`CURRENT_TIMESTAMP`)
+		.notNull(),
+	updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+		() => new Date(),
+	),
 });
 
 // const storiesRelations = relations(stories, ({ many }) => ({

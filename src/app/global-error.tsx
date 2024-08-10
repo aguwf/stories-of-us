@@ -1,19 +1,17 @@
-/* eslint-disable */
+"use client";
 
-'use client';
-
-import Error from 'next/error';
+import NextError from "next/error";
 
 export default function GlobalError(props: {
-  error: Error & { digest?: string };
-  params: { locale: string };
+	error: NextError & { digest?: string };
+	params: { locale: string };
 }) {
-  return (
-    <html lang={props.params.locale}>
-      <body>
-        {/* This is the default Next.js error component but it doesn't allow omitting the statusCode property yet. */}
-        <Error statusCode={undefined as any} />
-      </body>
-    </html>
-  );
+	return (
+		<html lang={props.params.locale}>
+			<body>
+				{/* This is the default Next.js error component but it doesn't allow omitting the statusCode property yet. */}
+				<NextError statusCode={undefined as any} />
+			</body>
+		</html>
+	);
 }

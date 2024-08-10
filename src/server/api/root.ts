@@ -8,8 +8,8 @@ import { storyRouter } from "./routers/story";
  * All routers added in /api/routers should be manually added here.
  */
 export const appRouter = createTRPCRouter({
-  // post: postRouter,
-  story: storyRouter
+	// post: postRouter,
+	story: storyRouter,
 });
 
 // export type definition of API

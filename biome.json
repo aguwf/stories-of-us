@@ -1,0 +1,30 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.8.3/schema.json",
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"nursery": {
+				"useSortedClasses": "warn"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "warn"
+			},
+			"suspicious": {
+				"noExplicitAny": "warn"
+			}
+		}
+	},
+	"formatter": {
+		"enabled": true
+	},
+	"vcs": {
+		"enabled": true,
+		"clientKind": "git",
+		"useIgnoreFile": true,
+		"defaultBranch": "main"
+	}
+}

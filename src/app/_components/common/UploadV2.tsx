@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/react";
 import { Image } from "antd";
 import { Cancel01Icon, PlusSignIcon } from "hugeicons-react";
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const chunkArray = (array: File[], size: number) => {
 	const chunkedArray = [];

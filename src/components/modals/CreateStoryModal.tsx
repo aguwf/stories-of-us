@@ -87,18 +87,6 @@ export default function CreateStoryModal({
 		}
 	}, [selectedStory]);
 
-	// const handlePreview = async (file: UploadFile) => {
-	// 	if (!file.url && !file.preview) {
-	// 		file.preview = await getBase64(file.originFileObj as FileType);
-	// 	}
-
-	// 	setPreviewImage(file.url || (file.preview as string));
-	// 	setPreviewOpen(true);
-	// };
-
-	// const handleChange: UploadProps["onChange"] = ({ fileList: newFileList }) =>
-	// 	setFileList(newFileList);
-
 	const onInputChange = (e: any) => {
 		const { name, value } = e.target;
 		setData({ ...data, [name]: value });
@@ -113,8 +101,8 @@ export default function CreateStoryModal({
 
 		setIsUploading(true);
 
-		const files = fileList.map((file) => file.originFileObj);
-		const images: any = await handleUploadImage(files);
+		// const files = fileList.map((file) => file.originFileObj);
+		const images: any = await handleUploadImage(fileList);
 
 		const uploadData: any = {
 			name: data.title,
@@ -186,16 +174,7 @@ export default function CreateStoryModal({
 								value={data.description}
 							/>
 							<div>
-								<UploadV2 />
-								{/* <Upload
-                  listType="picture-card"
-                  fileList={fileList}
-                  onChange={handleChange}
-                  onPreview={handlePreview}
-                  multiple
-                >
-                  {uploadButton}
-                </Upload> */}
+								<UploadV2 fileList={fileList} setFileList={setFileList} />
 								{previewImage && (
 									<Image
 										wrapperStyle={{ display: "none" }}

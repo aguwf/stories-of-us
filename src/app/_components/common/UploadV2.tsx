@@ -1,18 +1,10 @@
 import { Button } from "@nextui-org/react";
 import { Image } from "antd";
 import { Cancel01Icon, PlusSignIcon } from "hugeicons-react";
-import { useEffect, useRef, useState } from "react";
-
-const chunkArray = (array: File[], size: number) => {
-	const chunkedArray = [];
-	for (let i = 0; i < array.length; i += size) {
-		chunkedArray.push(array.slice(i, i + size));
-	}
-	return chunkedArray;
-};
+import { useEffect, useRef } from "react";
 
 export const UploadV2 = (_props: any) => {
-	const [fileList, setFileList] = useState<File[]>([]);
+	const { fileList, setFileList } = _props;
 	const inputFileRef = useRef<HTMLInputElement>(null);
 	const objectURLsRef = useRef<string[]>([]);
 
@@ -38,13 +30,9 @@ export const UploadV2 = (_props: any) => {
 	};
 
 	useEffect(() => {
-		const fileBatches = chunkArray(fileList, 10); // Chia thành batch 10 file
-
-		for (const batch of fileBatches) {
-			for (const file of batch) {
-				if (!objectURLsRef.current.includes(createObjectURL(file))) {
-					objectURLsRef.current.push(createObjectURL(file));
-				}
+		for (const file of fileList) {
+			if (!objectURLsRef.current.includes(createObjectURL(file))) {
+				objectURLsRef.current.push(createObjectURL(file));
 			}
 		}
 

@@ -109,7 +109,7 @@ export default function CreateStoryModal({
 			description: data.description,
 			coverImage: images?.[0] || "",
 			images: images,
-			userId: "",
+			userId: "test",
 		};
 		createStory.mutate(uploadData);
 	};

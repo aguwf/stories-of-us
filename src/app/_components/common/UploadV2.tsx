@@ -1,12 +1,12 @@
 import { Button } from "@nextui-org/react";
 import { Image } from "antd";
 import { Cancel01Icon, PlusSignIcon } from "hugeicons-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export const UploadV2 = (_props: any) => {
 	const { fileList, setFileList } = _props;
 	const inputFileRef = useRef<HTMLInputElement>(null);
-	const objectURLsRef = useRef<string[]>([]);
+	const [objectURLs, setObjectURLs] = useState<string[]>([]);
 
 	const handleClickUpload = () => {
 		inputFileRef.current?.click();
@@ -31,15 +31,11 @@ export const UploadV2 = (_props: any) => {
 
 	useEffect(() => {
 		for (const file of fileList) {
-			if (!objectURLsRef.current.includes(createObjectURL(file))) {
-				objectURLsRef.current.push(createObjectURL(file));
+			const objUrl = createObjectURL(file);
+			if (!objectURLs.includes(objUrl)) {
+				setObjectURLs([...objectURLs, objUrl]);
 			}
 		}
-
-		return () => {
-			for (const url of objectURLsRef.current) URL.revokeObjectURL(url);
-			objectURLsRef.current = [];
-		};
 	}, [fileList]);
 
 	return (
@@ -65,15 +61,13 @@ export const UploadV2 = (_props: any) => {
 					<Image.PreviewGroup>
 						{fileList.length
 							? fileList.map((file: File, index: number) => {
-									// Lấy objectURL từ danh sách objectURLsRef
-									const objectURL = objectURLsRef.current[index];
 									return (
 										<div
 											className="upload-select relative transition-all duration-300 ease-in-out"
 											key={file.name + file.size}
 										>
 											<Image
-												src={objectURL}
+												src={createObjectURL(file)}
 												alt={file.name}
 												width={102}
 												height={102}

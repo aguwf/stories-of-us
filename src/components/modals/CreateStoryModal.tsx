@@ -1,8 +1,6 @@
 "use client";
 
 import { UploadV2 } from "@/app/_components/common/UploadV2";
-import { api } from "@/trpc/react";
-import { handleUploadImage } from "@/utils/uploadHelper";
 import {
 	Modal,
 	ModalBody,
@@ -10,29 +8,10 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from "@nextui-org/modal";
-import { Button, Input, Textarea, image } from "@nextui-org/react";
+import { Button, Input, Textarea } from "@nextui-org/react";
 import type { PopconfirmProps, UploadFile } from "antd";
 import { Image, Popconfirm, message } from "antd";
-// import { PlusSignIcon } from "hugeicons-react";
 import { useEffect, useState } from "react";
-
-// const uploadButton = (
-// 	<button className="border-0 bg-none" type="button">
-// 		<PlusSignIcon className="mx-auto" />
-// 		<div className="mt-2">Upload</div>
-// 	</button>
-// );
-
-// type FileType = Parameters<GetProp<UploadProps, "beforeUpload">>[0];
-
-// const getBase64 = (file: FileType): Promise<string> =>
-// 	new Promise((resolve, reject) => {
-// 		const reader = new FileReader();
-// 		reader.readAsDataURL(file);
-// 		reader.onload = () => resolve(reader.result as string);
-// 		reader.onerror = (error) => reject(error);
-// 	});
-
 interface StoryData {
 	title: string;
 	description: string;
@@ -48,8 +27,6 @@ export default function CreateStoryModal({
 	const [fileList, setFileList] = useState<UploadFile[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
 	const [data, setData] = useState<StoryData>({ title: "", description: "" });
-
-	const utils = api.useUtils();
 
 	useEffect(() => {
 		const localData = localStorage.getItem("data");
@@ -114,17 +91,6 @@ export default function CreateStoryModal({
 
 		console.log(messageId);
 	};
-
-	const createStory = api.story.create.useMutation({
-		onSuccess: async () => {
-			await utils.story.invalidate();
-			onOpenChange(false);
-			_resetModal();
-		},
-		onError: () => {
-			setIsUploading(false);
-		},
-	});
 
 	const _resetModal = () => {
 		setFileList([]);

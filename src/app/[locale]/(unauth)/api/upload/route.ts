@@ -1,6 +1,6 @@
 import { env } from "@/env";
-import { appRouter, createCaller } from "@/server/api/root";
-import { createCallerFactory, createTRPCContext } from "@/server/api/trpc";
+import { createCaller } from "@/server/api/root";
+import { createTRPCContext } from "@/server/api/trpc";
 import { generateImageKitSignature } from "@/utils/Helpers";
 import { TRPCError } from "@trpc/server";
 import type {
@@ -9,7 +9,6 @@ import type {
 	NextApiResponse,
 } from "@trpc/server/adapters/next";
 import { getHTTPStatusCodeFromError } from "@trpc/server/unstable-core-do-not-import";
-import { verifySignatureAppRouter } from "@upstash/qstash/nextjs";
 import ImageKit from "imagekit-javascript";
 import type { UploadOptions } from "imagekit-javascript/dist/src/interfaces";
 
@@ -18,7 +17,7 @@ const imageKit = new ImageKit({
 	urlEndpoint: env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
 });
 
-export async function createContext(opts: CreateNextContextOptions) {
+export async function createContext(_opts: CreateNextContextOptions) {
 	return {};
 }
 

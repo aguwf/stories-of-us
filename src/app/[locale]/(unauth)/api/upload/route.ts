@@ -3,11 +3,8 @@ import { createCaller } from "@/server/api/root";
 import { createTRPCContext } from "@/server/api/trpc";
 import { generateImageKitSignature } from "@/utils/Helpers";
 import { TRPCError } from "@trpc/server";
-import type {
-	CreateNextContextOptions,
-	NextApiRequest,
-	NextApiResponse,
-} from "@trpc/server/adapters/next";
+import type { NextApiRequest, NextApiResponse } from "next";
+import type { CreateNextContextOptions } from "@trpc/server/adapters/next";
 import { getHTTPStatusCodeFromError } from "@trpc/server/unstable-core-do-not-import";
 import ImageKit from "imagekit-javascript";
 import type { UploadOptions } from "imagekit-javascript/dist/src/interfaces";

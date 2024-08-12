@@ -17,7 +17,7 @@ const imageKit = new ImageKit({
 	urlEndpoint: env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
 });
 
-export async function createContext(_opts: CreateNextContextOptions) {
+function createContext(_opts: CreateNextContextOptions) {
 	return {};
 }
 

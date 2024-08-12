@@ -10,7 +10,7 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from "@nextui-org/modal";
-import { Button, Input, Textarea } from "@nextui-org/react";
+import { Button, Input, Textarea, image } from "@nextui-org/react";
 import type { PopconfirmProps, UploadFile } from "antd";
 import { Image, Popconfirm, message } from "antd";
 // import { PlusSignIcon } from "hugeicons-react";
@@ -101,17 +101,18 @@ export default function CreateStoryModal({
 
 		setIsUploading(true);
 
-		// const files = fileList.map((file) => file.originFileObj);
-		const images: any = await handleUploadImage(fileList);
+		// const images: any = await handleUploadImage(fileList);
+		console.log("🚀 ~ handleSubmit ~ fileList:", fileList);
+		// const messageId = await uploadImageBackgroundJob({ images: fileList });
+		const messageId = await fetch("/api/start-upload-job", {
+			method: "POST",
+			body: JSON.stringify({
+				data,
+				images: fileList,
+			}),
+		});
 
-		const uploadData: any = {
-			name: data.title,
-			description: data.description,
-			coverImage: images?.[0] || "",
-			images: images,
-			userId: "test",
-		};
-		createStory.mutate(uploadData);
+		console.log(messageId);
 	};
 
 	const createStory = api.story.create.useMutation({

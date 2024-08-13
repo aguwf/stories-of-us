@@ -60,6 +60,7 @@ export const storyRouter = createTRPCRouter({
 				offset,
 				limit,
 			});
+			console.log("🚀 ~ .query ~ storyList:", storyList);
 
 			return {
 				storyList,

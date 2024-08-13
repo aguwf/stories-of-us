@@ -86,6 +86,7 @@ export default function ListStory(props: ListStoryProps) {
 		totalPages: number;
 		totalCount: number;
 	};
+	console.log("🚀 ~ ListStory ~ storyList:", storyList);
 
 	const utils = api.useUtils();
 	const deleteStory = api.story.delete.useMutation({
@@ -188,7 +189,7 @@ export default function ListStory(props: ListStoryProps) {
 					<h1 className="text-2xl">Loading...</h1>
 				</div>
 			)}
-			{storyList.length ? (
+			{storyList?.length ? (
 				<div>
 					{storyList.map(renderStoryCard)}
 					<Pagination

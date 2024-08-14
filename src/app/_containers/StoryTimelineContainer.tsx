@@ -11,9 +11,8 @@ import {
 	Settings01Icon,
 	Sun03Icon,
 } from "hugeicons-react";
-import { useEffect, useState } from "react";
-import "react-tiny-fab/dist/styles.css";
 import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 const StoryTimelineContainer = () => {
 	const {

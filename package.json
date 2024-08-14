@@ -5,7 +5,7 @@
 	"type": "module",
 	"scripts": {
 		"build-stats": "cross-env ANALYZE=true bun run build",
-		"build": "npm run db:migrate && next build",
+		"build": "next build",
 		"check-types": "tsc --noEmit --pretty",
 		"clean": "rimraf .next .swc out coverage",
 		"commit": "cz",
@@ -20,6 +20,7 @@
 		"start": "next start"
 	},
 	"dependencies": {
+		"@ant-design/cssinjs": "^1.21.0",
 		"@ant-design/nextjs-registry": "^1.0.0",
 		"@auth/drizzle-adapter": "^1.4.2",
 		"@clerk/localizations": "^2.5.4",
@@ -56,6 +57,7 @@
 		"postgres": "^3.4.4",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
+		"react-tiny-fab": "^4.0.4",
 		"server-only": "^0.0.1",
 		"superjson": "^2.2.1",
 		"uuid": "^10.0.0",

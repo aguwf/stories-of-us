@@ -2,6 +2,7 @@ import "@/styles/globals.css";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { AppConfig } from "@/utils/AppConfig";
+import { StyleProvider } from "@ant-design/cssinjs";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { NextUIProvider } from "@nextui-org/react";
 import { GeistSans } from "geist/font/sans";
@@ -9,6 +10,7 @@ import type { Metadata } from "next";
 import { NextIntlClientProvider, useMessages } from "next-intl";
 import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
+import Provider from "./provider";
 
 export const metadata: Metadata = {
 	title: "Stories of us",
@@ -58,14 +60,15 @@ export default function RootLayout(props: {
 						messages={messages}
 					>
 						<AntdRegistry>
-							<ThemeProvider
-								attribute="class"
-								defaultTheme="system"
-								enableSystem
-								disableTransitionOnChange
-							>
-								<NextUIProvider>{props.children}</NextUIProvider>
-							</ThemeProvider>
+							<Provider>
+								<ThemeProvider
+									attribute="class"
+									defaultTheme="system"
+									enableSystem
+								>
+									<NextUIProvider>{props.children}</NextUIProvider>
+								</ThemeProvider>
+							</Provider>
 						</AntdRegistry>
 					</NextIntlClientProvider>
 				</TRPCReactProvider>

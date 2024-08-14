@@ -116,6 +116,10 @@ export default function CreateStoryModal({
 			isDismissable={false}
 			isKeyboardDismissDisabled
 			scrollBehavior="inside"
+			classNames={{
+				wrapper: "z-[101]",
+				backdrop: "z-[100]",
+			}}
 		>
 			<ModalContent>
 				{(onClose) => (
@@ -125,19 +129,27 @@ export default function CreateStoryModal({
 						</ModalHeader>
 						<ModalBody>
 							<Input
-								name="title"
-								type="text"
-								labelPlacement="inside"
-								placeholder="Enter your title"
+								classNames={{
+									input: "text-base",
+								}}
 								label="Title"
+								labelPlacement="inside"
+								name="title"
 								onChange={onInputChange}
+								placeholder="Enter your title"
+								type="text"
 								value={data.title}
 							/>
 							<Textarea
+								classNames={{
+									input: "text-base",
+								}}
 								label="Description"
+								labelPlacement="inside"
 								name="description"
-								placeholder="Enter your description"
 								onChange={onInputChange}
+								placeholder="Enter your description"
+								type="text"
 								value={data.description}
 							/>
 							<div>

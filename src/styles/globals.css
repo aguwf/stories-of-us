@@ -1,3 +1,51 @@
-@tailwind base;
+@layer reset, tailwind-base, antd;
+
+@import url(reset.css) layer(reset);
+
+@layer tailwind-base {
+  @tailwind base;
+}
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* Light Mode */
+  --primary: #f5f5f5; /* Light gray */
+  --secondary: #e0e0e0; /* Slightly darker gray */
+  --accent: #f08080; /* Light pink */
+  --accent-hover: #dc143c; /* Darker pink */
+  --background: #fff; /* White */
+  --foreground: #212529; /* Dark gray */
+  --text: #212529; /* Dark gray */
+  --border: #ced4da; /* Light gray */
+  --shadow: rgba(0, 0, 0, 0.1); /* Light shadow */
+  --highlight: #ffff00; /* Yellow */
+  --success: #28a745; /* Green */
+  --warning: #ffc107; /* Yellow */
+  --danger: #dc3545; /* Red */
+  --pastel-blue: #6bc7e6; /* Pastel blue */
+  --pastel-green: #7af07a; /* Pastel green */
+  --pastel-yellow: #e8e87d; /* Pastel yellow */
+  --pastel-purple: #D8BFD8; /* Pastel purple */
+}
+
+[data-theme='dark'] {
+  /* Dark Mode */
+  --primary: #212529; /* Dark gray */
+  --secondary: #343a40; /* Darker gray */
+  --accent: #cd6d6d; /* Light pink */
+  --accent-hover: #dc143c; /* Darker pink */
+  --background: #212529; /* Dark gray */
+  --foreground: #f0f0f0; /* Light gray */
+  --text: #f0f0f0; /* Light gray */
+  --border: #495057; /* Dark gray */
+  --shadow: #ffffff1a; /* Light shadow */
+  --highlight: #ffff00; /* Yellow */
+  --success: #28a745; /* Green */
+  --warning: #ffc107; /* Yellow */
+  --danger: #dc3545; /* Red */
+  --pastel-blue: #4d9cb6; /* Darker blue */
+  --pastel-green: #5cb65c; /* Darker green */
+  --pastel-yellow: #d8d863; /* Darker yellow */
+  --pastel-purple: #ad97ad; /* Darker purple */
+}

@@ -57,7 +57,6 @@
 		"postgres": "^3.4.4",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
-		"react-tiny-fab": "^4.0.4",
 		"server-only": "^0.0.1",
 		"superjson": "^2.2.1",
 		"uuid": "^10.0.0",

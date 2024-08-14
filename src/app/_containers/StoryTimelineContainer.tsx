@@ -7,14 +7,11 @@ import { useDisclosure } from "@nextui-org/react";
 import { FloatButton } from "antd";
 import {
 	Add01Icon,
-	Moon01Icon,
 	Moon02Icon,
-	PlusSignIcon,
 	Settings01Icon,
 	Sun03Icon,
 } from "hugeicons-react";
 import { useEffect, useState } from "react";
-import { Action, Fab } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
 import { useTheme } from "next-themes";
 

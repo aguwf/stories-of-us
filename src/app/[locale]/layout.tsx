@@ -2,7 +2,6 @@ import "@/styles/globals.css";
 
 import { TRPCReactProvider } from "@/trpc/react";
 import { AppConfig } from "@/utils/AppConfig";
-import { StyleProvider } from "@ant-design/cssinjs";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { NextUIProvider } from "@nextui-org/react";
 import { GeistSans } from "geist/font/sans";

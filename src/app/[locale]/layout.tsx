@@ -10,6 +10,7 @@ import { NextIntlClientProvider, useMessages } from "next-intl";
 import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
 import Provider from "./provider";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
 	title: "Stories of us",
@@ -72,6 +73,7 @@ export default function RootLayout(props: {
 						</AntdRegistry>
 					</NextIntlClientProvider>
 				</TRPCReactProvider>
+				<SpeedInsights />
 			</body>
 		</html>
 	);

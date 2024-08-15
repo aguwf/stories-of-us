@@ -34,6 +34,7 @@
 		"@trpc/react-query": "^11.0.0-rc.467",
 		"@trpc/server": "^11.0.0-rc.467",
 		"@upstash/qstash": "^2.6.3",
+		"@vercel/speed-insights": "^1.0.12",
 		"antd": "^5.19.3",
 		"autoprefixer": "^10.4.19",
 		"axios": "^1.7.3",

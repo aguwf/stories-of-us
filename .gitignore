@@ -45,9 +45,6 @@ yarn-error.log*
 # idea files
 .idea
 
-sw.*
-workbox-*
-swe-worker-*
 # Serwist
 public/sw*
 public/swe-worker*

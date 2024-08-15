@@ -1,6 +1,8 @@
 "use client";
 
 import { UploadV2 } from "@/app/_components/common/UploadV2";
+import { api } from "@/trpc/react";
+import { handleUploadImage } from "@/utils/uploadHelper";
 import {
 	Modal,
 	ModalBody,
@@ -9,11 +11,11 @@ import {
 	ModalHeader,
 } from "@nextui-org/modal";
 import { Button, Input, Textarea } from "@nextui-org/react";
-import type { PopconfirmProps, UploadFile } from "antd";
+import type { PopconfirmProps } from "antd";
 import { Image, Popconfirm, message } from "antd";
 import { useEffect, useState } from "react";
 interface StoryData {
-	title: string;
+	name: string;
 	description: string;
 }
 
@@ -24,9 +26,21 @@ export default function CreateStoryModal({
 }: any) {
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewImage, setPreviewImage] = useState("");
-	const [fileList, setFileList] = useState<UploadFile[]>([]);
+	const [fileList, setFileList] = useState<File[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
-	const [data, setData] = useState<StoryData>({ title: "", description: "" });
+	const [data, setData] = useState<StoryData>({ name: "", description: "" });
+	const [messageApi] = message.useMessage();
+	const utils = api.useUtils();
+
+	const creating = () => {
+		messageApi.open({
+			type: "loading",
+			content: "Action in progress..",
+			duration: 0,
+		});
+		// Dismiss manually and asynchronously
+		setTimeout(messageApi.destroy, 2500);
+	};
 
 	useEffect(() => {
 		const localData = localStorage.getItem("data");
@@ -48,7 +62,7 @@ export default function CreateStoryModal({
 	useEffect(() => {
 		if (selectedStory) {
 			setData({
-				title: selectedStory.name,
+				name: selectedStory.name,
 				description: selectedStory.description,
 			});
 
@@ -78,24 +92,41 @@ export default function CreateStoryModal({
 
 		setIsUploading(true);
 
-		// const images: any = await handleUploadImage(fileList);
-		console.log("🚀 ~ handleSubmit ~ fileList:", fileList);
-		// const messageId = await uploadImageBackgroundJob({ images: fileList });
-		const messageId = await fetch("/api/start-upload-job", {
-			method: "POST",
-			body: JSON.stringify({
-				data,
-				images: fileList,
-			}),
-		});
+		handleUploadImage(fileList)
+			.then((images) => {
+				const urls = images ? images.map((image) => image?.url || "") : [];
+				const createStoryData = {
+					name: data.name,
+					description: data.description,
+					coverImage: urls?.[0] || "",
+					images: urls,
+					userId: "test",
+				};
 
-		console.log(messageId);
+				createStory.mutate(createStoryData);
+			})
+			.catch((err) => {
+				console.log("🚀 ~ err:", err);
+			});
+
+		onOpenChange(false);
+		creating();
 	};
+
+	const createStory = api.story.create.useMutation({
+		onSuccess: async () => {
+			await utils.story.invalidate();
+			_resetModal();
+		},
+		onError: () => {
+			setIsUploading(false);
+		},
+	});
 
 	const _resetModal = () => {
 		setFileList([]);
 		setIsUploading(false);
-		setData({ title: "", description: "" });
+		setData({ name: "", description: "" });
 		localStorage.removeItem("data");
 	};
 
@@ -134,11 +165,11 @@ export default function CreateStoryModal({
 								}}
 								label="Title"
 								labelPlacement="inside"
-								name="title"
+								name="name"
 								onChange={onInputChange}
 								placeholder="Enter your title"
 								type="text"
-								value={data.title}
+								value={data.name}
 							/>
 							<Textarea
 								classNames={{
@@ -169,7 +200,7 @@ export default function CreateStoryModal({
 							</div>
 						</ModalBody>
 						<ModalFooter>
-							{data?.title ? (
+							{data?.name ? (
 								<Popconfirm
 									title="Discard changes?"
 									description="Are you sure to discard this story?"

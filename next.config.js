@@ -2,28 +2,19 @@
 import { fileURLToPath } from "node:url";
 
 import withBundleAnalyzer from "@next/bundle-analyzer";
+import withSerwistInit from "@serwist/next";
 import createJiti from "jiti";
 import withNextIntl from "next-intl/plugin";
-// import withPWAInit from "@ducanh2912/next-pwa";
-
-// const withPWA = withPWAInit({
-// 	dest: "public",
-// 	register: true,
-// 	cacheOnFrontEndNav: true,
-// 	aggressiveFrontEndNavCaching: true,
-// 	reloadOnOnline: true,
-// 	disable: process.env.NODE_ENV === "development",
-// 	workboxOptions: {
-// 		disableDevLogs: true,
-// 	},
-// });
-import withSerwistInit from "@serwist/next";
 
 const withSerwist = withSerwistInit({
 	// Note: This is only an example. If you use Pages Router,
 	// use something else that works, such as "service-worker/index.ts".
 	swSrc: "src/app/sw.ts",
 	swDest: "public/sw.js",
+	disable: process.env.NODE_ENV === "development",
+	reloadOnOnline: true,
+	cacheOnNavigation: true,
+	register: true,
 });
 
 const jiti = createJiti(fileURLToPath(import.meta.url));

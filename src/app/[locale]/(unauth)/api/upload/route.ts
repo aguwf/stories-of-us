@@ -24,12 +24,13 @@ export async function POST(req: NextRequest) {
 	const ctx = await createTRPCContext({ headers: req.headers });
 	const caller = createCaller(ctx);
 	try {
+		const json = await req.json();
+		console.log("🚀 ~ POST ~ json:", json);
 		const {
 			data,
 			images,
 			folder = "stories-of-us",
-		}: { images?: File[]; folder?: string; data: any } = await req.json();
-		console.log(images);
+		}: { images?: File[]; folder?: string; data: any } = json;
 		if (!images || !images.length)
 			return new Response("No images provided", { status: 400 });
 

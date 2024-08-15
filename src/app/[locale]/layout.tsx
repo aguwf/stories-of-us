@@ -36,6 +36,7 @@ export const metadata: Metadata = {
 			url: "/favicon.ico",
 		},
 	],
+	manifest: "/manifest.json",
 };
 
 export default function RootLayout(props: {

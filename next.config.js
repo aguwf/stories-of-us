@@ -1,17 +1,30 @@
 /* eslint-disable import/no-extraneous-dependencies, import/extensions */
 import { fileURLToPath } from "node:url";
 
-// import { createRequire } from "node:module";
 import withBundleAnalyzer from "@next/bundle-analyzer";
 import createJiti from "jiti";
 import withNextIntl from "next-intl/plugin";
-// const require = createRequire(import.meta.url);
-// const withPWA = require("next-pwa")({
+// import withPWAInit from "@ducanh2912/next-pwa";
+
+// const withPWA = withPWAInit({
 // 	dest: "public",
 // 	register: true,
-// 	skipWaiting: true,
-// 	buildExcludes: [/middleware-manifest.json$/],
+// 	cacheOnFrontEndNav: true,
+// 	aggressiveFrontEndNavCaching: true,
+// 	reloadOnOnline: true,
+// 	disable: process.env.NODE_ENV === "development",
+// 	workboxOptions: {
+// 		disableDevLogs: true,
+// 	},
 // });
+import withSerwistInit from "@serwist/next";
+
+const withSerwist = withSerwistInit({
+	// Note: This is only an example. If you use Pages Router,
+	// use something else that works, such as "service-worker/index.ts".
+	swSrc: "src/app/sw.ts",
+	swDest: "public/sw.js",
+});
 
 const jiti = createJiti(fileURLToPath(import.meta.url));
 
@@ -49,4 +62,6 @@ function defineNextConfig() {
 	return config;
 }
 
-export default bundleAnalyzer(withNextIntlConfig(defineNextConfig()));
+export default withSerwist(
+	bundleAnalyzer(withNextIntlConfig(defineNextConfig())),
+);

@@ -29,18 +29,32 @@ export default function CreateStoryModal({
 	const [fileList, setFileList] = useState<File[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
 	const [data, setData] = useState<StoryData>({ name: "", description: "" });
-	const [messageApi] = message.useMessage();
+	// const [messageApi] = message.useMessage();
 	const utils = api.useUtils();
 
-	const creating = () => {
-		messageApi.open({
-			type: "loading",
-			content: "Action in progress..",
-			duration: 0,
-		});
-		// Dismiss manually and asynchronously
-		setTimeout(messageApi.destroy, 2500);
-	};
+	const createStory = api.story.create.useMutation({
+		onSuccess: async () => {
+			setIsUploading(false);
+			message.success("Create successfully");
+			await utils.story.invalidate();
+			_resetModal();
+		},
+		onError: () => {
+			setIsUploading(false);
+		},
+	});
+
+	const updateStory = api.story.update.useMutation({
+		onSuccess: async () => {
+			setIsUploading(false);
+			message.success("Update successfully");
+			await utils.story.invalidate();
+			_resetModal();
+		},
+		onError: () => {
+			setIsUploading(false);
+		},
+	});
 
 	useEffect(() => {
 		const localData = localStorage.getItem("data");
@@ -65,16 +79,7 @@ export default function CreateStoryModal({
 				name: selectedStory.name,
 				description: selectedStory.description,
 			});
-
-			const selectedFile = selectedStory.images.map((image: string) => {
-				return {
-					uid: image,
-					name: image,
-					status: "done",
-					url: image,
-				};
-			});
-			setFileList(selectedFile);
+			setFileList(selectedStory.images);
 		}
 	}, [selectedStory]);
 
@@ -85,43 +90,60 @@ export default function CreateStoryModal({
 	};
 
 	const handleSubmit = async () => {
+		console.log(
+			"🚀 ~ handleSubmit ~ newStoryData: any.selectedStory:",
+			selectedStory,
+		);
+
 		if (fileList.length === 0) {
 			message.error("You need to select at least one image");
 			return;
 		}
 
 		setIsUploading(true);
+		message.loading("Uploading...");
 
-		handleUploadImage(fileList)
-			.then((images) => {
-				const urls = images ? images.map((image) => image?.url || "") : [];
-				const createStoryData = {
-					name: data.name,
-					description: data.description,
-					coverImage: urls?.[0] || "",
-					images: urls,
-					userId: "test",
-				};
+		const existedImages = fileList.filter((file) => typeof file === "string");
+		const newImages = fileList.filter((file) => typeof file === "object");
 
-				createStory.mutate(createStoryData);
-			})
-			.catch((err) => {
-				console.log("🚀 ~ err:", err);
-			});
+		if (newImages.length > 0) {
+			handleUploadImage(newImages)
+				.then((images) => {
+					const urls = images ? images.map((image) => image?.url || "") : [];
+					const newStoryData: any = {
+						name: data.name,
+						description: data.description,
+						coverImage: selectedStory?.coverImage || urls?.[0] || "",
+						images: [...existedImages, ...urls],
+						userId: "defaultid",
+					};
+					if (selectedStory) {
+						newStoryData.id = selectedStory.id;
+						updateStory.mutate(newStoryData);
+					} else {
+						createStory.mutate(newStoryData);
+					}
+				})
+				.catch((err) => console.log(err));
+		} else {
+			const newStoryData: any = {
+				id: selectedStory?.id,
+				name: data.name,
+				description: data.description,
+				coverImage: selectedStory?.coverImage || "",
+				images: existedImages,
+				userId: "defaultid",
+			};
+			console.log(
+				"🚀 ~ handleSubmit ~ newStoryData: any.selectedStory?.id:",
+				newStoryData,
+			);
+
+			updateStory.mutate(newStoryData);
+		}
 
 		onOpenChange(false);
-		creating();
 	};
-
-	const createStory = api.story.create.useMutation({
-		onSuccess: async () => {
-			await utils.story.invalidate();
-			_resetModal();
-		},
-		onError: () => {
-			setIsUploading(false);
-		},
-	});
 
 	const _resetModal = () => {
 		setFileList([]);
@@ -221,9 +243,11 @@ export default function CreateStoryModal({
 							<Button
 								color="primary"
 								onPress={handleSubmit}
-								isLoading={isUploading}
+								isLoading={
+									isUploading || createStory.isPending || updateStory.isPending
+								}
 							>
-								Save
+								{selectedStory ? "Update" : "Create"}
 							</Button>
 						</ModalFooter>
 					</>

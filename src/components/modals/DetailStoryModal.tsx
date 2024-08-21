@@ -29,12 +29,15 @@ export default function DetailStoryModal({ isOpen, onOpenChange, story }: any) {
 					<>
 						{/* <ModalHeader></ModalHeader> */}
 						<ModalBody>
-							<StoryCarousel slides={story?.images} options={OPTIONS} />
 							{/* Info */}
-							<Title level={3} className="mt-4">
-								{story?.name}
-							</Title>
-							<p className="mt-2">{story?.description}</p>
+							<div className="mx-auto w-full max-w-screen-md ">
+								<Title level={3} className="mt-16">
+									{story?.name}
+								</Title>
+								<p className="mt-2">{story?.description}</p>
+							</div>
+							{/* Carousel */}
+							<StoryCarousel slides={story?.images} options={OPTIONS} />
 						</ModalBody>
 					</>
 				)}

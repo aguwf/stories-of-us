@@ -10,7 +10,6 @@ import {
 	PrevButton,
 	usePrevNextButtons,
 } from "./StoryCarouselArrowButton";
-import { DotButton, useDotButton } from "./StoryCarouselDotButton";
 
 type PropType = {
 	slides: string[];
@@ -33,10 +32,10 @@ const StoryCarousel: React.FC<PropType> = (props) => {
 		resetOrStop();
 	}, []);
 
-	const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
-		emblaApi,
-		onNavButtonClick,
-	);
+	// const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
+	// 	emblaApi,
+	// 	onNavButtonClick,
+	// );
 
 	const {
 		prevBtnDisabled,
@@ -52,7 +51,12 @@ const StoryCarousel: React.FC<PropType> = (props) => {
 					<Image.PreviewGroup>
 						{slides.map((src, index) => (
 							<div className={styles.embla__slide} key={index + src}>
-								<Image src={src} alt="" />
+								<Image
+									className="object-contain"
+									height={500}
+									src={src}
+									alt=""
+								/>
 							</div>
 						))}
 					</Image.PreviewGroup>
@@ -65,15 +69,15 @@ const StoryCarousel: React.FC<PropType> = (props) => {
 					<NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
 				</div>
 
-				<div className={styles.embla__dots}>
+				{/* <div className={styles.embla__dots}>
 					{scrollSnaps.map((_, index) => (
 						<DotButton
 							key={scrollSnaps.toString()}
 							onClick={() => onDotButtonClick(index)}
-							className={`${styles.embla__dot}${index === selectedIndex ? styles["embla__dot--selected"] : ""}`}
+							className={`${styles.embla__dot} ${index === selectedIndex ? styles["embla__dot--selected"] : ""}`}
 						/>
 					))}
-				</div>
+				</div> */}
 			</div>
 		</section>
 	);

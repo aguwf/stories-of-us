@@ -4,13 +4,14 @@ import { TRPCReactProvider } from "@/trpc/react";
 import { AppConfig } from "@/utils/AppConfig";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { NextUIProvider } from "@nextui-org/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { NextIntlClientProvider, useMessages } from "next-intl";
 import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
+import { useClientStore } from "../_store/clientStore";
 import Provider from "./provider";
-import { SpeedInsights } from "@vercel/speed-insights/next"
 
 export const metadata: Metadata = {
 	title: "Stories of us",
@@ -62,13 +63,7 @@ export default function RootLayout(props: {
 					>
 						<AntdRegistry>
 							<Provider>
-								<ThemeProvider
-									attribute="class"
-									defaultTheme="system"
-									enableSystem
-								>
-									<NextUIProvider>{props.children}</NextUIProvider>
-								</ThemeProvider>
+								<NextUIProvider>{props.children}</NextUIProvider>
 							</Provider>
 						</AntdRegistry>
 					</NextIntlClientProvider>

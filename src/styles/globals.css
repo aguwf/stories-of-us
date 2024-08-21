@@ -49,3 +49,24 @@
   --pastel-yellow: #d8d863; /* Darker yellow */
   --pastel-purple: #ad97ad; /* Darker purple */
 }
+
+.rtf {
+  z-index: 49!important;
+}
+
+.rtf--mb {
+  width: 48px;
+  height: 48px;
+}
+
+.rtf.open .rtf--mb>*{
+  transform: none !important;
+}
+
+.rtf.open .rtf--ab__c:first-child {
+  transform: translateY(-64px) scale(1)!important;
+}
+
+.rtf .rtf--ab {
+  margin-right: -1px!important;
+}

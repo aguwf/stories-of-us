@@ -104,12 +104,15 @@ export const storyRouter = createTRPCRouter({
 				return null;
 			}
 
-			await ctx.db.update(stories).set({
-				name: input.name,
-				description: input.description,
-				coverImage: input.coverImage,
-				images: input.images,
-			});
+			await ctx.db
+				.update(stories)
+				.set({
+					name: input.name,
+					description: input.description,
+					coverImage: input.coverImage,
+					images: input.images,
+				})
+				.where(eq(stories.id, input.id));
 
 			return {
 				...story,

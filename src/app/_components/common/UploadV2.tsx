@@ -34,7 +34,13 @@ export const UploadV2 = (_props: any) => {
 	useEffect(() => {
 		const timeoutId = setTimeout(() => {
 			setIsLoading(true); // Start loading
-			const newObjectURLs = fileList.map(createObjectURL);
+			const newObjectURLs = fileList.map((file: any) => {
+				console.log("🚀 ~ newObjectURLs ~ file:", file);
+				if (typeof file === "string") {
+					return file;
+				}
+				return createObjectURL(file);
+			});
 			setObjectURLs(newObjectURLs);
 			setIsLoading(false); // Finish loading
 		}, 500); // Adjust delay as needed
@@ -64,7 +70,36 @@ export const UploadV2 = (_props: any) => {
 					</div>
 					<Image.PreviewGroup>
 						{fileList.length
-							? fileList.map((file: File, index: number) => {
+							? fileList.map((file: any, index: number) => {
+									if (typeof file === "string") {
+										return (
+											<div
+												className="upload-select relative w-[calc((100%-16px)/3)] text-center transition-all duration-300 ease-in-out"
+												key={file}
+											>
+												{isLoading ? (
+													<div className="h-full w-full animate-pulse rounded-lg bg-gray-300" />
+												) : (
+													<Image
+														src={file} // Use objectURLs
+														alt={file}
+														height={102}
+														className="rounded-lg object-cover"
+													/>
+												)}
+
+												<span className="close -right-2 -top-2 absolute cursor-pointer">
+													<Button
+														isIconOnly
+														className="h-5 min-h-5 w-5 min-w-5 rounded-full"
+														onClick={() => handleRemoveFile(index)}
+													>
+														<Cancel01Icon size={12} />
+													</Button>
+												</span>
+											</div>
+										);
+									}
 									return (
 										<div
 											className="upload-select relative w-[calc((100%-16px)/3)] text-center transition-all duration-300 ease-in-out"

@@ -13,7 +13,7 @@ import React, { useState } from "react";
 
 const Toolbar = () => {
 	const router = useRouter();
-	const [selectedKeys, setSelectedKeys] = useState<any>("Sort by");
+	const [selectedKeys, setSelectedKeys] = useState<string>("Sort by");
 
 	const handleChangeOrder = (key: any) => {
 		setSelectedKeys(key);
@@ -27,7 +27,7 @@ const Toolbar = () => {
 					<DropdownTrigger>
 						<Button
 							variant="light"
-							className="bg-transparent"
+							className="bg-transparent capitalize"
 							startContent={<FilterIcon size={18} />}
 						>
 							{selectedKeys}

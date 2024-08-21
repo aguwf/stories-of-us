@@ -8,9 +8,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { NextIntlClientProvider, useMessages } from "next-intl";
-import { ThemeProvider } from "next-themes";
 import { notFound } from "next/navigation";
-import { useClientStore } from "../_store/clientStore";
 import Provider from "./provider";
 
 export const metadata: Metadata = {

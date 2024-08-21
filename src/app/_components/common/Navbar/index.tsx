@@ -2,7 +2,7 @@ import { Layout, Menu } from "antd";
 
 const { Header } = Layout;
 
-const Navbar = (props: any) => {
+const Navbar = () => {
 	return (
 		<nav className="navbar">
 			<Layout>
@@ -24,3 +24,5 @@ const Navbar = (props: any) => {
 		</nav>
 	);
 };
+
+export default Navbar;

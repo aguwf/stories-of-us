@@ -1,30 +1,36 @@
 "use client";
 
-import ImageK from "@/app/_components/common/ImageK";
+import { useStoryStore } from "@/app/_store/storyStore";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { api } from "@/trpc/react";
 import {
-	Button,
-	Card,
-	Dropdown,
-	DropdownItem,
-	DropdownMenu,
-	DropdownTrigger,
-	Pagination,
-	useDisclosure,
-} from "@nextui-org/react";
+	DndContext,
+	type DragEndEvent,
+	KeyboardSensor,
+	MouseSensor,
+	TouchSensor,
+	useSensor,
+	useSensors,
+} from "@dnd-kit/core";
+import {
+	SortableContext,
+	arrayMove,
+	sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
+import { Pagination, useDisclosure } from "@nextui-org/react";
 import { message } from "antd";
-import { MoreVerticalCircle01Icon } from "hugeicons-react";
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DetailStoryModal from "../modals/DetailStoryModal";
+import { StoryCard } from "./Card";
 
-interface Story {
+export interface Story {
 	id: number;
 	name: string;
-	description: string | null;
+	description: string;
 	coverImage: string;
 	images: string[];
+	sort: number;
 	createdAt: Date | string | null;
 }
 
@@ -32,21 +38,11 @@ interface ListStoryProps {
 	setSelectedStory: (story: Story) => void;
 }
 
-const actionMenuOptions: {
-	key: string;
-	label: string;
-	color?:
-		| "danger"
-		| "default"
-		| "success"
-		| "primary"
-		| "secondary"
-		| "warning";
-}[] = [
-	{ key: "copy", label: "Copy link" },
-	{ key: "edit", label: "Edit" },
-	{ key: "delete", label: "Delete", color: "danger" },
-];
+interface ResponseStory {
+	storyList: Story[];
+	totalPages: number;
+	totalCount: number;
+}
 
 const DEFAULT_ORDER_BY = "newest";
 const DEFAULT_PAGE = 1;
@@ -57,6 +53,7 @@ export default function ListStory(props: ListStoryProps) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [selectedImages, setSelectedImages] = useState<Story>();
 
+	const utils = api.useUtils();
 	const searchParams = useSearchParams();
 	const { push } = useRouterHelper();
 
@@ -68,118 +65,97 @@ export default function ListStory(props: ListStoryProps) {
 		orderBy: orderBy === "newest" ? "desc" : "asc",
 		page: page < 1 ? DEFAULT_PAGE : page,
 		totalItems: totalItems < 1 ? DEFAULT_TOTAL_ITEMS : totalItems,
-		sort: "createdAt",
+		sort: "sort",
 	});
 
-	// Type assertion (use with caution)
-	const { storyList, totalPages } = stories as {
-		storyList: {
-			id: number;
-			name: string;
-			description: string | null;
-			coverImage: string;
-			images: string[];
-			userId: string;
-			createdAt: Date;
-			updatedAt: Date | null;
-		}[];
-		totalPages: number;
-		totalCount: number;
-	};
-	console.log("🚀 ~ ListStory ~ storyList:", storyList);
+	const {
+		stories: storiesStore,
+		totalPages,
+		setTotalPages,
+		setStories,
+	} = useStoryStore();
 
-	const utils = api.useUtils();
-	const deleteStory = api.story.delete.useMutation({
+	const storyIds = useMemo(
+		() => storiesStore.map((story) => story.id),
+		[storiesStore],
+	);
+
+	const updateStory = api.story.update.useMutation({
 		onSuccess: async () => {
-			message.success("Delete successfully");
+			message.success("Update successfully");
 			await utils.story.invalidate();
 		},
 	});
 
-	const handleActionMenu = (key: any, story: Story) => {
-		switch (key) {
-			case "delete":
-				message.info("Deleting...");
-				deleteStory.mutate({ id: story.id });
-				break;
-			case "edit":
-				setSelectedStory(story);
-				break;
-			default:
-				break;
+	useEffect(() => {
+		const { storyList, totalPages } = stories as ResponseStory;
+		if (storyList && storyList.length > 0) {
+			setStories(storyList);
+			setTotalPages(totalPages);
 		}
-	};
+	}, [stories]);
 
 	const handleChangePagination = (page: number) => {
 		push("page", page.toString());
 	};
 
-	const renderStoryCard = (item: Story) => {
-		const formattedDate = new Date(item.createdAt || new Date());
-		const month = formattedDate
-			.toLocaleString("en-US", { month: "long" })
-			.slice(0, 3);
+	const sensors = useSensors(
+		useSensor(MouseSensor, {
+			activationConstraint: {
+				distance: 8,
+			},
+		}),
+		useSensor(TouchSensor, {
+			activationConstraint: {
+				delay: 300,
+				tolerance: 8,
+			},
+		}),
+		useSensor(KeyboardSensor, {
+			coordinateGetter: sortableKeyboardCoordinates,
+		}),
+	);
 
-		return (
-			<Card
-				className="mt-12 flex flex-row gap-8 p-4 first:mt-0"
-				key={item.id}
-				onClick={onOpen}
-			>
-				<div className="mx-4 flex flex-col items-center">
-					<div className="font-medium text-[#9f9f9f]">{month}</div>
-					<div className="font-bold">{formattedDate.getDate()}</div>
-					<div className="font-medium text-[#9f9f9f]">
-						{formattedDate.getFullYear()}
-					</div>
-				</div>
-				<div>
-					<ImageK
-						width={500}
-						height={300}
-						quality={80}
-						className="rounded-2xl"
-						src={item.coverImage.split("/").pop()}
-						alt={item.name}
-						onClick={() => {
-							onOpen();
-							setSelectedImages(item);
-						}}
-					/>
-					<div className="flex items-center justify-between">
-						<div>
-							<h3 className="mt-4 font-bold">{item.name}</h3>
-							<p className="mt-2 line-clamp-5">{item.description}</p>
-						</div>
-						<Dropdown>
-							<DropdownTrigger>
-								<Button
-									variant="flat"
-									className="rounded-full bg-transparent"
-									isIconOnly
-								>
-									<MoreVerticalCircle01Icon />
-								</Button>
-							</DropdownTrigger>
-							<DropdownMenu
-								aria-label="Static Actions"
-								onAction={(key) => handleActionMenu(key, item)}
-							>
-								{actionMenuOptions.map((option) => (
-									<DropdownItem
-										key={option.key}
-										className={option.color ? `text-${option.color}` : ""}
-										color={option.color}
-									>
-										{option.label}
-									</DropdownItem>
-								))}
-							</DropdownMenu>
-						</Dropdown>
-					</div>
-				</div>
-			</Card>
-		);
+	// const handleDragStart = (event: DragStartEvent) => {};
+	// const handleDragMove = (event: DragMoveEvent) => {};
+	const handleDragEnd = (event: DragEndEvent) => {
+		const { active, over } = event;
+		if (active.id && over && active.id !== over.id) {
+			const newStoryList = arrayMove(
+				storiesStore,
+				storyIds.indexOf(+active.id),
+				storyIds.indexOf(+over.id),
+			).map((story, _idx) => {
+				return {
+					...story,
+					sort: _idx,
+				};
+			});
+
+			setStories(newStoryList);
+
+			const overStory = storiesStore.find((s) => s.id === over.id);
+			console.log(
+				"🚀 ~ handleDragEnd ~ overStory:",
+				storiesStore.find((s) => s.id === over.id),
+			);
+			const activeStory = storiesStore.find((s) => s.id === active.id);
+			console.log(
+				"🚀 ~ handleDragEnd ~ activeStory:",
+				storiesStore.find((s) => s.id === active.id),
+			);
+
+			if (overStory && activeStory) {
+				updateStory.mutate({
+					...overStory,
+					sort: activeStory.sort,
+				});
+				updateStory.mutate({
+					...activeStory,
+					sort: overStory.sort,
+				});
+			}
+		}
 	};
 
 	return (
@@ -189,9 +165,21 @@ export default function ListStory(props: ListStoryProps) {
 					<h1 className="text-2xl">Loading...</h1>
 				</div>
 			)}
-			{storyList?.length ? (
-				<div>
-					{storyList.map(renderStoryCard)}
+			{storiesStore?.length ? (
+				<DndContext sensors={sensors} onDragEnd={handleDragEnd}>
+					<SortableContext items={storyIds}>
+						<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+							{storiesStore.map((item) => (
+								<StoryCard
+									key={item.id}
+									item={item}
+									setSelectedStory={setSelectedStory}
+									onOpen={onOpen}
+									setSelectedImages={setSelectedImages}
+								/>
+							))}
+						</div>
+					</SortableContext>
 					<Pagination
 						className="mt-3"
 						total={totalPages}
@@ -199,7 +187,7 @@ export default function ListStory(props: ListStoryProps) {
 						initialPage={1}
 						onChange={handleChangePagination}
 					/>
-				</div>
+				</DndContext>
 			) : (
 				<div className="flex h-[50vh] items-center justify-center">
 					<h1 className="text-2xl">No stories found</h1>

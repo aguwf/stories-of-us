@@ -11,8 +11,7 @@ interface Actions {
 	toggleTheme: () => void;
 }
 
-// useBearStore
-export const useClientStore = create(
+export const useThemeStore = create(
 	persist<States & Actions>(
 		(set) => ({
 			theme: "",
@@ -21,7 +20,7 @@ export const useClientStore = create(
 				set((state) => ({ theme: state.theme === "light" ? "dark" : "light" })),
 		}),
 		{
-			name: "bearStore",
+			name: "theme-store",
 			storage: createJSONStorage(() => localStorage),
 		},
 	),

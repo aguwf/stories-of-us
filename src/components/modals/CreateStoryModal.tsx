@@ -14,10 +14,13 @@ import { Button, Input, Textarea } from "@nextui-org/react";
 import type { PopconfirmProps } from "antd";
 import { Image, Popconfirm, message } from "antd";
 import { useEffect, useState } from "react";
+
 interface StoryData {
 	name: string;
 	description: string;
 }
+
+const defaultStoryData: StoryData = { name: "", description: "" };
 
 export default function CreateStoryModal({
 	isOpen,
@@ -28,8 +31,7 @@ export default function CreateStoryModal({
 	const [previewImage, setPreviewImage] = useState("");
 	const [fileList, setFileList] = useState<File[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
-	const [data, setData] = useState<StoryData>({ name: "", description: "" });
-	// const [messageApi] = message.useMessage();
+	const [data, setData] = useState<StoryData>(defaultStoryData);
 	const utils = api.useUtils();
 
 	const createStory = api.story.create.useMutation({
@@ -37,7 +39,7 @@ export default function CreateStoryModal({
 			setIsUploading(false);
 			message.success("Create successfully");
 			await utils.story.invalidate();
-			_resetModal();
+			resetModal();
 		},
 		onError: () => {
 			setIsUploading(false);
@@ -49,7 +51,7 @@ export default function CreateStoryModal({
 			setIsUploading(false);
 			message.success("Update successfully");
 			await utils.story.invalidate();
-			_resetModal();
+			resetModal();
 		},
 		onError: () => {
 			setIsUploading(false);
@@ -61,15 +63,9 @@ export default function CreateStoryModal({
 		if (localData) {
 			setData(JSON.parse(localData));
 		}
-		// Before reload browser
-		window.addEventListener("beforeunload", () => {
-			localStorage.removeItem("data");
-		});
 
 		return () => {
-			window.removeEventListener("beforeunload", () => {
-				localStorage.removeItem("data");
-			});
+			localStorage.removeItem("data");
 		};
 	}, []);
 
@@ -80,6 +76,9 @@ export default function CreateStoryModal({
 				description: selectedStory.description,
 			});
 			setFileList(selectedStory.images);
+		} else {
+			setData(defaultStoryData);
+			setFileList([]);
 		}
 	}, [selectedStory]);
 
@@ -90,11 +89,6 @@ export default function CreateStoryModal({
 	};
 
 	const handleSubmit = async () => {
-		console.log(
-			"🚀 ~ handleSubmit ~ newStoryData: any.selectedStory:",
-			selectedStory,
-		);
-
 		if (fileList.length === 0) {
 			message.error("You need to select at least one image");
 			return;
@@ -115,7 +109,7 @@ export default function CreateStoryModal({
 						description: data.description,
 						coverImage: selectedStory?.coverImage || urls?.[0] || "",
 						images: [...existedImages, ...urls],
-						userId: "defaultid",
+						userId: "default-id",
 					};
 					if (selectedStory) {
 						newStoryData.id = selectedStory.id;
@@ -126,34 +120,30 @@ export default function CreateStoryModal({
 				})
 				.catch((err) => console.log(err));
 		} else {
-			const newStoryData: any = {
+			const updateStoryData: any = {
 				id: selectedStory?.id,
 				name: data.name,
 				description: data.description,
 				coverImage: selectedStory?.coverImage || "",
 				images: existedImages,
-				userId: "defaultid",
+				userId: "default-id",
 			};
-			console.log(
-				"🚀 ~ handleSubmit ~ newStoryData: any.selectedStory?.id:",
-				newStoryData,
-			);
 
-			updateStory.mutate(newStoryData);
+			updateStory.mutate(updateStoryData);
 		}
 
 		onOpenChange(false);
 	};
 
-	const _resetModal = () => {
+	const resetModal = () => {
 		setFileList([]);
 		setIsUploading(false);
-		setData({ name: "", description: "" });
+		setData(defaultStoryData);
 		localStorage.removeItem("data");
 	};
 
 	const confirm: PopconfirmProps["onConfirm"] = ({ onClose }: any) => {
-		_resetModal();
+		resetModal();
 		onClose();
 	};
 
@@ -178,7 +168,7 @@ export default function CreateStoryModal({
 				{(onClose) => (
 					<>
 						<ModalHeader className="flex flex-col gap-1">
-							Create new memory
+							{selectedStory ? "Edit Story" : "Create new memory"}
 						</ModalHeader>
 						<ModalBody>
 							<Input

@@ -1,0 +1,87 @@
+{
+	"id": "00084758-ae99-4451-857b-6490458e006b",
+	"prevId": "b63f343c-b029-4a54-83b5-e8baf69bc8dc",
+	"version": "6",
+	"dialect": "postgresql",
+	"tables": {
+		"public.stories-of-us_story": {
+			"name": "stories-of-us_story",
+			"schema": "",
+			"columns": {
+				"id": {
+					"name": "id",
+					"type": "serial",
+					"primaryKey": true,
+					"notNull": true
+				},
+				"name": {
+					"name": "name",
+					"type": "varchar(256)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"description": {
+					"name": "description",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"cover_image": {
+					"name": "cover_image",
+					"type": "varchar(255)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"images": {
+					"name": "images",
+					"type": "text[]",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "'{}'::text[]"
+				},
+				"user_id": {
+					"name": "user_id",
+					"type": "varchar(255)",
+					"primaryKey": false,
+					"notNull": true
+				},
+				"sort": {
+					"name": "sort",
+					"type": "integer",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"created_at": {
+					"name": "created_at",
+					"type": "timestamp with time zone",
+					"primaryKey": false,
+					"notNull": true,
+					"default": "CURRENT_TIMESTAMP"
+				},
+				"updated_at": {
+					"name": "updated_at",
+					"type": "timestamp with time zone",
+					"primaryKey": false,
+					"notNull": false
+				}
+			},
+			"indexes": {},
+			"foreignKeys": {},
+			"compositePrimaryKeys": {},
+			"uniqueConstraints": {
+				"stories-of-us_story_sort_unique": {
+					"name": "stories-of-us_story_sort_unique",
+					"nullsNotDistinct": false,
+					"columns": ["sort"]
+				}
+			}
+		}
+	},
+	"enums": {},
+	"schemas": {},
+	"_meta": {
+		"columns": {},
+		"schemas": {},
+		"tables": {}
+	}
+}

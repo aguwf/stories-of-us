@@ -3,10 +3,10 @@
 import { StyleProvider } from "@ant-design/cssinjs";
 import { ConfigProvider, theme } from "antd";
 import { ThemeProvider } from "next-themes";
-import { useClientStore } from "../_store/clientStore";
+import { useThemeStore } from "../_store/clientStore";
 
 export default function Provider({ children }: { children: React.ReactNode }) {
-	const { theme: themeStore } = useClientStore();
+	const { theme: themeStore } = useThemeStore();
 
 	return (
 		<ConfigProvider

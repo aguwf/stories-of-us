@@ -1,5 +1,6 @@
 import { sql } from "drizzle-orm";
 import {
+	integer,
 	pgTableCreator,
 	serial,
 	text,
@@ -22,6 +23,7 @@ export const stories = createTable("story", {
 	coverImage: varchar("cover_image", { length: 255 }).notNull(),
 	images: text("images").array().default(sql`'{}'::text[]`).notNull(),
 	userId: varchar("user_id", { length: 255 }).notNull(),
+	sort: integer("sort"),
 	createdAt: timestamp("created_at", { withTimezone: true })
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull(),

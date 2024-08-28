@@ -26,7 +26,7 @@ export const storyRouter = createTRPCRouter({
 			z.object({
 				page: z.number(),
 				totalItems: z.number(),
-				sort: z.enum(["createdAt", "name"]),
+				sort: z.enum(["createdAt", "name", "sort"]),
 				orderBy: z.enum(["asc", "desc"]),
 			}),
 		)
@@ -92,7 +92,8 @@ export const storyRouter = createTRPCRouter({
 				name: z.string(),
 				description: z.string(),
 				coverImage: z.string(),
-				images: z.array(z.string()).nonempty(),
+				images: z.string().array(),
+				sort: z.number(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -111,6 +112,7 @@ export const storyRouter = createTRPCRouter({
 					description: input.description,
 					coverImage: input.coverImage,
 					images: input.images,
+					sort: input.sort,
 				})
 				.where(eq(stories.id, input.id));
 

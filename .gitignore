@@ -48,3 +48,6 @@ yarn-error.log*
 # Serwist
 public/sw*
 public/swe-worker*
+## Panda
+styled-system
+styled-system-studio

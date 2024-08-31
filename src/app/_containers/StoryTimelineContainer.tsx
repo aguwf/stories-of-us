@@ -25,6 +25,8 @@ const StoryTimelineContainer = () => {
 	const { theme, setTheme } = useThemeStore();
 
 	const [selectedStory, setSelectedStory] = useState<any>(null);
+	const [createIndex, setCreateIndex] = useState<number | null>(null);
+	const [maxIndex, setMaxIndex] = useState<number | null>(null);
 
 	useEffect(() => {
 		if (selectedStory) {
@@ -35,7 +37,12 @@ const StoryTimelineContainer = () => {
 	return (
 		<div className="container mx-auto px-4">
 			<Toolbar />
-			<ListStory setSelectedStory={setSelectedStory} />
+			<ListStory 
+				setSelectedStory={setSelectedStory} 
+				openModal={onOpenCreateModal} 
+				setCreateIndex={setCreateIndex}
+				setMaxIndex={setMaxIndex}
+			/>
 			<FloatButton.Group className="end-6">
 				<FloatButton
 					className="-translate-y-8 [&>div]:bg-primary"
@@ -65,6 +72,8 @@ const StoryTimelineContainer = () => {
 				isOpen={isOpenCreateModal}
 				onOpenChange={onOpenChangeCreateModal}
 				selectedStory={selectedStory}
+				createIndex={createIndex}
+				maxIndex={maxIndex}
 			/>
 		</div>
 	);

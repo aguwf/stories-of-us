@@ -16,13 +16,15 @@ import {
 	SortableContext,
 	arrayMove,
 	sortableKeyboardCoordinates,
+	verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
-import { Pagination, useDisclosure } from "@nextui-org/react";
+import { Button, Pagination, useDisclosure } from "@nextui-org/react";
 import { message } from "antd";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import DetailStoryModal from "../modals/DetailStoryModal";
 import { StoryCard } from "./Card";
+import { PlusSignIcon } from "hugeicons-react";
 
 export interface Story {
 	id: number;
@@ -36,6 +38,9 @@ export interface Story {
 
 interface ListStoryProps {
 	setSelectedStory: (story: Story) => void;
+	openModal: () => void; // Add this line
+	setCreateIndex: (index: number) => void;
+	setMaxIndex: (index: number) => void;
 }
 
 interface ResponseStory {
@@ -48,23 +53,22 @@ const DEFAULT_ORDER_BY = "newest";
 const DEFAULT_PAGE = 1;
 const DEFAULT_TOTAL_ITEMS = 5;
 
-export default function ListStory(props: ListStoryProps) {
-	const { setSelectedStory } = props;
+export default function ListStory({ setSelectedStory, openModal, setCreateIndex, setMaxIndex }: ListStoryProps) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-	const [selectedImages, setSelectedImages] = useState<Story>();
+	const [selectedImages, setSelectedImages] = useState<Story | undefined>();
 
 	const utils = api.useUtils();
 	const searchParams = useSearchParams();
 	const { push } = useRouterHelper();
 
 	const orderBy = searchParams.get("orderBy") || DEFAULT_ORDER_BY;
-	const page = +(searchParams.get("page") ?? DEFAULT_PAGE);
-	const totalItems = +(searchParams.get("totalItems") ?? DEFAULT_TOTAL_ITEMS);
+	const page = Math.max(+(searchParams.get("page") ?? DEFAULT_PAGE), 1);
+	const totalItems = Math.max(+(searchParams.get("totalItems") ?? DEFAULT_TOTAL_ITEMS), 1);
 
 	const [stories, { isLoading }] = api.story.getAll.useSuspenseQuery({
 		orderBy: orderBy === "newest" ? "desc" : "asc",
-		page: page < 1 ? DEFAULT_PAGE : page,
-		totalItems: totalItems < 1 ? DEFAULT_TOTAL_ITEMS : totalItems,
+		page,
+		totalItems,
 		sort: "sort",
 	});
 
@@ -75,10 +79,7 @@ export default function ListStory(props: ListStoryProps) {
 		setStories,
 	} = useStoryStore();
 
-	const storyIds = useMemo(
-		() => storiesStore.map((story) => story.id),
-		[storiesStore],
-	);
+	const storyIds = useMemo(() => storiesStore.map((story) => story.id), [storiesStore]);
 
 	const updateStory = api.story.update.useMutation({
 		onSuccess: async () => {
@@ -89,11 +90,18 @@ export default function ListStory(props: ListStoryProps) {
 
 	useEffect(() => {
 		const { storyList, totalPages } = stories as ResponseStory;
-		if (storyList && storyList.length > 0) {
+		if (storyList?.length > 0) {
 			setStories(storyList);
 			setTotalPages(totalPages);
 		}
-	}, [stories]);
+	}, [stories, setStories, setTotalPages]);
+
+	useEffect(() => {
+		if (storiesStore.length > 0) {
+			const maxSort = Math.max(...storiesStore.map(story => story.sort));
+			setMaxIndex(maxSort);
+		}
+	}, [storiesStore, setMaxIndex]);
 
 	const handleChangePagination = (page: number) => {
 		push("page", page.toString());
@@ -107,92 +115,104 @@ export default function ListStory(props: ListStoryProps) {
 		}),
 		useSensor(TouchSensor, {
 			activationConstraint: {
-				delay: 300,
-				tolerance: 8,
+				delay: 100,
+				tolerance: 5,
 			},
 		}),
 		useSensor(KeyboardSensor, {
 			coordinateGetter: sortableKeyboardCoordinates,
-		}),
+		})
 	);
 
-	// const handleDragStart = (event: DragStartEvent) => {};
-	// const handleDragMove = (event: DragMoveEvent) => {};
 	const handleDragEnd = (event: DragEndEvent) => {
 		const { active, over } = event;
 		if (active.id && over && active.id !== over.id) {
-			const newStoryList = arrayMove(
-				storiesStore,
-				storyIds.indexOf(+active.id),
-				storyIds.indexOf(+over.id),
-			).map((story, _idx) => {
-				return {
-					...story,
-					sort: _idx,
-				};
-			});
+			const oldIndex = storyIds.indexOf(+active.id);
+			const newIndex = storyIds.indexOf(+over.id);
+			const newStoryList = arrayMove(storiesStore, oldIndex, newIndex)
+				.map((story, index) => ({ ...story, sort: index }));
 
 			setStories(newStoryList);
 
-			const overStory = storiesStore.find((s) => s.id === over.id);
-			console.log(
-				"🚀 ~ handleDragEnd ~ overStory:",
-				storiesStore.find((s) => s.id === over.id),
-			);
-			const activeStory = storiesStore.find((s) => s.id === active.id);
-			console.log(
-				"🚀 ~ handleDragEnd ~ activeStory:",
-				storiesStore.find((s) => s.id === active.id),
-			);
+			updateStory.mutate({
+				id: +active.id,
+				sort: storiesStore[newIndex]?.sort ?? 0
+			});
 
-			if (overStory && activeStory) {
-				updateStory.mutate({
-					...overStory,
-					sort: activeStory.sort,
-				});
-				updateStory.mutate({
-					...activeStory,
-					sort: overStory.sort,
-				});
-			}
+			updateStory.mutate({
+				id: +over.id,
+				sort: storiesStore[oldIndex]?.sort ?? 0
+			});
 		}
 	};
 
+	const handleAddStory = (index: number) => {
+		// Implement the logic to add a new story at the specified index
+		openModal();
+		setCreateIndex(index);
+	};
+
+	if (isLoading) {
+		return (
+			<div className="flex h-[50vh] items-center justify-center">
+				<h1 className="text-2xl">Loading...</h1>
+			</div>
+		);
+	}
+
+	if (!storiesStore?.length) {
+		return (
+			<div className="flex h-[50vh] items-center justify-center">
+				<h1 className="text-2xl">No stories found</h1>
+			</div>
+		);
+	}
+
 	return (
 		<div>
-			{isLoading && (
-				<div className="flex h-[50vh] items-center justify-center">
-					<h1 className="text-2xl">Loading...</h1>
-				</div>
-			)}
-			{storiesStore?.length ? (
-				<DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-					<SortableContext items={storyIds}>
-						<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-							{storiesStore.map((item) => (
-								<StoryCard
-									key={item.id}
-									item={item}
-									setSelectedStory={setSelectedStory}
-									onOpen={onOpen}
-									setSelectedImages={setSelectedImages}
-								/>
-							))}
-						</div>
-					</SortableContext>
-					<Pagination
-						className="mt-3"
-						total={totalPages}
-						page={page}
-						initialPage={1}
-						onChange={handleChangePagination}
-					/>
-				</DndContext>
-			) : (
-				<div className="flex h-[50vh] items-center justify-center">
-					<h1 className="text-2xl">No stories found</h1>
-				</div>
-			)}
+			<DndContext
+				sensors={sensors}
+				onDragEnd={handleDragEnd}
+			>
+				<SortableContext items={storyIds} strategy={verticalListSortingStrategy}>
+					<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+						{storiesStore.map((item, index) => {
+							const nextItem = storiesStore[index + 1];
+							const nextSort = nextItem ? (nextItem.sort + 1) : item.sort + 1;
+							const sort = (item.sort + nextSort) / 2;
+							const isLastItem = index === storiesStore.length - 1;
+							return (
+								<div key={item.id}>
+									<StoryCard
+										item={item}
+										setSelectedStory={setSelectedStory}
+										onOpen={onOpen}
+										setSelectedImages={setSelectedImages}
+									/>
+									{!isLastItem && (
+										<Button
+											isIconOnly
+											color="primary"
+											aria-label="Add story"
+											className="h-12 w-full mt-2"
+											onClick={() => handleAddStory(sort)}
+										>
+											<PlusSignIcon className="h-6 w-6" />
+										</Button>
+									)}
+								</div>
+							)
+						})}
+					</div>
+				</SortableContext>
+				<Pagination
+					className="mt-3"
+					total={totalPages}
+					page={page}
+					initialPage={1}
+					onChange={handleChangePagination}
+				/>
+			</DndContext>
 			<DetailStoryModal
 				isOpen={isOpen}
 				onOpenChange={onOpenChange}

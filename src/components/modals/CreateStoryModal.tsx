@@ -12,8 +12,9 @@ import {
 } from "@nextui-org/modal";
 import { Button, Input, Textarea } from "@nextui-org/react";
 import type { PopconfirmProps } from "antd";
-import { Image, Popconfirm, message } from "antd";
-import { useEffect, useState } from "react";
+import { Popconfirm, message } from "antd";
+import { useEffect, useState, useCallback } from "react";
+import { Story } from "../common/ListStory";
 
 interface StoryData {
 	name: string;
@@ -22,40 +23,46 @@ interface StoryData {
 
 const defaultStoryData: StoryData = { name: "", description: "" };
 
+interface CreateStoryModalProps {
+	isOpen: boolean;
+	onOpenChange: (open: boolean) => void;
+	selectedStory?: Story;
+	createIndex?: number | null;
+	maxIndex?: number | null;
+}
+
 export default function CreateStoryModal({
 	isOpen,
 	onOpenChange,
 	selectedStory,
-}: any) {
-	const [previewOpen, setPreviewOpen] = useState(false);
-	const [previewImage, setPreviewImage] = useState("");
-	const [fileList, setFileList] = useState<File[]>([]);
+	createIndex,
+	maxIndex,
+}: CreateStoryModalProps) {
+	const [fileList, setFileList] = useState<(File | string)[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
 	const [data, setData] = useState<StoryData>(defaultStoryData);
 	const utils = api.useUtils();
 
+	const handleMutationSuccess = (action: string) => async () => {
+		setIsUploading(false);
+		message.success(`${action} successfully`);
+		await utils.story.invalidate();
+		resetModal();
+	};
+
+	const handleMutationError = () => {
+		setIsUploading(false);
+		message.error("An error occurred");
+	};
+
 	const createStory = api.story.create.useMutation({
-		onSuccess: async () => {
-			setIsUploading(false);
-			message.success("Create successfully");
-			await utils.story.invalidate();
-			resetModal();
-		},
-		onError: () => {
-			setIsUploading(false);
-		},
+		onSuccess: handleMutationSuccess("Create"),
+		onError: handleMutationError,
 	});
 
 	const updateStory = api.story.update.useMutation({
-		onSuccess: async () => {
-			setIsUploading(false);
-			message.success("Update successfully");
-			await utils.story.invalidate();
-			resetModal();
-		},
-		onError: () => {
-			setIsUploading(false);
-		},
+		onSuccess: handleMutationSuccess("Update"),
+		onError: handleMutationError,
 	});
 
 	useEffect(() => {
@@ -77,16 +84,18 @@ export default function CreateStoryModal({
 			});
 			setFileList(selectedStory.images);
 		} else {
-			setData(defaultStoryData);
-			setFileList([]);
+			resetModal();
 		}
 	}, [selectedStory]);
 
-	const onInputChange = (e: any) => {
+	const onInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		const { name, value } = e.target;
-		setData({ ...data, [name]: value });
-		localStorage.setItem("data", JSON.stringify(data));
-	};
+		setData((prevData) => {
+			const newData = { ...prevData, [name]: value };
+			localStorage.setItem("data", JSON.stringify(newData));
+			return newData;
+		});
+	}, []);
 
 	const handleSubmit = async () => {
 		if (fileList.length === 0) {
@@ -97,50 +106,52 @@ export default function CreateStoryModal({
 		setIsUploading(true);
 		message.loading("Uploading...");
 
-		const existedImages = fileList.filter((file) => typeof file === "string");
-		const newImages = fileList.filter((file) => typeof file === "object");
+		const existedImages = fileList.filter((file): file is string => typeof file === "string");
+		const newImages = fileList.filter((file): file is File => file instanceof File);
 
-		if (newImages.length > 0) {
-			handleUploadImage(newImages)
-				.then((images) => {
-					const urls = images ? images.map((image) => image?.url || "") : [];
-					const newStoryData: any = {
-						name: data.name,
-						description: data.description,
-						coverImage: selectedStory?.coverImage || urls?.[0] || "",
-						images: [...existedImages, ...urls],
-						userId: "default-id",
-					};
-					if (selectedStory) {
-						newStoryData.id = selectedStory.id;
-						updateStory.mutate(newStoryData);
-					} else {
-						createStory.mutate(newStoryData);
-					}
-				})
-				.catch((err) => console.log(err));
-		} else {
-			const updateStoryData: any = {
-				id: selectedStory?.id,
-				name: data.name,
-				description: data.description,
-				coverImage: selectedStory?.coverImage || "",
-				images: existedImages,
-				userId: "default-id",
-			};
+		try {
+			if (newImages.length > 0) {
+				const uploadedImages = await handleUploadImage(newImages);
+				const urls = uploadedImages ? uploadedImages.map((image) => image?.url || "") : [];
+				const allImages = [...existedImages, ...urls];
+				const newStoryData = {
+					name: data.name,
+					description: data.description,
+					coverImage: selectedStory?.coverImage || urls[0] || "",
+					images: allImages,
+					sort: createIndex ? createIndex : maxIndex ? maxIndex + 100 : 0,
+					userId: "default-id",
+				};
 
-			updateStory.mutate(updateStoryData);
+				if (selectedStory) {
+					updateStory.mutate({ ...newStoryData, id: selectedStory.id });
+				} else {
+					createStory.mutate(newStoryData);
+				}
+			} else if (selectedStory) {
+				updateStory.mutate({
+					id: selectedStory.id,
+					name: data.name,
+					description: data.description,
+					coverImage: selectedStory.coverImage,
+					images: existedImages
+				});
+			}
+		} catch (error) {
+			console.error("Error during image upload:", error);
+			message.error("Failed to upload images");
+			setIsUploading(false);
 		}
 
 		onOpenChange(false);
 	};
 
-	const resetModal = () => {
+	const resetModal = useCallback(() => {
 		setFileList([]);
 		setIsUploading(false);
 		setData(defaultStoryData);
 		localStorage.removeItem("data");
-	};
+	}, []);
 
 	const confirm: PopconfirmProps["onConfirm"] = ({ onClose }: any) => {
 		resetModal();
@@ -195,21 +206,7 @@ export default function CreateStoryModal({
 								type="text"
 								value={data.description}
 							/>
-							<div>
-								<UploadV2 fileList={fileList} setFileList={setFileList} />
-								{previewImage && (
-									<Image
-										wrapperStyle={{ display: "none" }}
-										preview={{
-											visible: previewOpen,
-											onVisibleChange: (visible) => setPreviewOpen(visible),
-											afterOpenChange: (visible) =>
-												!visible && setPreviewImage(""),
-										}}
-										src={previewImage}
-									/>
-								)}
-							</div>
+							<UploadV2 fileList={fileList} setFileList={setFileList} />
 						</ModalBody>
 						<ModalFooter>
 							{data?.name ? (

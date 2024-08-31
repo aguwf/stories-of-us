@@ -13,10 +13,11 @@ export const storyRouter = createTRPCRouter({
 		.input(StoryValidation)
 		.mutation(async ({ ctx, input }) => {
 			await ctx.db.insert(stories).values({
-				name: input.name,
-				description: input.description,
-				coverImage: input.coverImage,
-				images: input.images,
+				name: input.name ?? "",
+				description: input.description ?? "",
+				coverImage: input.coverImage ?? "",
+				images: input.images ?? [],
+				sort: input.sort ?? 0,
 				userId: input.userId,
 			});
 		}),
@@ -89,11 +90,11 @@ export const storyRouter = createTRPCRouter({
 		.input(
 			z.object({
 				id: z.number(),
-				name: z.string(),
-				description: z.string(),
-				coverImage: z.string(),
-				images: z.string().array(),
-				sort: z.number(),
+				name: z.string().optional(),
+				description: z.string().optional(),
+				coverImage: z.string().optional(),
+				images: z.string().array().optional(),
+				sort: z.number().optional(),
 			}),
 		)
 		.mutation(async ({ ctx, input }) => {

@@ -13,56 +13,60 @@ import {
 import { message } from "antd";
 import { MoreVerticalCircle01Icon } from "hugeicons-react";
 import type { Story } from "./ListStory";
+import clsx from "clsx";
+import { memo } from "react";
 
-const actionMenuOptions: {
-	key: string;
-	label: string;
-	color?:
-		| "danger"
-		| "default"
-		| "success"
-		| "primary"
-		| "secondary"
-		| "warning";
-}[] = [
+const actionMenuOptions = [
 	{ key: "copy", label: "Copy link" },
 	{ key: "edit", label: "Edit" },
-	{ key: "delete", label: "Delete", color: "danger" },
+	{ key: "delete", label: "Delete", color: "danger" as const },
 ];
 
-export const StoryCard = ({
+interface StoryCardProps {
+	item: Story;
+	setSelectedStory: (story: Story) => void;
+	onOpen: () => void;
+	setSelectedImages: (story: Story) => void;
+}
+
+export const StoryCard: React.FC<StoryCardProps> = memo(({
 	item,
 	setSelectedStory,
 	onOpen,
 	setSelectedImages,
-}: any) => {
-	const { attributes, listeners, setNodeRef, transform } = useSortable({
-		id: item.id,
-	});
+}) => {
+	const {
+		attributes,
+		listeners,
+		setNodeRef,
+		transform,
+		transition,
+		isDragging
+	} = useSortable({ id: item.id });
+
 	const formattedDate = new Date(item.createdAt || new Date());
 	const month = formattedDate
 		.toLocaleString("en-US", { month: "long" })
 		.slice(0, 3);
 
 	const style = {
-		margin: "10px",
-		opacity: 1,
-		color: "#333",
-		background: "white",
-		padding: "10px",
 		transform: CSS.Transform.toString(transform),
+		transition,
+		opacity: isDragging ? 0.5 : 1,
+		zIndex: isDragging ? 1000 : 1,
 	};
 
-	const handleActionMenu = (key: any, story: Story) => {
+	const handleActionMenu = (key: any) => {
 		switch (key) {
 			case "delete":
 				message.info("Deleting...");
-				deleteStory.mutate({ id: story.id });
+				deleteStory.mutate({ id: item.id });
 				break;
 			case "edit":
-				setSelectedStory(story);
+				setSelectedStory(item);
 				break;
-			default:
+			case "copy":
+				// Implement copy link functionality
 				break;
 		}
 	};
@@ -71,20 +75,26 @@ export const StoryCard = ({
 
 	const deleteStory = api.story.delete.useMutation({
 		onSuccess: async () => {
-			message.success("Delete successfully");
+			message.success("Deleted successfully");
 			await utils.story.invalidate();
+		},
+		onError: () => {
+			message.error("Failed to delete story");
 		},
 	});
 
 	return (
 		<Card
-			className="mt-12 flex w-full flex-row gap-8 p-4 first:mt-0"
+			className={clsx(
+				"flex w-full flex-row gap-8 p-4 first:mt-0",
+				{ "touch-none": isDragging }
+			)}
 			key={item.id}
 			id={`${item.id}`}
 			ref={setNodeRef}
+			style={style}
 			{...attributes}
 			{...listeners}
-			style={style}
 		>
 			<div className="mx-4 flex flex-col items-center">
 				<div className="font-medium text-[#9f9f9f]">{month}</div>
@@ -93,12 +103,12 @@ export const StoryCard = ({
 					{formattedDate.getFullYear()}
 				</div>
 			</div>
-			<div>
+			<div className="flex-1">
 				<ImageK
 					width={500}
 					height={300}
 					quality={80}
-					className="rounded-2xl"
+					className="w-full rounded-2xl object-cover"
 					src={item.coverImage.split("/").pop()}
 					alt={item.name}
 					onClick={() => {
@@ -106,24 +116,24 @@ export const StoryCard = ({
 						setSelectedImages(item);
 					}}
 				/>
-				<div className="flex items-center justify-between">
+				<div className="mt-4 flex items-start justify-between">
 					<div>
-						<h3 className="mt-4 font-bold">{item.name}</h3>
-						<p className="mt-2 line-clamp-5">{item.description}</p>
+						<h3 className="font-bold">{item.name}</h3>
+						<p className="mt-2 line-clamp-3 text-sm text-gray-600">{item.description}</p>
 					</div>
 					<Dropdown>
 						<DropdownTrigger>
 							<Button
-								variant="flat"
-								className="rounded-full bg-transparent"
+								variant="light"
 								isIconOnly
+								className="rounded-full"
 							>
 								<MoreVerticalCircle01Icon />
 							</Button>
 						</DropdownTrigger>
 						<DropdownMenu
-							aria-label="Static Actions"
-							onAction={(key) => handleActionMenu(key, item)}
+							aria-label="Story actions"
+							onAction={handleActionMenu}
 						>
 							{actionMenuOptions.map((option) => (
 								<DropdownItem
@@ -140,4 +150,6 @@ export const StoryCard = ({
 			</div>
 		</Card>
 	);
-};
+});
+
+StoryCard.displayName = 'StoryCard';

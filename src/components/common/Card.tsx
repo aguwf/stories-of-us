@@ -1,7 +1,5 @@
 import ImageK from "@/app/_components/common/ImageK";
 import { api } from "@/trpc/react";
-import { useSortable } from "@dnd-kit/sortable";
-import { CSS } from "@dnd-kit/utilities";
 import {
 	Button,
 	Card,
@@ -35,26 +33,11 @@ export const StoryCard: React.FC<StoryCardProps> = memo(({
 	onOpen,
 	setSelectedImages,
 }) => {
-	const {
-		attributes,
-		listeners,
-		setNodeRef,
-		transform,
-		transition,
-		isDragging
-	} = useSortable({ id: item.id });
 
 	const formattedDate = new Date(item.createdAt || new Date());
 	const month = formattedDate
 		.toLocaleString("en-US", { month: "long" })
 		.slice(0, 3);
-
-	const style = {
-		transform: CSS.Transform.toString(transform),
-		transition,
-		opacity: isDragging ? 0.5 : 1,
-		zIndex: isDragging ? 1000 : 1,
-	};
 
 	const handleActionMenu = (key: any) => {
 		switch (key) {
@@ -86,15 +69,10 @@ export const StoryCard: React.FC<StoryCardProps> = memo(({
 	return (
 		<Card
 			className={clsx(
-				"flex w-full flex-row gap-8 p-4 first:mt-0",
-				{ "touch-none": isDragging }
+				"flex w-full flex-row gap-8 p-4 first:mt-0"
 			)}
 			key={item.id}
 			id={`${item.id}`}
-			ref={setNodeRef}
-			style={style}
-			{...attributes}
-			{...listeners}
 		>
 			<div className="mx-4 flex flex-col items-center">
 				<div className="font-medium text-[#9f9f9f]">{month}</div>

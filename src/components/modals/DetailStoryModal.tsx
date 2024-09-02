@@ -22,6 +22,7 @@ export default function DetailStoryModal({ isOpen, onOpenChange, story }: any) {
 			className="top max-h-screen"
 			classNames={{
 				closeButton: "top-8 right-6",
+				body: "pl-6",
 			}}
 		>
 			<ModalContent>

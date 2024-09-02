@@ -14,7 +14,7 @@ import { Button, Input, Textarea } from "@nextui-org/react";
 import type { PopconfirmProps } from "antd";
 import { Popconfirm, message } from "antd";
 import { useEffect, useState, useCallback } from "react";
-import { Story } from "../common/ListStory";
+import type { Story } from "../common/ListStory";
 
 interface StoryData {
 	name: string;
@@ -173,6 +173,7 @@ export default function CreateStoryModal({
 			classNames={{
 				wrapper: "z-[101]",
 				backdrop: "z-[100]",
+				body: "pl-6",
 			}}
 		>
 			<ModalContent>

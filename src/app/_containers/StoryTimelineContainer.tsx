@@ -4,7 +4,6 @@ import ListStory from "@/components/common/ListStory";
 import Toolbar from "@/components/common/Toolbar";
 import CreateStoryModal from "@/components/modals/CreateStoryModal";
 import { useDisclosure } from "@nextui-org/react";
-import { FloatButton } from "antd";
 import {
 	Add01Icon,
 	Moon02Icon,
@@ -12,8 +11,8 @@ import {
 	Sun03Icon,
 } from "hugeicons-react";
 import { useEffect, useState } from "react";
-import "react-tiny-fab/dist/styles.css";
 import { useThemeStore } from "../_store/clientStore";
+import { FloatButton, FloatButtonGroup } from "../_components/FloatButton";
 
 const StoryTimelineContainer = () => {
 	const {
@@ -32,42 +31,30 @@ const StoryTimelineContainer = () => {
 		if (selectedStory) {
 			onOpenCreateModal();
 		}
-	}, [selectedStory]);
+	}, [selectedStory, onOpenCreateModal]);
 
 	return (
 		<div className="container mx-auto px-4">
 			<Toolbar />
-			<ListStory 
-				setSelectedStory={setSelectedStory} 
-				openModal={onOpenCreateModal} 
+			<ListStory
+				setSelectedStory={setSelectedStory}
+				openModal={onOpenCreateModal}
 				setCreateIndex={setCreateIndex}
 				setMaxIndex={setMaxIndex}
 			/>
-			<FloatButton.Group className="end-6">
-				<FloatButton
-					className="-translate-y-8 [&>div]:bg-primary"
-					type="primary"
-					icon={<Add01Icon size={16} />}
-					onClick={onOpenCreateModal}
-				/>
-				<FloatButton.Group
-					trigger="hover"
-					style={{ insetInlineEnd: 24 }}
-					icon={<Settings01Icon size={16} />}
-				>
-					{theme === "light" ? (
-						<FloatButton
-							icon={<Moon02Icon size={16} />}
-							onClick={() => setTheme("dark")}
-						/>
-					) : (
-						<FloatButton
-							icon={<Sun03Icon size={16} />}
-							onClick={() => setTheme("light")}
-						/>
-					)}
-				</FloatButton.Group>
-			</FloatButton.Group>
+			<FloatButton onClick={onOpenCreateModal}>
+				<Add01Icon size={16} />
+			</FloatButton>
+			<FloatButtonGroup 
+				openIcon={<Settings01Icon size={16} />} 
+				closeIcon={<Settings01Icon size={16} />} 
+				buttons={[
+					{
+						onClick: () => setTheme(theme === "light" ? "dark" : "light"),
+						children: theme === "light" ? <Moon02Icon size={16} /> : <Sun03Icon size={16} />
+					},
+				]} 
+			/>
 			<CreateStoryModal
 				isOpen={isOpenCreateModal}
 				onOpenChange={onOpenChangeCreateModal}

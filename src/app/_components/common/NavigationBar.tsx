@@ -19,7 +19,12 @@ export default function NavigationBar() {
 	const t = useTranslations("RootLayout");
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-	const menuItems = ["Timeline", "All images", "Maps"];
+	const menuItems = [
+		{ name: "Timeline", href: "/timeline", isActive: true },
+		{ name: "All images", href: "/images", isDisabled: true },
+		{ name: "Maps", href: "/maps", isDisabled: true },
+		{ name: "Portfolio", href: "/portfolio" },
+	];
 
 	return (
 		<Navbar onMenuOpenChange={setIsMenuOpen}>
@@ -34,21 +39,21 @@ export default function NavigationBar() {
 			</NavbarContent>
 
 			<NavbarContent className="hidden gap-4 sm:flex" justify="center">
-				<NavbarItem isActive>
-					<Link color="foreground" href="#timeline">
-						Timeline
-					</Link>
-				</NavbarItem>
-				<NavbarItem className="cursor-not-allowed">
-					<Link color="disable" href="#">
-						All images
-					</Link>
-				</NavbarItem>
-				<NavbarItem className="cursor-not-allowed">
-					<Link color="disable" href="#">
-						Maps
-					</Link>
-				</NavbarItem>
+				{menuItems.map((item) => (
+					<NavbarItem
+						key={item.name}
+						isActive={item.isActive}
+						className={item.isDisabled ? "cursor-not-allowed" : ""}
+					>
+						<Link
+							className={item.isDisabled ? "pointer-events-none cursor-not-allowed" : ""}
+							color={item.isDisabled ? "disable" : "foreground"}
+							href={item.href}
+						>
+							{item.name}
+						</Link>
+					</NavbarItem>
+				))}
 			</NavbarContent>
 			<NavbarContent justify="end">
 				<NavbarItem>
@@ -56,27 +61,22 @@ export default function NavigationBar() {
 						{t("sign_in_link")}
 					</Button>
 				</NavbarItem>
-				{/* <NavbarItem>
-          <Button as={Link} color="primary" href="/sign-up/" variant="flat">
-            {t("sign_up_link")}
-          </Button>
-        </NavbarItem> */}
 			</NavbarContent>
 			<NavbarMenu>
 				{menuItems.map((item, index) => (
-					<NavbarMenuItem key={`${item}`}>
+					<NavbarMenuItem key={item.name}>
 						<Link
 							color={
-								index === 2
+								index === 0
 									? "primary"
 									: index === menuItems.length - 1
 										? "danger"
 										: "foreground"
 							}
-							className="w-full"
-							href="#"
+							className={`w-full ${item.isDisabled ? "cursor-not-allowed" : ""}`}
+							href={item.href}
 						>
-							{item}
+							{item.name}
 						</Link>
 					</NavbarMenuItem>
 				))}

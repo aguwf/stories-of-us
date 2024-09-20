@@ -47,6 +47,15 @@ const config = {
 		// Related to Pino error with RSC: https://github.com/orgs/vercel/discussions/3150
 		serverComponentsExternalPackages: ["pino"],
 	},
+	redirects: async () => {
+		return [
+			{
+				source: "/",
+				destination: "/timeline",
+				permanent: true,
+			},
+		];
+	},
 };
 
 function defineNextConfig() {

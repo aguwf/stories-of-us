@@ -12,7 +12,7 @@ import { notFound } from "next/navigation";
 import Provider from "./provider";
 
 export const metadata: Metadata = {
-	title: "Stories of us",
+	title: "Stories of Us",
 	description: "Create by AGuwf",
 	icons: [
 		{

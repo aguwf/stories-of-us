@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
-import LocaleSwitcher from "@/components/LocaleSwitcher";
+import LocaleSwitcher from "@/app/_components/LocaleSwitcher";
 import { BaseTemplate } from "@/templates/BaseTemplate";
 
 export default function Layout(props: { children: React.ReactNode }) {

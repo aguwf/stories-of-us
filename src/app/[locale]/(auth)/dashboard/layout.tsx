@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import Link from "next/link";
 
-import LocaleSwitcher from "@/components/LocaleSwitcher";
+import LocaleSwitcher from "@/app/_components/LocaleSwitcher";
 // import { LogOutButton } from "@/components/LogOutButton";
 import { BaseTemplate } from "@/templates/BaseTemplate";
 

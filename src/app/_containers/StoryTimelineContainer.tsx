@@ -1,8 +1,8 @@
 "use client";
 
-import ListStory from "@/components/common/ListStory";
-import Toolbar from "@/components/common/Toolbar";
-import CreateStoryModal from "@/components/modals/CreateStoryModal";
+import ListStory from "@/app/_components/Story/ListStory";
+import Toolbar from "@/app/_components/common/Toolbar";
+import CreateStoryModal from "@/app/_components/modals/CreateStoryModal";
 import { useDisclosure } from "@nextui-org/react";
 import {
 	Add01Icon,
@@ -12,7 +12,7 @@ import {
 } from "hugeicons-react";
 import { useEffect, useState } from "react";
 import { useThemeStore } from "../_store/clientStore";
-import { FloatButton, FloatButtonGroup } from "../_components/FloatButton";
+import { FloatButton, FloatButtonGroup } from "../_components/common/FloatButton";
 
 const StoryTimelineContainer = () => {
 	const {
@@ -45,15 +45,15 @@ const StoryTimelineContainer = () => {
 			<FloatButton onClick={onOpenCreateModal}>
 				<Add01Icon size={16} />
 			</FloatButton>
-			<FloatButtonGroup 
-				openIcon={<Settings01Icon size={16} />} 
-				closeIcon={<Settings01Icon size={16} />} 
+			<FloatButtonGroup
+				openIcon={<Settings01Icon size={16} />}
+				closeIcon={<Settings01Icon size={16} />}
 				buttons={[
 					{
 						onClick: () => setTheme(theme === "light" ? "dark" : "light"),
 						children: theme === "light" ? <Moon02Icon size={16} /> : <Sun03Icon size={16} />
 					},
-				]} 
+				]}
 			/>
 			<CreateStoryModal
 				isOpen={isOpenCreateModal}

@@ -1,5 +1,5 @@
 // biome-ignore lint/style/useImportType: <explanation>
-import { Story } from "@/components/common/ListStory";
+import { Story } from "@/app/_components/Story/ListStory";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 

@@ -46,13 +46,13 @@ export const UploadV2: React.FC<UploadV2Props> = ({ fileList, setFileList }) => 
 
 		return () => {
 			clearTimeout(timeoutId);
-			objectURLs.forEach(url => {
+			for (const url of objectURLs) {
 				if (url.startsWith('blob:')) {
 					URL.revokeObjectURL(url);
 				}
-			});
+			}
 		};
-	}, [fileList, createObjectURL]);
+	}, [fileList, createObjectURL, setObjectURLs, setIsLoading, objectURLs]);
 
 	const renderFilePreview = useCallback((file: File | string, index: number) => {
 		const key = typeof file === 'string' ? file : file.name + file.size;

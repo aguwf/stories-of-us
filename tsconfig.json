@@ -57,7 +57,8 @@
 		"**/*.tsx",
 		"**/*.cjs",
 		"**/*.js",
-		".next/types/**/*.ts"
+		".next/types/**/*.ts",
+		"src/types/base.d.ts"
 	],
 	"exclude": ["./out/**/*", "node_modules", "public/sw.js"]
 }

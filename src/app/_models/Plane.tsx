@@ -39,4 +39,4 @@ export function PlaneModel({ isRotating, ...props }: PlaneModelProps) {
             <primitive object={scene} />
         </mesh>
     )
-};
+}

@@ -1,75 +1,161 @@
-import { Image } from "antd";
+import { Image, Space } from "antd";
 import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
-import type React from "react";
+import React from "react";
 import { useCallback } from "react";
 import styles from "./StoryCarousel.module.css";
 import {
-	NextButton,
-	PrevButton,
-	usePrevNextButtons,
+  NextButton,
+  PrevButton,
+  usePrevNextButtons,
 } from "./StoryCarouselArrowButton";
+import {
+  ArrowReloadHorizontalIcon,
+  ArrowReloadVerticalIcon,
+  Download04Icon,
+  RotateTopLeftIcon,
+  RotateTopRightIcon,
+  SearchAddIcon,
+  SearchMinusIcon,
+} from "hugeicons-react";
+import { Button } from "@nextui-org/react";
 
 type PropType = {
-	slides: string[];
-	options?: EmblaOptionsType;
+  slides: string[];
+  options?: EmblaOptionsType;
 };
 
 const StoryCarousel: React.FC<PropType> = (props) => {
-	const { slides, options } = props;
-	const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
+  const { slides, options } = props;
 
-	const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
-		const autoplay = emblaApi?.plugins()?.autoplay;
-		if (!autoplay) return;
+  const [current, setCurrent] = React.useState(0);
 
-		const resetOrStop =
-			autoplay.options.stopOnInteraction === false
-				? autoplay.reset
-				: autoplay.stop;
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
 
-		resetOrStop();
-	}, []);
+  const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
+    const autoplay = emblaApi?.plugins()?.autoplay;
+    if (!autoplay) return;
 
-	// const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
-	// 	emblaApi,
-	// 	onNavButtonClick,
-	// );
+    const resetOrStop =
+      autoplay.options.stopOnInteraction === false
+        ? autoplay.reset
+        : autoplay.stop;
 
-	const {
-		prevBtnDisabled,
-		nextBtnDisabled,
-		onPrevButtonClick,
-		onNextButtonClick,
-	} = usePrevNextButtons(emblaApi, onNavButtonClick);
+    resetOrStop();
+  }, []);
 
-	return (
-		<section className={styles.embla}>
-			<div className={styles.embla__viewport} ref={emblaRef}>
-				<div className={styles.embla__container}>
-					<Image.PreviewGroup>
-						{slides.map((src, index) => (
-							<div className={styles.embla__slide} key={index + src}>
-								<Image
-									className="object-contain"
-									height={500}
-									src={src}
-									alt=""
-								/>
-							</div>
-						))}
-					</Image.PreviewGroup>
-				</div>
-			</div>
+  const onDownload = () => {
+    const url = slides[current] ?? "";
+    const suffix = url?.slice(url.lastIndexOf("."));
+    const filename = Date.now() + (suffix ?? "");
 
-			<div className={styles.embla__controls}>
-				<div className={styles.embla__buttons}>
-					<PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
-					<NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
-				</div>
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const blobUrl = URL.createObjectURL(new Blob([blob]));
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        URL.revokeObjectURL(blobUrl);
+        link.remove();
+      });
+  };
 
-				{/* <div className={styles.embla__dots}>
+  // const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
+  // 	emblaApi,
+  // 	onNavButtonClick,
+  // );
+
+  const {
+    prevBtnDisabled,
+    nextBtnDisabled,
+    onPrevButtonClick,
+    onNextButtonClick,
+  } = usePrevNextButtons(emblaApi, onNavButtonClick);
+
+  return (
+    <section className={styles.embla}>
+      <div className={styles.embla__viewport} ref={emblaRef}>
+        <div className={styles.embla__container}>
+          <Image.PreviewGroup
+            preview={{
+              toolbarRender: (
+                _,
+                {
+                  transform: { scale },
+                  actions: {
+                    onFlipY,
+                    onFlipX,
+                    onRotateLeft,
+                    onRotateRight,
+                    onZoomOut,
+                    onZoomIn,
+                  },
+                }
+              ) => (
+                <Space size={12} className="toolbar-wrapper">
+                  <Button variant="light" isIconOnly onClick={onDownload}>
+                    <Download04Icon color="default" />
+                  </Button>
+                  <Button variant="light" isIconOnly onClick={onFlipY}>
+                    <ArrowReloadVerticalIcon color="default" rotate={90} />
+                  </Button>
+                  <Button variant="light" isIconOnly onClick={onFlipX}>
+                    <ArrowReloadHorizontalIcon color="default" />
+                  </Button>
+                  <Button variant="light" isIconOnly onClick={onRotateLeft}>
+                    <RotateTopLeftIcon color="default" />
+                  </Button>
+                  <Button variant="light" isIconOnly onClick={onRotateRight}>
+                    <RotateTopRightIcon color="default" />
+                  </Button>
+                  <Button
+                    variant="light"
+                    isIconOnly
+                    disabled={scale === 1}
+                    onClick={onZoomOut}
+                  >
+                    <SearchMinusIcon color="default" />
+                  </Button>
+                  <Button
+                    variant="light"
+                    isIconOnly
+                    disabled={scale === 50}
+                    onClick={onZoomIn}
+                  >
+                    <SearchAddIcon color="default" />
+                  </Button>
+                </Space>
+              ),
+              onChange: (index) => {
+                setCurrent(index);
+              },
+            }}
+          >
+            {slides.map((src, index) => (
+              <div className={styles.embla__slide} key={index + src}>
+                <Image
+                  className="object-contain"
+                  height={500}
+                  src={src}
+                  alt=""
+                />
+              </div>
+            ))}
+          </Image.PreviewGroup>
+        </div>
+      </div>
+
+      <div className={styles.embla__controls}>
+        <div className={styles.embla__buttons}>
+          <PrevButton onClick={onPrevButtonClick} disabled={prevBtnDisabled} />
+          <NextButton onClick={onNextButtonClick} disabled={nextBtnDisabled} />
+        </div>
+
+        {/* <div className={styles.embla__dots}>
 					{scrollSnaps.map((_, index) => (
 						<DotButton
 							key={scrollSnaps.toString()}
@@ -78,9 +164,9 @@ const StoryCarousel: React.FC<PropType> = (props) => {
 						/>
 					))}
 				</div> */}
-			</div>
-		</section>
-	);
+      </div>
+    </section>
+  );
 };
 
 export default StoryCarousel;

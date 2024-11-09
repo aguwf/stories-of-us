@@ -51,7 +51,7 @@ const config = {
 		return [
 			{
 				source: "/",
-				destination: "/timeline",
+				destination: "/timelines",
 				permanent: true,
 			},
 		];

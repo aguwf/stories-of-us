@@ -28,7 +28,12 @@ const FloatButton: React.FC<FloatButtonProps> = memo(({ style, children, onClick
         }}
     >
         <AnimatePresence>
-            <Button className="h-10 w-10 min-w-full rounded-full p-0" onClick={onClick} {...options}>
+            <Button 
+                className="h-10 w-10 min-w-full rounded-full p-0" 
+                onClick={onClick} 
+                disabled={options?.disabled} 
+                type={options?.type} 
+            >
                 {children}
             </Button>
         </AnimatePresence>

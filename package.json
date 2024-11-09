@@ -34,6 +34,8 @@
 		"@react-three/fiber": "^8.17.6",
 		"@serwist/next": "^9.0.5",
 		"@t3-oss/env-nextjs": "^0.10.1",
+		"@tabler/icons": "^3.21.0",
+		"@tabler/icons-react": "^3.21.0",
 		"@tanstack/react-query": "^5.51.15",
 		"@trpc/client": "^11.0.0-rc.467",
 		"@trpc/react-query": "^11.0.0-rc.467",

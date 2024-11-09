@@ -10,33 +10,23 @@ import {
 	type DraggableStyle,
 	type DropResult,
 } from '@hello-pangea/dnd';
-import { Button, Pagination, useDisclosure } from "@nextui-org/react";
+import { Pagination, useDisclosure } from "@nextui-org/react";
 import { message } from "antd";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import DetailStoryModal from "../modals/DetailStoryModal";
 import { StoryCard } from "./Card";
-import { PlusSignIcon } from "hugeicons-react";
-
-export interface Story {
-	id: number;
-	name: string;
-	description: string;
-	coverImage: string;
-	images: string[];
-	sort: number;
-	createdAt: Date | string | null;
-}
+import { StoryType } from "@/types";
 
 interface ListStoryProps {
-	setSelectedStory: (story: Story) => void;
+	setSelectedStory: (story: StoryType | null) => void;
 	openModal: () => void;
-	setCreateIndex: (index: number) => void;
+	setCreateIndex: (index: number | null) => void;
 	setMaxIndex: (index: number) => void;
 }
 
 interface ResponseStory {
-	storyList: Story[];
+	storyList: StoryType[];
 	totalPages: number;
 	totalCount: number;
 }
@@ -68,7 +58,7 @@ const getItemStyle = (
 
 export default function ListStory({ setSelectedStory, openModal, setCreateIndex, setMaxIndex }: ListStoryProps) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
-	const [selectedImages, setSelectedImages] = useState<Story | undefined>();
+	const [selectedImages, setSelectedImages] = useState<StoryType | undefined>();
 
 	const utils = api.useUtils();
 	const searchParams = useSearchParams();
@@ -94,6 +84,9 @@ export default function ListStory({ setSelectedStory, openModal, setCreateIndex,
 
 	const updateStory = api.story.update.useMutation({
 		onSuccess: async () => {
+			// Reset state
+			setSelectedStory(null);
+			setCreateIndex(null);
 			message.success("Update successfully");
 			await utils.story.invalidate();
 		},
@@ -129,17 +122,16 @@ export default function ListStory({ setSelectedStory, openModal, setCreateIndex,
 
 		updateStory.mutate({
 			id: storiesStore[source.index]?.id ?? 0,
-			sort: storiesStore[destination.index]?.sort ?? 0
+			sort: newStoryList[destination.index]?.sort ?? 0
 		});
-
 		updateStory.mutate({
 			id: storiesStore[destination.index]?.id ?? 0,
-			sort: storiesStore[source.index]?.sort ?? 0
+			sort: newStoryList[source.index]?.sort ?? 0
 		});
 	};
 
 	const handleAddStory = (index: number) => {
-		openModal();
+		// openModal();
 		setCreateIndex(index);
 	};
 
@@ -187,18 +179,10 @@ export default function ListStory({ setSelectedStory, openModal, setCreateIndex,
 													setSelectedStory={setSelectedStory}
 													onOpen={onOpen}
 													setSelectedImages={setSelectedImages}
+													sort={sort}
+													setCreateIndex={setCreateIndex}
+													openModal={openModal}
 												/>
-												{!isLastItem && (
-													<Button
-														isIconOnly
-														color="primary"
-														aria-label="Add story"
-														className="mt-2 h-12 w-full"
-														onClick={() => handleAddStory(sort)}
-													>
-														<PlusSignIcon className="h-6 w-6" />
-													</Button>
-												)}
 											</div>
 										)}
 									</Draggable>

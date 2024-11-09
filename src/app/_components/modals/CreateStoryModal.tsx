@@ -13,11 +13,11 @@ import {
 import type { PopconfirmProps } from "antd";
 import { message } from "antd";
 import { useEffect, useState, useCallback } from "react";
-import type { Story } from "../Story/ListStory";
 import StoryInput from "../Story/StoryInput";
 import StoryTextarea from "../Story/StoryTextarea";
 import CancelButton from "../Story/CancelButton";
 import SubmitButton from "../Story/SubmitButton";
+import { StoryType } from "@/types";
 
 interface StoryData {
 	name: string;
@@ -29,9 +29,10 @@ const defaultStoryData: StoryData = { name: "", description: "" };
 interface CreateStoryModalProps {
 	isOpen: boolean;
 	onOpenChange: (open: boolean) => void;
-	selectedStory?: Story;
+	selectedStory?: StoryType | null;
 	createIndex?: number | null;
 	maxIndex?: number | null;
+	setCreateIndex: (index: number | null) => void;
 }
 
 export default function CreateStoryModal({
@@ -40,6 +41,7 @@ export default function CreateStoryModal({
 	selectedStory,
 	createIndex,
 	maxIndex,
+	setCreateIndex,
 }: CreateStoryModalProps) {
 	const [fileList, setFileList] = useState<(File | string)[]>([]);
 	const [isUploading, setIsUploading] = useState(false);
@@ -159,6 +161,8 @@ export default function CreateStoryModal({
 		setIsUploading(false);
 		setData(defaultStoryData);
 		localStorage.removeItem("data");
+		onOpenChange(false);
+		setCreateIndex(null);
 	}, []);
 
 	const confirm: PopconfirmProps["onConfirm"] = ({ onClose }: any) => {

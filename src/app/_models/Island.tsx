@@ -11,11 +11,11 @@
  * YOU DON'T HAVE TO WRITE EVERYTHING FROM SCRATCH
  */
 
-import { a } from "@react-spring/three";
-import { useEffect, useRef } from "react";
-import { useGLTF } from "@react-three/drei";
-import { useFrame, useThree } from "@react-three/fiber";
-import type { Group, Mesh } from "three";
+import {a} from "@react-spring/three";
+import {useEffect, useRef} from "react";
+import {useGLTF} from "@react-three/drei";
+import {useFrame, useThree} from "@react-three/fiber";
+import type {Group, Mesh} from "three";
 
 type IslandProps = {
   isRotating: boolean;
@@ -54,10 +54,8 @@ export function Island({
     setIsRotating(true);
 
     // Calculate the clientX based on whether it's a touch event or a mouse event
-    const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-
     // Store the current clientX position for reference
-    lastX.current = clientX;
+    lastX.current = event.touches ? event.touches[0].clientX : event.clientX;
   };
 
   // Handle pointer (mouse or touch) up event

@@ -1,7 +1,7 @@
 import StoryTimelineContainer from "@/app/_containers/StoryTimelineContainer";
 
-const Timeline = () => {
+const Timelines = () => {
 	return <StoryTimelineContainer />;
 };
 
-export default Timeline;
+export default Timelines;

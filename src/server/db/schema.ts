@@ -1,11 +1,11 @@
 import { sql } from "drizzle-orm";
 import {
 	pgTableCreator,
+	real,
 	serial,
 	text,
 	timestamp,
 	varchar,
-	real,
 } from "drizzle-orm/pg-core";
 
 /**

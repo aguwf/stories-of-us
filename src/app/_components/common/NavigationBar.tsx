@@ -46,7 +46,9 @@ export default function NavigationBar() {
 						className={item.isDisabled ? "cursor-not-allowed" : ""}
 					>
 						<Link
-							className={item.isDisabled ? "pointer-events-none cursor-not-allowed" : ""}
+							className={
+								item.isDisabled ? "pointer-events-none cursor-not-allowed" : ""
+							}
 							color={item.isDisabled ? "disable" : "foreground"}
 							href={item.href}
 						>

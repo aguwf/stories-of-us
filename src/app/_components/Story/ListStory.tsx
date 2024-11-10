@@ -3,20 +3,20 @@
 import { useStoryStore } from "@/app/_store/storyStore";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { api } from "@/trpc/react";
+import type { StoryType } from "@/types";
 import {
 	DragDropContext,
-	Droppable,
 	Draggable,
 	type DraggableStyle,
 	type DropResult,
-} from '@hello-pangea/dnd';
+	Droppable,
+} from "@hello-pangea/dnd";
 import { Pagination, useDisclosure } from "@nextui-org/react";
 import { message } from "antd";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import DetailStoryModal from "../modals/DetailStoryModal";
 import { StoryCard } from "./Card";
-import { StoryType } from "@/types";
 
 interface ListStoryProps {
 	setSelectedStory: (story: StoryType | null) => void;
@@ -51,12 +51,17 @@ const getItemStyle = (
 	isDragging: boolean,
 	draggableStyle: DraggableStyle = {},
 ) => ({
-	userSelect: 'none' as const,
+	userSelect: "none" as const,
 	...draggableStyle,
 	opacity: isDragging ? 0.5 : 1,
 });
 
-export default function ListStory({ setSelectedStory, openModal, setCreateIndex, setMaxIndex }: ListStoryProps) {
+export default function ListStory({
+	setSelectedStory,
+	openModal,
+	setCreateIndex,
+	setMaxIndex,
+}: ListStoryProps) {
 	const { isOpen, onOpen, onOpenChange } = useDisclosure();
 	const [selectedImages, setSelectedImages] = useState<StoryType | undefined>();
 
@@ -66,7 +71,10 @@ export default function ListStory({ setSelectedStory, openModal, setCreateIndex,
 
 	const orderBy = searchParams.get("orderBy") || DEFAULT_ORDER_BY;
 	const page = Math.max(+(searchParams.get("page") ?? DEFAULT_PAGE), 1);
-	const totalItems = Math.max(+(searchParams.get("totalItems") ?? DEFAULT_TOTAL_ITEMS), 1);
+	const totalItems = Math.max(
+		+(searchParams.get("totalItems") ?? DEFAULT_TOTAL_ITEMS),
+		1,
+	);
 
 	const [stories, { isLoading }] = api.story.getAll.useSuspenseQuery({
 		orderBy: orderBy === "newest" ? "desc" : "asc",
@@ -102,7 +110,7 @@ export default function ListStory({ setSelectedStory, openModal, setCreateIndex,
 
 	useEffect(() => {
 		if (storiesStore.length > 0) {
-			const maxSort = Math.max(...storiesStore.map(story => story.sort));
+			const maxSort = Math.max(...storiesStore.map((story) => story.sort));
 			setMaxIndex(maxSort);
 		}
 	}, [storiesStore, setMaxIndex]);
@@ -115,24 +123,22 @@ export default function ListStory({ setSelectedStory, openModal, setCreateIndex,
 		const { source, destination } = result;
 		if (!destination || source.index === destination.index) return;
 
-		const newStoryList = reorder(storiesStore, source.index, destination.index)
-			.map((story, index) => ({ ...story, sort: index }));
+		const newStoryList = reorder(
+			storiesStore,
+			source.index,
+			destination.index,
+		).map((story, index) => ({ ...story, sort: index }));
 
 		setStories(newStoryList);
 
 		updateStory.mutate({
 			id: storiesStore[source.index]?.id ?? 0,
-			sort: newStoryList[destination.index]?.sort ?? 0
+			sort: newStoryList[destination.index]?.sort ?? 0,
 		});
 		updateStory.mutate({
 			id: storiesStore[destination.index]?.id ?? 0,
-			sort: newStoryList[source.index]?.sort ?? 0
+			sort: newStoryList[source.index]?.sort ?? 0,
 		});
-	};
-
-	const handleAddStory = (index: number) => {
-		// openModal();
-		setCreateIndex(index);
 	};
 
 	if (isLoading) {
@@ -159,11 +165,15 @@ export default function ListStory({ setSelectedStory, openModal, setCreateIndex,
 						<div ref={droppableProvided.innerRef}>
 							{storiesStore.map((item, index) => {
 								const nextItem = storiesStore[index + 1];
-								const nextSort = nextItem ? (nextItem.sort + 1) : item.sort + 1;
+								const nextSort = nextItem ? nextItem.sort + 1 : item.sort + 1;
 								const sort = (item.sort + nextSort) / 2;
-								const isLastItem = index === storiesStore.length - 1;
+								// const isLastItem = index === storiesStore.length - 1;
 								return (
-									<Draggable key={item.id} draggableId={item.id.toString()} index={index}>
+									<Draggable
+										key={item.id}
+										draggableId={item.id.toString()}
+										index={index}
+									>
 										{(draggableProvided, draggableSnapshot) => (
 											<div
 												ref={draggableProvided.innerRef}

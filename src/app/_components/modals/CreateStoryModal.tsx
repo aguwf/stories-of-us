@@ -2,6 +2,7 @@
 
 import { UploadV2 } from "@/app/_components/common/UploadV2";
 import { api } from "@/trpc/react";
+import type { StoryType } from "@/types";
 import { handleUploadImage } from "@/utils/uploadHelper";
 import {
 	Modal,
@@ -12,12 +13,11 @@ import {
 } from "@nextui-org/modal";
 import type { PopconfirmProps } from "antd";
 import { message } from "antd";
-import { useEffect, useState, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
+import CancelButton from "../Story/CancelButton";
 import StoryInput from "../Story/StoryInput";
 import StoryTextarea from "../Story/StoryTextarea";
-import CancelButton from "../Story/CancelButton";
 import SubmitButton from "../Story/SubmitButton";
-import { StoryType } from "@/types";
 
 interface StoryData {
 	name: string;
@@ -93,14 +93,17 @@ export default function CreateStoryModal({
 		}
 	}, [selectedStory]);
 
-	const onInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-		const { name, value } = e.target;
-		setData((prevData) => {
-			const newData = { ...prevData, [name]: value };
-			localStorage.setItem("data", JSON.stringify(newData));
-			return newData;
-		});
-	}, []);
+	const onInputChange = useCallback(
+		(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+			const { name, value } = e.target;
+			setData((prevData) => {
+				const newData = { ...prevData, [name]: value };
+				localStorage.setItem("data", JSON.stringify(newData));
+				return newData;
+			});
+		},
+		[],
+	);
 
 	const handleSubmit = async () => {
 		if (fileList.length === 0) {
@@ -111,8 +114,12 @@ export default function CreateStoryModal({
 		setIsUploading(true);
 		message.loading("Uploading...");
 
-		const existedImages = fileList.filter((file): file is string => typeof file === "string");
-		const newImages = fileList.filter((file): file is File => file instanceof File);
+		const existedImages = fileList.filter(
+			(file): file is string => typeof file === "string",
+		);
+		const newImages = fileList.filter(
+			(file): file is File => file instanceof File,
+		);
 
 		try {
 			const allImages = await uploadNewImages(newImages, existedImages);
@@ -130,10 +137,15 @@ export default function CreateStoryModal({
 		onOpenChange(false);
 	};
 
-	const uploadNewImages = async (newImages: File[], existedImages: string[]) => {
+	const uploadNewImages = async (
+		newImages: File[],
+		existedImages: string[],
+	) => {
 		if (newImages.length > 0) {
 			const uploadedImages = await handleUploadImage(newImages);
-			const urls = uploadedImages ? uploadedImages.map((image) => image?.url || "") : [];
+			const urls = uploadedImages
+				? uploadedImages.map((image) => image?.url || "")
+				: [];
 			return [...existedImages, ...urls];
 		}
 		return existedImages;

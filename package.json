@@ -80,6 +80,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.8.3",
+		"@commitlint/config-conventional": "^19.5.0",
 		"@commitlint/types": "^19.0.3",
 		"@next/bundle-analyzer": "^14.2.5",
 		"@pandacss/dev": "^0.45.1",

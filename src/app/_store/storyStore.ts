@@ -1,19 +1,19 @@
 // biome-ignore lint/style/useImportType: <explanation>
-import { Story } from "@/app/_components/Story/ListStory";
+import { StoryType } from "@/types";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
 // State types
 interface States {
-	stories: Story[];
+	stories: StoryType[];
 	totalPages: number;
 }
 
 interface Actions {
-	setStories: (stories: Story[]) => void;
-	addStory: (story: Story) => void;
-	removeStory: (story: Story) => void;
-	updateStory: (story: Story) => void;
+	setStories: (stories: StoryType[]) => void;
+	addStory: (story: StoryType) => void;
+	removeStory: (story: StoryType) => void;
+	updateStory: (story: StoryType) => void;
 	setTotalPages: (totalPages: number) => void;
 }
 

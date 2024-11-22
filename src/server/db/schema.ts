@@ -1,11 +1,14 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
-	pgTableCreator,
-	real,
-	serial,
-	text,
-	timestamp,
-	varchar,
+  index,
+  integer,
+  pgTableCreator,
+  primaryKey,
+  real,
+  serial,
+  text,
+  timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
 
 /**
@@ -17,19 +20,22 @@ import {
 export const createTable = pgTableCreator((name) => `stories-of-us_${name}`);
 
 export const stories = createTable("story", {
-	id: serial("id").primaryKey(),
-	name: varchar("name", { length: 256 }).notNull(),
-	description: text("description"),
-	coverImage: varchar("cover_image", { length: 255 }).notNull(),
-	images: text("images").array().default(sql`'{}'::text[]`).notNull(),
-	userId: varchar("user_id", { length: 255 }).notNull(),
-	sort: real("sort"),
-	createdAt: timestamp("created_at", { withTimezone: true })
-		.default(sql`CURRENT_TIMESTAMP`)
-		.notNull(),
-	updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-		() => new Date(),
-	),
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }).notNull(),
+  description: text("description"),
+  coverImage: varchar("cover_image", { length: 255 }).notNull(),
+  images: text("images")
+    .array()
+    .default(sql`'{}'::text[]`)
+    .notNull(),
+  userId: varchar("user_id", { length: 255 }).notNull(),
+  sort: real("sort"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    () => new Date()
+  ),
 });
 
 // const storiesRelations = relations(stories, ({ many }) => ({
@@ -84,56 +90,56 @@ export const stories = createTable("story", {
 //   }),
 // );
 
-// export const users = createTable("user", {
-//   id: varchar("id", { length: 255 })
-//     .notNull()
-//     .primaryKey()
-//     .$defaultFn(() => crypto.randomUUID()),
-//   name: varchar("name", { length: 255 }),
-//   email: varchar("email", { length: 255 }).notNull(),
-//   emailVerified: timestamp("email_verified", {
-//     mode: "date",
-//     withTimezone: true,
-//   }).default(sql`CURRENT_TIMESTAMP`),
-//   image: varchar("image", { length: 255 }),
-// });
+export const users = createTable("user", {
+  id: varchar("id", { length: 255 })
+    .notNull()
+    .primaryKey()
+    .$defaultFn(() => crypto.randomUUID()),
+  name: varchar("name", { length: 255 }),
+  email: varchar("email", { length: 255 }).notNull(),
+  emailVerified: timestamp("email_verified", {
+    mode: "date",
+    withTimezone: true,
+  }).default(sql`CURRENT_TIMESTAMP`),
+  avatar: varchar("avatar", { length: 255 }),
+});
 
-// export const usersRelations = relations(users, ({ many }) => ({
-//   accounts: many(accounts),
-// }));
+export const usersRelations = relations(users, ({ many }) => ({
+  accounts: many(accounts),
+}));
 
-// export const accounts = createTable(
-//   "account",
-//   {
-//     userId: varchar("user_id", { length: 255 })
-//       .notNull()
-//       .references(() => users.id),
-//     type: varchar("type", { length: 255 })
-//       .$type<AdapterAccount["type"]>()
-//       .notNull(),
-//     provider: varchar("provider", { length: 255 }).notNull(),
-//     providerAccountId: varchar("provider_account_id", {
-//       length: 255,
-//     }).notNull(),
-//     refresh_token: text("refresh_token"),
-//     access_token: text("access_token"),
-//     expires_at: integer("expires_at"),
-//     token_type: varchar("token_type", { length: 255 }),
-//     scope: varchar("scope", { length: 255 }),
-//     id_token: text("id_token"),
-//     session_state: varchar("session_state", { length: 255 }),
-//   },
-//   (account) => ({
-//     compoundKey: primaryKey({
-//       columns: [account.provider, account.providerAccountId],
-//     }),
-//     userIdIdx: index("account_user_id_idx").on(account.userId),
-//   }),
-// );
+export const accounts = createTable(
+  "account",
+  {
+    userId: varchar("user_id", { length: 255 })
+      .notNull()
+      .references(() => users.id),
+    // type: varchar("type", { length: 255 })
+    //   .$type<AdapterAccount["type"]>()
+    //   .notNull(),
+    provider: varchar("provider", { length: 255 }).notNull(),
+    providerAccountId: varchar("provider_account_id", {
+      length: 255,
+    }).notNull(),
+    refresh_token: text("refresh_token"),
+    access_token: text("access_token"),
+    expires_at: integer("expires_at"),
+    token_type: varchar("token_type", { length: 255 }),
+    scope: varchar("scope", { length: 255 }),
+    id_token: text("id_token"),
+    session_state: varchar("session_state", { length: 255 }),
+  },
+  (account) => ({
+    compoundKey: primaryKey({
+      columns: [account.provider, account.providerAccountId],
+    }),
+    userIdIdx: index("account_user_id_idx").on(account.userId),
+  })
+);
 
-// export const accountsRelations = relations(accounts, ({ one }) => ({
-//   user: one(users, { fields: [accounts.userId], references: [users.id] }),
-// }));
+export const accountsRelations = relations(accounts, ({ one }) => ({
+  user: one(users, { fields: [accounts.userId], references: [users.id] }),
+}));
 
 // export const sessions = createTable(
 //   "session",

@@ -1,6 +1,5 @@
 "use client";
 
-import { StyleProvider } from "@ant-design/cssinjs";
 import { ConfigProvider, theme } from "antd";
 import { ThemeProvider } from "next-themes";
 import { useThemeStore } from "../_store/clientStore";
@@ -21,7 +20,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
 				enableSystem
 				forcedTheme={themeStore}
 			>
-				<StyleProvider layer>{children}</StyleProvider>
+				{children}
 			</ThemeProvider>
 		</ConfigProvider>
 	);

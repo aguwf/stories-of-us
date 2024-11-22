@@ -3,15 +3,6 @@ import { Image, Space } from "antd";
 import type { EmblaCarouselType, EmblaOptionsType } from "embla-carousel";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
-import {
-	ArrowReloadHorizontalIcon,
-	ArrowReloadVerticalIcon,
-	Download04Icon,
-	RotateTopLeftIcon,
-	RotateTopRightIcon,
-	SearchAddIcon,
-	SearchMinusIcon,
-} from "hugeicons-react";
 import React from "react";
 import { useCallback } from "react";
 import styles from "./StoryCarousel.module.css";
@@ -20,6 +11,7 @@ import {
 	PrevButton,
 	usePrevNextButtons,
 } from "./StoryCarouselArrowButton";
+import { Download, FlipHorizontal2, FlipVertical2, RotateCcwSquare, RotateCcwSquareIcon, RotateCwSquare, ZoomIn, ZoomOut } from "lucide-react";
 
 type PropType = {
 	slides: string[];
@@ -98,19 +90,19 @@ const StoryCarousel: React.FC<PropType> = (props) => {
 							) => (
 								<Space size={12} className="toolbar-wrapper">
 									<Button variant="light" isIconOnly onClick={onDownload}>
-										<Download04Icon color="default" />
+										<Download color="default" />
 									</Button>
 									<Button variant="light" isIconOnly onClick={onFlipY}>
-										<ArrowReloadVerticalIcon color="default" rotate={90} />
+										<FlipHorizontal2 color="default" />
 									</Button>
 									<Button variant="light" isIconOnly onClick={onFlipX}>
-										<ArrowReloadHorizontalIcon color="default" />
+										<FlipVertical2 color="default" />
 									</Button>
 									<Button variant="light" isIconOnly onClick={onRotateLeft}>
-										<RotateTopLeftIcon color="default" />
+										<RotateCcwSquare color="default" />
 									</Button>
 									<Button variant="light" isIconOnly onClick={onRotateRight}>
-										<RotateTopRightIcon color="default" />
+										<RotateCwSquare color="default" />
 									</Button>
 									<Button
 										variant="light"
@@ -118,7 +110,7 @@ const StoryCarousel: React.FC<PropType> = (props) => {
 										disabled={scale === 1}
 										onClick={onZoomOut}
 									>
-										<SearchMinusIcon color="default" />
+										<ZoomOut color="default" />
 									</Button>
 									<Button
 										variant="light"
@@ -126,7 +118,7 @@ const StoryCarousel: React.FC<PropType> = (props) => {
 										disabled={scale === 50}
 										onClick={onZoomIn}
 									>
-										<SearchAddIcon color="default" />
+										<ZoomIn color="default" />
 									</Button>
 								</Space>
 							),

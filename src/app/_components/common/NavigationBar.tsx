@@ -1,6 +1,6 @@
 "use client";
 
-import { TextOnlyLogo } from "@/app/_assets/logo/TextOnlyLogo";
+import { TextOnlyLogo } from "@/app/_assets/logos/TextOnlyLogo";
 import {
 	Button,
 	Navbar,
@@ -20,7 +20,7 @@ export default function NavigationBar() {
 	const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
 	const menuItems = [
-		{ name: "Timeline", href: "/timeline", isActive: true },
+		{ name: "Timeline", href: "/timelines", isActive: true },
 		{ name: "All images", href: "/images", isDisabled: true },
 		{ name: "Maps", href: "/maps", isDisabled: true },
 		{ name: "Portfolio", href: "/portfolio" },

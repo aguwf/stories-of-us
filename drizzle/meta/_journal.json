@@ -1,34 +1,41 @@
 {
-	"version": "6",
-	"dialect": "postgresql",
-	"entries": [
-		{
-			"idx": 0,
-			"version": "6",
-			"when": 1723199562889,
-			"tag": "0000_low_omega_flight",
-			"breakpoints": true
-		},
-		{
-			"idx": 1,
-			"version": "6",
-			"when": 1724653434986,
-			"tag": "0001_tricky_ronan",
-			"breakpoints": true
-		},
-		{
-			"idx": 2,
-			"version": "6",
-			"when": 1724807171116,
-			"tag": "0002_rare_nehzno",
-			"breakpoints": true
-		},
-		{
-			"idx": 3,
-			"version": "6",
-			"when": 1725078547365,
-			"tag": "0003_lethal_magus",
-			"breakpoints": true
-		}
-	]
+  "version": "6",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1723199562889,
+      "tag": "0000_low_omega_flight",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1724653434986,
+      "tag": "0001_tricky_ronan",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1724807171116,
+      "tag": "0002_rare_nehzno",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1725078547365,
+      "tag": "0003_lethal_magus",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1732041388826,
+      "tag": "0004_blue_leper_queen",
+      "breakpoints": true
+    }
+  ]
 }

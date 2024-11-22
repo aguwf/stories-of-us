@@ -1,7 +1,11 @@
 import StoryTimelineContainer from "@/app/_containers/StoryTimelineContainer";
 
 const Timelines = () => {
-	return <StoryTimelineContainer />;
+	return (
+		<section>
+			<StoryTimelineContainer />
+		</section>
+	);
 };
 
 export default Timelines;

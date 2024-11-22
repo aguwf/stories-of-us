@@ -1,7 +1,7 @@
 import { Button } from "@nextui-org/react";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
-import { Settings01Icon } from "hugeicons-react";
+import { Settings } from "lucide-react";
 import type React from "react";
 import { memo, useEffect, useRef, useState } from "react";
 
@@ -160,8 +160,8 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
 					)}
 				>
 					{isOpen
-						? closeIcon || <Settings01Icon size={16} />
-						: openIcon || <Settings01Icon size={16} />}
+						? closeIcon || <Settings size={16} />
+						: openIcon || <Settings size={16} />}
 				</Button>
 			</motion.div>
 		);

@@ -1,6 +1,6 @@
 import { Button } from "@nextui-org/react";
 import { Image } from "antd";
-import { Cancel01Icon, PlusSignIcon } from "hugeicons-react";
+import { Plus, X } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface UploadV2Props {
@@ -87,7 +87,7 @@ export const UploadV2: React.FC<UploadV2Props> = ({
 							className="h-5 min-h-5 w-5 min-w-5 rounded-full"
 							onClick={() => handleRemoveFile(index)}
 						>
-							<Cancel01Icon size={12} />
+							<X size={12} />
 						</Button>
 					</span>
 				</div>
@@ -111,7 +111,7 @@ export const UploadV2: React.FC<UploadV2Props> = ({
 								onChange={handleChangeFile}
 							/>
 							<button type="button" onClick={handleClickUpload}>
-								<PlusSignIcon className="mx-auto" />
+								<Plus className="mx-auto" />
 								<div className="mt-2">Upload</div>
 							</button>
 						</span>

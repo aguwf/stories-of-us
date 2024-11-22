@@ -19,9 +19,9 @@ const withSerwist = withSerwistInit({
 
 const jiti = createJiti(fileURLToPath(import.meta.url));
 
-jiti("./src/libs/Env");
+jiti("./src/lib/Env");
 
-const withNextIntlConfig = withNextIntl("./src/libs/i18n.ts");
+const withNextIntlConfig = withNextIntl("./src/lib/i18n.ts");
 
 const bundleAnalyzer = withBundleAnalyzer({
 	enabled: process.env.ANALYZE === "true",

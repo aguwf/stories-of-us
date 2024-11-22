@@ -5,18 +5,14 @@ import Toolbar from "@/app/_components/common/Toolbar";
 import CreateStoryModal from "@/app/_components/modals/CreateStoryModal";
 import useDisclosure from "@/hooks/useDisclosure";
 import type { StoryType } from "@/types";
-import {
-	Add01Icon,
-	Moon02Icon,
-	Settings01Icon,
-	Sun03Icon,
-} from "hugeicons-react";
 import { useState } from "react";
 import {
 	FloatButton,
 	FloatButtonGroup,
 } from "../_components/common/FloatButton";
 import { useThemeStore } from "../_store/clientStore";
+import { Moon, Plus, Settings, Sun } from "lucide-react";
+import Greeting from "../_components/greeting";
 
 const StoryTimelineContainer = () => {
 	const {
@@ -30,6 +26,7 @@ const StoryTimelineContainer = () => {
 	const [selectedStory, setSelectedStory] = useState<StoryType | null>(null);
 	const [createIndex, setCreateIndex] = useState<number | null>(null);
 	const [maxIndex, setMaxIndex] = useState<number | null>(null);
+	const [showSearch, setShowSearch] = useState<boolean>(false);
 
 	// useEffect(() => {
 	//     if (selectedStory) {
@@ -39,7 +36,8 @@ const StoryTimelineContainer = () => {
 
 	return (
 		<div className="container mx-auto px-4">
-			<Toolbar />
+			<Greeting showSearch={showSearch} setShowSearch={setShowSearch} />
+			<Toolbar showSearch={showSearch} />
 			<ListStory
 				setSelectedStory={setSelectedStory}
 				openModal={onOpenCreateModal}
@@ -47,18 +45,18 @@ const StoryTimelineContainer = () => {
 				setMaxIndex={setMaxIndex}
 			/>
 			<FloatButton onClick={onOpenCreateModal}>
-				<Add01Icon size={16} />
+				<Plus size={16} />
 			</FloatButton>
 			<FloatButtonGroup
-				openIcon={<Settings01Icon size={16} />}
-				closeIcon={<Settings01Icon size={16} />}
+				openIcon={<Settings size={16} />}
+				closeIcon={<Settings size={16} />}
 				buttons={[
 					{
 						children:
 							theme === "light" ? (
-								<Moon02Icon size={16} />
+								<Moon size={16} />
 							) : (
-								<Sun03Icon size={16} />
+								<Sun size={16} />
 							),
 						onClick: () => setTheme(theme === "light" ? "dark" : "light"),
 					},

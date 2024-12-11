@@ -121,14 +121,14 @@ const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({ items, story }) => {
               <DialogContent className="w-full p-0 h-full border-none overflow-auto">
                 <div className="mt-16 px-4 flex items-center gap-2">
                   <Avatar className="border-1 border-gray-200">
-                    <AvatarImage src={story?.user.avatar ?? ""} />
+                    <AvatarImage src={story?.user?.avatar ?? ""} />
                     <AvatarFallback>
                       <Icon className="h-6 w-6" name="user-outline" />
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">
                     <span className="font-semibold text-sm">
-                      {story?.user.name}
+                      {story?.user?.name}
                     </span>
                     <div className="flex gap-1">
                       <span className="font-medium text-[#9f9f9f] text-sm">

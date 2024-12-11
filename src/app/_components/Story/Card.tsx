@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import useStorage from "@/hooks/useStorage";
 import ImageVideoGrid from "../common/ImageVideoGrid/ImageVideoGrid";
+import {useUserStore} from "@/app/_store/userStore";
 
 type ActionMenuOption = {
   key: "copy" | "edit" | "delete" | "insertAfter";
@@ -113,8 +113,8 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
     openModal,
     setCreateIndex,
   }) => {
-    const { getItem } = useStorage();
-    const userId = getItem("userId")?.toString();
+    const { user } = useUserStore();
+    const userId = user?.id;
     const formattedDate = new Date(item.createdAt || new Date());
     const month = formattedDate
       .toLocaleString("en-US", { month: "long" })
@@ -228,13 +228,13 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
           >
             <div className="flex items-center gap-2">
               <Avatar className="border-1 border-gray-200">
-                <AvatarImage src={item.user.avatar ?? ""} />
+                <AvatarImage src={item?.user?.avatar ?? ""} />
                 <AvatarFallback>
                   <Icon className="h-6 w-6" name="user-outline" />
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <span className="font-semibold text-sm">{item.user.name}</span>
+                <span className="font-semibold text-sm">{item?.user?.name ?? ""}</span>
                 <div className="flex gap-1">
                   <span className="font-medium text-[#9f9f9f] text-sm">
                     {month}

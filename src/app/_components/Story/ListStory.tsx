@@ -17,7 +17,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 // import DetailStoryModal from "../modals/DetailStoryModal";
 import { StoryCard } from "./Card";
-import useStorage from "@/hooks/useStorage";
+import {useUserStore} from "@/app/_store/userStore";
 
 interface ListStoryProps {
   setSelectedStory: (story: StoryType | null) => void;
@@ -101,18 +101,18 @@ export default function ListStory({
     },
   });
 
-  const { getItem } = useStorage();
-  const userId = getItem("userId")?.toString();
+  const { user } = useUserStore();
+  const userId = user?.id;
 
   useEffect(() => {
     if ('storyList' in stories) {  // Type guard
       const { storyList, totalPages } = stories;
       if (storyList?.length > 0) {
         // Pre-fetch heart data for all stories
-        storyList.forEach((story) => {
-          utils.story.getHeartCount.prefetch({ storyId: story.id });
+        storyList.forEach(async(story) => {
+          await utils.story.getHeartCount.prefetch({ storyId: story.id });
           if (userId) {
-            utils.story.hasUserHearted.prefetch({ 
+            await utils.story.hasUserHearted.prefetch({
               storyId: story.id, 
               userId 
             });

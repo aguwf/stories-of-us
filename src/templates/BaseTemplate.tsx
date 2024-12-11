@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-
+import React from "react";
 import NavigationBar from "@/app/_components/common/NavigationBar";
 import { AppConfig } from "@/utils/AppConfig";
 

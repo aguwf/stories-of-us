@@ -73,7 +73,7 @@ const Greeting = ({
             variant="ghost"
             onClick={() => setShowSearch(!showSearch)}
           >
-            <Icon className="!h-7 !w-7" name="magnifier-outline" />
+            <Icon className="!h-7 !w-7" name="magnifer-outline" />
           </Button>
         </div>
       </div>

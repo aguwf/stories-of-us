@@ -85,7 +85,7 @@ export default function CreateStoryModal({
 		if (selectedStory) {
 			setData({
 				name: selectedStory.name,
-				description: selectedStory.description,
+				description: selectedStory.description || "",
 			});
 			setFileList(selectedStory.images);
 		} else {

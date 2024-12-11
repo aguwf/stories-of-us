@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import { ImageProps } from "next/image";
 
 type ImageKitLoaderProps = {
 	src: string;
@@ -20,15 +21,21 @@ const imageKitLoader = ({ src, width, quality }: ImageKitLoaderProps) => {
 	return `${urlEndpoint}/${src}?tr=${paramsString}`;
 };
 
-const ImageK = (props: any) => {
+const ImageK = (props: Omit<ImageProps, "loader">) => {
+	const { fill, width, height, src, alt, ...restProps } = props;
+	
 	return (
 		<Image
 			loader={imageKitLoader}
-			src={props.src || "default-image.jpg"}
-			alt={props.alt || "Sample image"}
-			width={props.width || 400}
-			height={props.height || 400}
-			{...props}
+			src={src || "default-image.jpg"}
+			alt={alt || "Sample image"}
+			{...(fill
+				? { fill: true }
+				: {
+						width: width || 400,
+						height: height || 400,
+				  })}
+			{...restProps}
 		/>
 	);
 };

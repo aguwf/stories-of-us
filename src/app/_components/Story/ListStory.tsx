@@ -11,12 +11,13 @@ import {
   type DropResult,
   Droppable,
 } from "@hello-pangea/dnd";
-import { Pagination, useDisclosure } from "@nextui-org/react";
+import { Pagination } from "@nextui-org/react";
 import { message } from "antd";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import DetailStoryModal from "../modals/DetailStoryModal";
+// import DetailStoryModal from "../modals/DetailStoryModal";
 import { StoryCard } from "./Card";
+import useStorage from "@/hooks/useStorage";
 
 interface ListStoryProps {
   setSelectedStory: (story: StoryType | null) => void;
@@ -25,11 +26,11 @@ interface ListStoryProps {
   setMaxIndex: (index: number) => void;
 }
 
-interface ResponseStory {
-  storyList: StoryType[];
-  totalPages: number;
-  totalCount: number;
-}
+// interface ResponseStory {
+//   storyList: StoryType[];
+//   totalPages: number;
+//   totalCount: number;
+// }
 
 const DEFAULT_ORDER_BY = "newest";
 const DEFAULT_PAGE = 1;
@@ -62,7 +63,7 @@ export default function ListStory({
   setCreateIndex,
   setMaxIndex,
 }: ListStoryProps) {
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  // @ts-ignore
   const [selectedImages, setSelectedImages] = useState<StoryType | undefined>();
 
   const utils = api.useUtils();
@@ -100,17 +101,33 @@ export default function ListStory({
     },
   });
 
+  const { getItem } = useStorage();
+  const userId = getItem("userId")?.toString();
+
   useEffect(() => {
-    const { storyList, totalPages } = stories as ResponseStory;
-    if (storyList?.length > 0) {
-      setStories(storyList);
-      setTotalPages(totalPages);
+    if ('storyList' in stories) {  // Type guard
+      const { storyList, totalPages } = stories;
+      if (storyList?.length > 0) {
+        // Pre-fetch heart data for all stories
+        storyList.forEach((story) => {
+          utils.story.getHeartCount.prefetch({ storyId: story.id });
+          if (userId) {
+            utils.story.hasUserHearted.prefetch({ 
+              storyId: story.id, 
+              userId 
+            });
+          }
+        });
+        
+        setStories(storyList);
+        setTotalPages(totalPages);
+      }
     }
-  }, [stories, setStories, setTotalPages]);
+  }, [stories, setStories, setTotalPages, utils.story, userId]);
 
   useEffect(() => {
     if (storiesStore.length > 0) {
-      const maxSort = Math.max(...storiesStore.map((story) => story.sort));
+      const maxSort = Math.max(...storiesStore.map((story) => story.sort ?? 0));
       setMaxIndex(maxSort);
     }
   }, [storiesStore, setMaxIndex]);
@@ -165,8 +182,8 @@ export default function ListStory({
             <div ref={droppableProvided.innerRef}>
               {storiesStore.map((item, index) => {
                 const nextItem = storiesStore[index + 1];
-                const nextSort = nextItem ? nextItem.sort + 1 : item.sort + 1;
-                const sort = (item.sort + nextSort) / 2;
+                const nextSort = nextItem ? nextItem.sort ?? 0 + 1 : item.sort ?? 0 + 1;
+                const sort = (item.sort ?? 0 + nextSort) / 2;
                 // const isLastItem = index === storiesStore.length - 1;
                 return (
                   <Draggable
@@ -187,7 +204,6 @@ export default function ListStory({
                         <StoryCard
                           item={item}
                           setSelectedStory={setSelectedStory}
-                          onOpen={onOpen}
                           setSelectedImages={setSelectedImages}
                           sort={sort}
                           setCreateIndex={setCreateIndex}
@@ -210,11 +226,11 @@ export default function ListStory({
           onChange={handleChangePagination}
         />
       </DragDropContext>
-      <DetailStoryModal
+      {/* <DetailStoryModal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         story={selectedImages}
-      />
+      /> */}
     </div>
   );
 }

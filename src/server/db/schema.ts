@@ -38,64 +38,18 @@ export const stories = createTable("story", {
   ),
 });
 
-// const storiesRelations = relations(stories, ({ many }) => ({
-//   images: many(images),
-// }));
-
-// export const images = createTable(
-//   "image",
-//   {
-//     id: serial("id").primaryKey(),
-//     url: varchar("url", { length: 255 }).notNull(),
-//     storyId: varchar("story_id")
-//       .notNull()
-//       .references(() => stories.id),
-//     createdAt: timestamp("created_at", { withTimezone: true })
-//       .default(sql`CURRENT_TIMESTAMP`)
-//       .notNull(),
-//     updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-//       () => new Date(),
-//     ),
-//   },
-//   (image) => ({
-//     compoundKey: primaryKey({
-//       columns: [image.storyId, image.url],
-//     }),
-//     storyIdIdx: index("story_id_idx").on(image.storyId),
-//   }),
-// );
-
-// const imagesRelations = relations(stories, ({ one }) => ({
-//   story: one(stories, { fields: [stories.id], references: [stories.id] }),
-// }));
-
-// export const posts = createTable(
-//   "post",
-//   {
-//     id: serial("id").primaryKey(),
-//     name: varchar("name", { length: 256 }),
-//     createdById: varchar("created_by", { length: 255 })
-//       .notNull()
-//       .references(() => users.id),
-//     createdAt: timestamp("created_at", { withTimezone: true })
-//       .default(sql`CURRENT_TIMESTAMP`)
-//       .notNull(),
-//     updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-//       () => new Date(),
-//     ),
-//   },
-//   (example) => ({
-//     createdByIdIdx: index("created_by_idx").on(example.createdById),
-//     nameIndex: index("name_idx").on(example.name),
-//   }),
-// );
+export const storiesRelations = relations(stories, ({ one, many }) => ({
+  user: one(users, { fields: [stories.userId], references: [users.id] }),
+  hearts: many(hearts),
+  comments: many(comments),
+}));
 
 export const users = createTable("user", {
   id: varchar("id", { length: 255 })
     .notNull()
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  name: varchar("name", { length: 255 }),
+  name: varchar("name", { length: 255 }).notNull(),
   email: varchar("email", { length: 255 }).notNull(),
   emailVerified: timestamp("email_verified", {
     mode: "date",
@@ -106,6 +60,7 @@ export const users = createTable("user", {
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
+  stories: many(stories),
 }));
 
 export const accounts = createTable(
@@ -178,3 +133,41 @@ export const accountsRelations = relations(accounts, ({ one }) => ({
 //     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
 //   }),
 // );
+
+export const hearts = createTable("heart", {
+  id: serial("id").primaryKey(),
+  storyId: integer("story_id")
+    .notNull()
+    .references(() => stories.id),
+  userId: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const heartsRelations = relations(hearts, ({ one }) => ({
+  story: one(stories, { fields: [hearts.storyId], references: [stories.id] }),
+  user: one(users, { fields: [hearts.userId], references: [users.id] }),
+}));
+
+export const comments = createTable("comment", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id")
+    .notNull()
+    .references(() => users.id),
+  storyId: integer("story_id")
+    .notNull()
+    .references(() => stories.id),
+  content: text("content").notNull(),
+  reactions: text("reactions").$type<{
+    [key: string]: string[]; // emoji: userId[]
+  }>(),
+  replies: integer("replies").array().default(sql`'{}'::integer[]`).notNull(),
+});
+
+export const commentsRelations = relations(comments, ({ one }) => ({
+  story: one(stories, { fields: [comments.storyId], references: [stories.id] }),
+  user: one(users, { fields: [comments.userId], references: [users.id] }),
+}));

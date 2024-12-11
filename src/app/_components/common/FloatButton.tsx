@@ -1,4 +1,4 @@
-import { Button } from "@nextui-org/react";
+import { Button } from "@/components/ui/button";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { Settings } from "lucide-react";

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 
 // Type definitions for better type safety
 type StorageValue = string | number | boolean | object | null;
@@ -36,7 +36,8 @@ const isStorageAvailable = (): boolean => {
     localStorage.setItem(test, test);
     localStorage.removeItem(test);
     return true;
-  } catch (e) {
+  } catch (err) {
+    console.log(err);
     return false;
   }
 };
@@ -48,7 +49,7 @@ const useStorage = () => {
   const setItem = useCallback(<T extends StorageValue>(
     key: string, 
     value: T, 
-    expiryHours?: number
+    // expiryHours?: number
   ): void => {
     if (!isAvailable) {
       console.warn('localStorage is not available');

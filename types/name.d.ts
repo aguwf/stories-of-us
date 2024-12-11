@@ -4,6 +4,7 @@ export type IconName =
 	| "bookmark-filled"
 	| "bookmark-outline"
 	| "copy-outline"
+	| "eye-outline"
 	| "filter-outline"
 	| "heart-filled"
 	| "heart-outline"
@@ -11,5 +12,6 @@ export type IconName =
 	| "magnifer-outline"
 	| "menu-dots-outline"
 	| "pen-outline"
+	| "square-share-line-outline"
 	| "trash-outline"
 	| "user-outline";

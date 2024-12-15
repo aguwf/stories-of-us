@@ -25,35 +25,41 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, onAddComment 
   };
 
   return (
-    <div className="w-full max-w-screen-md mx-auto px-4 py-6">
-      <form onSubmit={handleSubmit} className="mb-8">
-        <div className="flex gap-4">
-          <Avatar>
+    <div className="w-full max-w-screen-md mx-auto py-4">
+      <form onSubmit={handleSubmit} className="mb-6">
+        <div className="flex gap-3">
+          <Avatar className="w-8 h-8">
             <AvatarImage src={user?.avatar || ""} />
-            <AvatarFallback>{user?.name.slice(0, 2)}</AvatarFallback>
+            <AvatarFallback>{user?.name?.slice(0, 2)}</AvatarFallback>
           </Avatar>
-          <div className="flex-1">
+          <div className="flex-1 relative">
             <Textarea
               value={newComment}
               onChange={(e) => setNewComment(e.target.value)}
-              placeholder="Add a comment..."
-              className="mb-2"
+              placeholder="Write a comment..."
+              className="min-h-[40px] px-4 py-2 rounded-2xl bg-secondary resize-none overflow-hidden focus:ring-1 focus:ring-primary/20"
             />
-            <div className="flex justify-between items-center">
-              <EmojiPicker
-                onEmojiSelect={(emoji) => 
-                  setNewComment((prev) => prev + emoji.native)
-                }
-              />
-              <Button className="rounded-full" type="submit" disabled={!newComment.trim()}>
-                Post Comment
+            <div className="flex justify-between items-center mt-2">
+              <div className="flex items-center gap-2">
+                <EmojiPicker
+                  onEmojiSelect={(emoji) =>
+                    setNewComment((prev) => prev + emoji.native)
+                  }
+                />
+              </div>
+              <Button
+                className="rounded-full px-4 py-1 h-8 text-sm font-medium transition-opacity disabled:opacity-50"
+                type="submit"
+                disabled={!newComment.trim()}
+              >
+                Post
               </Button>
             </div>
           </div>
         </div>
       </form>
 
-      <div className="space-y-6">
+      <div className="space-y-4">
         {comments.map((comment) => (
           <Comment key={comment.id} comment={comment} />
         ))}
@@ -62,4 +68,4 @@ const CommentSection: React.FC<CommentSectionProps> = ({ comments, onAddComment 
   );
 };
 
-export default CommentSection; 
+export default CommentSection;

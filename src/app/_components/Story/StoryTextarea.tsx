@@ -6,6 +6,7 @@ interface StoryTextareaProps {
 	placeholder: string;
 	value: string;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	className?: string;
 }
 
 const StoryTextarea = ({
@@ -14,6 +15,7 @@ const StoryTextarea = ({
 	placeholder,
 	value,
 	onChange,
+	className,
 }: StoryTextareaProps) => {
 	return (
 		<Textarea
@@ -22,6 +24,7 @@ const StoryTextarea = ({
 			placeholder={placeholder}
 			value={value}
 			onChange={onChange}
+			className={className}
 		/>
 	);
 };

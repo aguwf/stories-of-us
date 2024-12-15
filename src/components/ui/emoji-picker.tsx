@@ -12,9 +12,8 @@ export const EmojiPicker: React.FC<EmojiPickerProps> = ({ onEmojiSelect }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="sm">
-          {/* <Smile className="w-5 h-5" /> */}
-          icon
+        <Button className="w-4 h-4 hover:bg-secondary/80 p-2 rounded-full transition-colors" variant="ghost" size="sm">
+          😀
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0">

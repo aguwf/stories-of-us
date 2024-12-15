@@ -3,7 +3,6 @@
 import ListStory from "@/app/_components/Story/ListStory";
 import Toolbar from "@/app/_components/common/Toolbar";
 import CreateStoryModal from "@/app/_components/modals/CreateStoryModal";
-import useDisclosure from "@/hooks/useDisclosure";
 import type { StoryType } from "@/types";
 import { useState } from "react";
 import {
@@ -13,26 +12,17 @@ import {
 import { useThemeStore } from "../_store/clientStore";
 import { Moon, Plus, Settings, Sun } from "lucide-react";
 import Greeting from "../_components/greeting";
+import { useRef } from "react";
+import { CreateStoryModalRef } from "../_components/modals/CreateStoryModal";
 
 const StoryTimelineContainer = () => {
-	const {
-		isOpen: isOpenCreateModal,
-		onOpen: onOpenCreateModal,
-		toggle: toggleCreateModal,
-	} = useDisclosure(false);
-
 	const { theme, setTheme } = useThemeStore();
+	const modalRef = useRef<CreateStoryModalRef>(null);
 
 	const [selectedStory, setSelectedStory] = useState<StoryType | null>(null);
 	const [createIndex, setCreateIndex] = useState<number | null>(null);
 	const [maxIndex, setMaxIndex] = useState<number | null>(null);
 	const [showSearch, setShowSearch] = useState<boolean>(false);
-
-	// useEffect(() => {
-	//     if (selectedStory) {
-	//         onOpenCreateModal();
-	//     }
-	// }, [selectedStory, onOpenCreateModal]);
 
 	return (
 		<div className="container mx-auto px-4">
@@ -40,11 +30,11 @@ const StoryTimelineContainer = () => {
 			<Toolbar showSearch={showSearch} />
 			<ListStory
 				setSelectedStory={setSelectedStory}
-				openModal={onOpenCreateModal}
+				openModal={() => modalRef.current?.openModal()}
 				setCreateIndex={setCreateIndex}
 				setMaxIndex={setMaxIndex}
 			/>
-			<FloatButton onClick={onOpenCreateModal}>
+			<FloatButton onClick={() => modalRef.current?.openModal()}>
 				<Plus size={16} />
 			</FloatButton>
 			<FloatButtonGroup
@@ -63,8 +53,7 @@ const StoryTimelineContainer = () => {
 				]}
 			/>
 			<CreateStoryModal
-				isOpen={isOpenCreateModal}
-				onOpenChange={toggleCreateModal}
+				ref={modalRef}
 				selectedStory={selectedStory}
 				createIndex={createIndex}
 				maxIndex={maxIndex}

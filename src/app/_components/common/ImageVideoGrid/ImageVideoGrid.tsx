@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import Video from "./Video";
 import MediaCarousel from "./MediaCarousel";
 import ImageK from "../ImageK";
-import CommentSection from "../CommentSection/CommentSection";
+// import CommentSection from "../CommentSection/CommentSection";
 
 import { StoryType } from "@/types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -39,12 +39,6 @@ const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({ items, story }) => {
       return <Video src={item.src} className={commonClasses} />;
     } else {
       return (
-        // <Image
-        //   src={item.src}
-        //   alt={`Media item ${index + 1}`}
-        //   fill
-        //   className={commonClasses}
-        // />
         <ImageK
           width={500}
           height={800}
@@ -149,13 +143,13 @@ const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({ items, story }) => {
                   <p className="mt-2">{story?.description}</p>
                 </div>
                 <MediaCarousel items={items} initialIndex={index} />
-                <CommentSection
+                {/* <CommentSection
                   comments={[]} // Pass your comments data here
                   onAddComment={(content) => {
                     // Implement your comment adding logic here
                     console.log("New comment:", content);
                   }}
-                />
+                /> */}
               </DialogContent>
             </Dialog>
           );

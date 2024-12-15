@@ -5,242 +5,315 @@ import { api } from "@/trpc/react";
 import type { StoryType } from "@/types";
 import { handleUploadImage } from "@/utils/uploadHelper";
 import {
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-} from "@nextui-org/modal";
-import type { PopconfirmProps } from "antd";
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { message } from "antd";
-import { useCallback, useEffect, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import CancelButton from "../Story/CancelButton";
-import StoryInput from "../Story/StoryInput";
-import StoryTextarea from "../Story/StoryTextarea";
+// import StoryInput from "../Story/StoryInput";
+// import StoryTextarea from "../Story/StoryTextarea";
 import SubmitButton from "../Story/SubmitButton";
+import useDisclosure from "@/hooks/useDisclosure";
+import { useUserStore } from "@/app/_store/userStore";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { TRPCClientErrorLike } from "@trpc/client";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 
-interface StoryData {
-	name: string;
-	description: string;
-}
+// interface StoryData {
+//   name: string;
+//   description: string;
+// }
 
-const defaultStoryData: StoryData = { name: "", description: "" };
+// const defaultStoryData: StoryData = { name: "", description: "" };
 
 interface CreateStoryModalProps {
-	isOpen: boolean;
-	onOpenChange: (open: boolean) => void;
-	selectedStory?: StoryType | null;
-	createIndex?: number | null;
-	maxIndex?: number | null;
-	setCreateIndex: (index: number | null) => void;
+  selectedStory?: StoryType | null;
+  createIndex?: number | null;
+  maxIndex?: number | null;
+  setCreateIndex: (index: number | null) => void;
 }
 
-export default function CreateStoryModal({
-	isOpen,
-	onOpenChange,
+export interface CreateStoryModalRef {
+  openModal: () => void;
+}
+
+const storySchema = z.object({
+  name: z.string().min(1, "Title is required"),
+  description: z.string(),
+});
+
+type StoryFormData = z.infer<typeof storySchema>;
+
+const useStoryModal = ({
+  selectedStory,
+  createIndex,
+  maxIndex,
+  setCreateIndex,
+}: CreateStoryModalProps) => {
+  const { isOpen, onClose, onOpen } = useDisclosure(false);
+  const [fileList, setFileList] = useState<(File | string)[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const utils = api.useUtils();
+  const { user } = useUserStore();
+
+  const form = useForm<StoryFormData>({
+    resolver: zodResolver(storySchema),
+    defaultValues: {
+      name: selectedStory?.name ?? "",
+      description: selectedStory?.description ?? "",
+    },
+  });
+
+  const resetModal = useCallback(() => {
+    setFileList([]);
+    setIsUploading(false);
+    form.reset();
+    setCreateIndex(null);
+    onClose();
+  }, [onClose, setCreateIndex, form]);
+
+  const handleMutationSuccess = useCallback(
+    async (action: string) => {
+      setIsUploading(false);
+      message.success(`${action} successfully`);
+      await utils.story.invalidate();
+      resetModal();
+    },
+    [utils.story, resetModal]
+  );
+
+  const handleMutationError = useCallback((error: TRPCClientErrorLike<any>) => {
+    setIsUploading(false);
+    message.error(error.message || "An error occurred");
+  }, []);
+
+  const createStory = api.story.create.useMutation({
+    onSuccess: () => handleMutationSuccess("Create"),
+    onError: handleMutationError,
+  });
+
+  const updateStory = api.story.update.useMutation({
+    onSuccess: () => handleMutationSuccess("Update"),
+    onError: handleMutationError,
+  });
+
+  useEffect(() => {
+    if (selectedStory) {
+      form.reset({
+        name: selectedStory.name,
+        description: selectedStory.description || "",
+      });
+      setFileList(selectedStory.images);
+    } else {
+      resetModal();
+    }
+  }, [selectedStory, resetModal, form]);
+
+  const uploadNewImages = async (
+    newImages: File[],
+    existedImages: string[]
+  ) => {
+    try {
+      if (!newImages.length) return existedImages;
+
+      const uploadedImages = await handleUploadImage(newImages);
+      const urls = uploadedImages
+        ?.map((image) => image?.url)
+        .filter(Boolean) as string[];
+      return [...existedImages, ...urls];
+    } catch (error) {
+      if (error instanceof Error) {
+        handleMutationError({
+          message: error.message,
+          data: { code: "INTERNAL_SERVER_ERROR" },
+          shape: { message: error.message, code: -32603 },
+        });
+      } else {
+        handleMutationError({
+          message: "Upload failed",
+          data: { code: "INTERNAL_SERVER_ERROR" },
+          shape: { message: "Upload failed", code: -32603 },
+        });
+      }
+      throw error;
+    }
+  };
+
+  const createStoryData = useCallback(
+    (allImages: string[]) => ({
+      ...form.getValues(),
+      coverImage: selectedStory?.coverImage || allImages[0] || "",
+      images: allImages,
+      sort: createIndex ?? maxIndex ? (maxIndex || 0) + 100 : 0,
+      userId: user?.id || "default-id",
+      ...(createIndex !== null && { index: createIndex }),
+    }),
+    [form, selectedStory, createIndex, maxIndex, user]
+  );
+
+  const handleSubmit = useCallback(
+    async () => {
+      if (fileList.length === 0) {
+        message.error("You need to select at least one image");
+        return;
+      }
+
+      setIsUploading(true);
+      message.loading("Uploading...");
+
+      const existedImages = fileList.filter(
+        (file): file is string => typeof file === "string"
+      );
+      const newImages = fileList.filter(
+        (file): file is File => file instanceof File
+      );
+
+      try {
+        const allImages = await uploadNewImages(newImages, existedImages);
+        const storyData = createStoryData(allImages);
+
+        if (selectedStory?.id) {
+          await updateStory.mutateAsync({ id: selectedStory.id, ...storyData });
+        } else {
+          await createStory.mutateAsync(storyData);
+        }
+      } catch (error) {
+        // Error already handled in uploadNewImages
+        console.error("Submission failed:", error);
+      }
+    },
+    [fileList, createStoryData, selectedStory, createStory, updateStory]
+  );
+
+  return {
+    isOpen,
+    onClose,
+    onOpen,
+    fileList,
+    setFileList,
+    isUploading,
+    form,
+    handleSubmit: form.handleSubmit(handleSubmit),
+    resetModal,
 	selectedStory,
-	createIndex,
-	maxIndex,
-	setCreateIndex,
-}: CreateStoryModalProps) {
-	const [fileList, setFileList] = useState<(File | string)[]>([]);
-	const [isUploading, setIsUploading] = useState(false);
-	const [data, setData] = useState<StoryData>(defaultStoryData);
-	const utils = api.useUtils();
+  };
+};
 
-	const handleMutationSuccess = (action: string) => async () => {
-		setIsUploading(false);
-		message.success(`${action} successfully`);
-		await utils.story.invalidate();
-		resetModal();
-	};
+const CreateStoryModal = forwardRef<CreateStoryModalRef, CreateStoryModalProps>(
+  (props, ref) => {
+    const {
+      isOpen,
+      onClose,
+      onOpen,
+      fileList,
+      setFileList,
+      isUploading,
+      form,
+      handleSubmit,
+      resetModal,
+	  selectedStory,
+    } = useStoryModal(props);
 
-	const handleMutationError = () => {
-		setIsUploading(false);
-		message.error("An error occurred");
-	};
+    useImperativeHandle(
+      ref,
+      () => ({
+        openModal: onOpen,
+      }),
+      [onOpen]
+    );
 
-	const createStory = api.story.create.useMutation({
-		onSuccess: handleMutationSuccess("Create"),
-		onError: handleMutationError,
-	});
+    const confirm = useCallback(
+      ({ onClose }: { onClose: () => void }) => {
+        onClose();
+        resetModal();
+      },
+      [resetModal]
+    );
 
-	const updateStory = api.story.update.useMutation({
-		onSuccess: handleMutationSuccess("Update"),
-		onError: handleMutationError,
-	});
+    const cancel = useCallback(({ onClose }: { onClose: () => void }) => {
+      onClose();
+    }, []);
 
-	useEffect(() => {
-		const localData = localStorage.getItem("data");
-		if (localData) {
-			setData(JSON.parse(localData));
-		}
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="pt-16 max-h-[90vh] overflow-y-auto sm:max-w-[425px]">
+          <DialogHeader className="mb-4">
+            <DialogTitle>
+              {props.selectedStory ? "Edit Story" : "Create new memory"}
+            </DialogTitle>
+          </DialogHeader>
 
-		return () => {
-			localStorage.removeItem("data");
-		};
-	}, []);
+          <form onSubmit={handleSubmit}>
+            <div>
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="name" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Title
+                </Label>
+                <Input
+                  {...form.register("name")}
+                  error={form.formState.errors.name?.message}
+                  placeholder="Enter your title"
+                  className="mb-4"
+				  id="name"
+                />
+              </div>
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label htmlFor="description" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Description
+                </Label>
+                <Textarea
+                  {...form.register("description")}
+                  error={form.formState.errors.description?.message}
+                  placeholder="Enter your description"
+                  className="mb-4"
+				  id="description"
+                />
+              </div>
+              <div className="grid w-full max-w-sm items-center gap-1.5">
+                <Label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                  Cover Image
+                </Label>
+                <UploadV2
+                  className="mb-4"
+                  fileList={fileList}
+                  setFileList={setFileList}
+                />
+              </div>
+            </div>
 
-	useEffect(() => {
-		if (selectedStory) {
-			setData({
-				name: selectedStory.name,
-				description: selectedStory.description || "",
-			});
-			setFileList(selectedStory.images);
-		} else {
-			resetModal();
-		}
-	}, [selectedStory]);
+            <DialogFooter className="gap-2">
+              <CancelButton
+                dataName={form.getValues("name")}
+                onClose={onClose}
+                confirm={confirm}
+                cancel={cancel}
+              />
+              <SubmitButton
+                isUploading={isUploading}
+                type="submit"
+                handleSubmit={handleSubmit}
+                selectedStory={selectedStory}
+              />
+            </DialogFooter>
+          </form>
+        </DialogContent>
+      </Dialog>
+    );
+  }
+);
 
-	const onInputChange = useCallback(
-		(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-			const { name, value } = e.target;
-			setData((prevData) => {
-				const newData = { ...prevData, [name]: value };
-				localStorage.setItem("data", JSON.stringify(newData));
-				return newData;
-			});
-		},
-		[],
-	);
-
-	const handleSubmit = async () => {
-		if (fileList.length === 0) {
-			message.error("You need to select at least one image");
-			return;
-		}
-
-		setIsUploading(true);
-		message.loading("Uploading...");
-
-		const existedImages = fileList.filter(
-			(file): file is string => typeof file === "string",
-		);
-		const newImages = fileList.filter(
-			(file): file is File => file instanceof File,
-		);
-
-		try {
-			const allImages = await uploadNewImages(newImages, existedImages);
-			const newStoryData = createStoryData(allImages);
-
-			if (selectedStory) {
-				updateStory.mutate({ ...newStoryData, id: selectedStory.id });
-			} else {
-				createStory.mutate(newStoryData);
-			}
-		} catch (error) {
-			handleUploadError(error);
-		}
-
-		onOpenChange(false);
-	};
-
-	const uploadNewImages = async (
-		newImages: File[],
-		existedImages: string[],
-	) => {
-		if (newImages.length > 0) {
-			const uploadedImages = await handleUploadImage(newImages);
-			const urls = uploadedImages
-				? uploadedImages.map((image) => image?.url || "")
-				: [];
-			return [...existedImages, ...urls];
-		}
-		return existedImages;
-	};
-
-	const createStoryData = (allImages: string[]) => {
-		return {
-			name: data.name,
-			description: data.description,
-			coverImage: selectedStory?.coverImage || allImages[0] || "",
-			images: allImages,
-			sort: createIndex ? createIndex : maxIndex ? maxIndex + 100 : 0,
-			userId: "default-id",
-		};
-	};
-
-	const handleUploadError = (error: any) => {
-		console.error("Error during image upload:", error);
-		message.error("Failed to upload images");
-		setIsUploading(false);
-	};
-
-	const resetModal = useCallback(() => {
-		setFileList([]);
-		setIsUploading(false);
-		setData(defaultStoryData);
-		localStorage.removeItem("data");
-		onOpenChange(false);
-		setCreateIndex(null);
-	}, []);
-
-	const confirm: PopconfirmProps["onConfirm"] = ({ onClose }: any) => {
-		resetModal();
-		onClose();
-	};
-
-	const cancel: PopconfirmProps["onCancel"] = ({ onClose }: any) => {
-		onClose();
-	};
-
-	return (
-		<Modal
-			isOpen={isOpen}
-			placement="center"
-			onOpenChange={onOpenChange}
-			isDismissable={false}
-			isKeyboardDismissDisabled
-			scrollBehavior="inside"
-			classNames={{
-				wrapper: "z-[101]",
-				backdrop: "z-[100]",
-				body: "pl-6",
-			}}
-		>
-			<ModalContent>
-				{(onClose) => (
-					<>
-						<ModalHeader className="flex flex-col gap-1">
-							{selectedStory ? "Edit Story" : "Create new memory"}
-						</ModalHeader>
-						<ModalBody>
-							<StoryInput
-								label="Title"
-								name="name"
-								placeholder="Enter your title"
-								value={data.name}
-								onChange={onInputChange}
-							/>
-							<StoryTextarea
-								label="Description"
-								name="description"
-								placeholder="Enter your description"
-								value={data.description}
-								onChange={onInputChange}
-							/>
-							<UploadV2 fileList={fileList} setFileList={setFileList} />
-						</ModalBody>
-						<ModalFooter>
-							<CancelButton
-								dataName={data?.name}
-								onClose={onClose}
-								confirm={confirm}
-								cancel={cancel}
-							/>
-							<SubmitButton
-								isUploading={isUploading}
-								createStory={createStory}
-								updateStory={updateStory}
-								selectedStory={selectedStory}
-								handleSubmit={handleSubmit}
-							/>
-						</ModalFooter>
-					</>
-				)}
-			</ModalContent>
-		</Modal>
-	);
-}
+export default CreateStoryModal;

@@ -1,26 +1,32 @@
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import type { StoryType } from "@/types";
-import { Button } from "@nextui-org/react";
 
 interface SubmitButtonProps {
 	handleSubmit: () => void;
 	isUploading: boolean;
-	createStory: any;
-	updateStory: any;
 	selectedStory?: StoryType | null;
+	type?: "submit" | "reset" | "button" | undefined;
+	isPending?: boolean;
 }
 
 const SubmitButton = ({
 	handleSubmit,
 	isUploading,
-	createStory,
-	updateStory,
 	selectedStory,
+	type,
+	isPending,
 }: SubmitButtonProps) => {
 	return (
 		<Button
-			color="primary"
-			onPress={handleSubmit}
-			isLoading={isUploading || createStory.isPending || updateStory.isPending}
+			className={cn(
+				selectedStory ? "bg-pastel-blue hover:bg-pastel-blue" : "bg-purple hover:bg-purple",
+				isUploading || isPending ? "loading" : "",
+			)}
+			variant={selectedStory ? "outline" : "default"}
+			onClick={handleSubmit}
+			isLoading={isUploading || isPending}
+			type={type}
 		>
 			{selectedStory ? "Update" : "Create"}
 		</Button>

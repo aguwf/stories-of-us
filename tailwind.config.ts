@@ -18,79 +18,91 @@ export default {
     			sm: 'calc(var(--radius) - 4px)'
     		},
     		colors: {
-    			background: 'hsl(var(--background))',
-    			foreground: 'hsl(var(--foreground))',
+    			background: 'var(--background)',
+    			foreground: 'var(--foreground)',
     			card: {
-    				DEFAULT: 'hsl(var(--card))',
-    				foreground: 'hsl(var(--card-foreground))'
+    				DEFAULT: 'var(--card)',
+    				foreground: 'var(--card-foreground)'
     			},
     			popover: {
-    				DEFAULT: 'hsl(var(--popover))',
-    				foreground: 'hsl(var(--popover-foreground))'
+    				DEFAULT: 'var(--popover)',
+    				foreground: 'var(--popover-foreground)'
     			},
     			primary: {
-    				DEFAULT: 'hsl(var(--primary))',
-    				foreground: 'hsl(var(--primary-foreground))'
+    				DEFAULT: 'var(--primary)',
+    				foreground: 'var(--primary-foreground)'
     			},
     			secondary: {
-    				DEFAULT: 'hsl(var(--secondary))',
-    				foreground: 'hsl(var(--secondary-foreground))'
-    			},
-    			muted: {
-    				DEFAULT: 'hsl(var(--muted))',
-    				foreground: 'hsl(var(--muted-foreground))'
+    				DEFAULT: 'var(--secondary)',
+    				foreground: 'var(--secondary-foreground)'
     			},
     			accent: {
-    				DEFAULT: 'hsl(var(--accent))',
-    				foreground: 'hsl(var(--accent-foreground))'
+    				DEFAULT: 'var(--accent)',
+    				hover: 'var(--accent-hover)'
     			},
-    			destructive: {
-    				DEFAULT: 'hsl(var(--destructive))',
-    				foreground: 'hsl(var(--destructive-foreground))'
+    			text: 'var(--text)',
+    			border: 'var(--border)',
+    			shadow: 'var(--shadow)',
+    			highlight: 'var(--highlight)',
+    			success: 'var(--success)',
+    			warning: 'var(--warning)',
+    			danger: 'var(--danger)',
+				purple: 'var(--purple)',
+    			pastel: {
+    				blue: 'var(--pastel-blue)',
+    				green: 'var(--pastel-green)',
+    				yellow: 'var(--pastel-yellow)',
+    				purple: 'var(--pastel-purple)'
     			},
-    			border: 'hsl(var(--border))',
-    			input: 'hsl(var(--input))',
-    			ring: 'hsl(var(--ring))',
+    			muted: {
+    				DEFAULT: 'var(--muted)',
+    				foreground: 'var(--muted-foreground)'
+    			},
     			chart: {
-    				'1': 'hsl(var(--chart-1))',
-    				'2': 'hsl(var(--chart-2))',
-    				'3': 'hsl(var(--chart-3))',
-    				'4': 'hsl(var(--chart-4))',
-    				'5': 'hsl(var(--chart-5))'
-    			}
+    				'1': 'var(--chart-1)',
+    				'2': 'var(--chart-2)',
+    				'3': 'var(--chart-3)',
+    				'4': 'var(--chart-4)',
+    				'5': 'var(--chart-5)'
+    			},
+    			input: 'var(--input)',
+    			ring: 'var(--ring)',
+    			destructive: {
+    				DEFAULT: 'var(--destructive)',
+    				foreground: 'var(--destructive-foreground)'
+    			},
     		}
     	}
     },
-	darkMode: ["class", "class"],
+	darkMode: ["class"],
 	plugins: [
 		nextui({
 			themes: {
 				dark: {
 					extend: "dark",
 					colors: {
-						background: "#212529",
-						foreground: "#f0f0f0",
-						primary: "#4d9cb6",
-						secondary: "#ad97ad",
-						success: "#5cb65c",
-						warning: "#d8d863",
-						danger: "#cd6d6d",
+						background: "var(--background)",
+						foreground: "var(--foreground)",
+						primary: "var(--primary)",
+						secondary: "var(--secondary)",
+						success: "var(--success)",
+						warning: "var(--warning)",
+						danger: "var(--destructive)",
 					},
 				},
 				light: {
 					extend: "light",
 					colors: {
-						background: "#f0f0f0",
-						foreground: "#212529",
-						primary: "#6bc7e6",
-						secondary: "#D8BFD8",
-						success: "#7af07a",
-						warning: "#e8e87d",
-						danger: "#f08080",
+						background: "var(--background)",
+						foreground: "var(--foreground)",
+						primary: "var(--primary)",
+						secondary: "var(--secondary)",
+						success: "var(--success)",
+						warning: "var(--warning)",
+						danger: "var(--destructive)",
 					},
 				},
 			},
 		}),
-        require("tailwindcss-animate")
-    ],
+	],
 } satisfies Config;

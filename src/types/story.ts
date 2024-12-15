@@ -9,4 +9,6 @@ export type StoryType = {
 	sort: number | null;
 	createdAt: Date | string | null;
 	user: UserType;
+	isHearted: boolean;
+	heartCount: number;
 };

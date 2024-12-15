@@ -63,6 +63,8 @@ export default function ListStory({
   setCreateIndex,
   setMaxIndex,
 }: ListStoryProps) {
+  const { user } = useUserStore();
+
   // @ts-ignore
   const [selectedImages, setSelectedImages] = useState<StoryType | undefined>();
 
@@ -82,6 +84,7 @@ export default function ListStory({
     page,
     totalItems,
     sort: "sort",
+    currentUserId: user?.id,
   });
 
   const {
@@ -101,29 +104,21 @@ export default function ListStory({
     },
   });
 
-  const { user } = useUserStore();
-  const userId = user?.id;
-
   useEffect(() => {
     if ('storyList' in stories) {  // Type guard
       const { storyList, totalPages } = stories;
       if (storyList?.length > 0) {
         // Pre-fetch heart data for all stories
-        storyList.forEach(async(story) => {
-          await utils.story.getHeartCount.prefetch({ storyId: story.id });
-          if (userId) {
-            await utils.story.hasUserHearted.prefetch({
-              storyId: story.id, 
-              userId 
-            });
-          }
-        });
+        // storyList.forEach(async(story) => {
+        //   await utils.story.getHeartCount.prefetch({ storyId: story.id });
+        // });
+        console.log("🚀 ~ file: ListStory.tsx:116 ~ storyList:", storyList)
         
         setStories(storyList);
         setTotalPages(totalPages);
       }
     }
-  }, [stories, setStories, setTotalPages, utils.story, userId]);
+  }, [stories, setStories, setTotalPages, utils.story, user?.id]);
 
   useEffect(() => {
     if (storiesStore.length > 0) {
@@ -146,7 +141,7 @@ export default function ListStory({
       destination.index
     ).map((story, index) => ({ ...story, sort: index }));
 
-    setStories(newStoryList);
+    setStories(newStoryList);``
 
     updateStory.mutate({
       id: storiesStore[source.index]?.id ?? 0,
@@ -166,7 +161,7 @@ export default function ListStory({
     );
   }
 
-  if (!storiesStore?.length) {
+  if (!isLoading && !storiesStore?.length) {
     return (
       <div className="flex h-[50vh] items-center justify-center">
         <h1 className="text-2xl">No stories found</h1>
@@ -226,11 +221,6 @@ export default function ListStory({
           onChange={handleChangePagination}
         />
       </DragDropContext>
-      {/* <DetailStoryModal
-        isOpen={isOpen}
-        onOpenChange={onOpenChange}
-        story={selectedImages}
-      /> */}
     </div>
   );
 }

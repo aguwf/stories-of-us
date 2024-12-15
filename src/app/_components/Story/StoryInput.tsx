@@ -6,6 +6,8 @@ interface StoryInputProps {
 	placeholder: string;
 	value: string;
 	onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+	className?: string;
+	error?: string;
 }
 
 const StoryInput = ({
@@ -14,6 +16,8 @@ const StoryInput = ({
 	placeholder,
 	value,
 	onChange,
+	className,
+	error,
 }: StoryInputProps) => {
 	return (
 		<Input
@@ -22,6 +26,8 @@ const StoryInput = ({
 			placeholder={placeholder}
 			value={value}
 			onChange={onChange}
+			className={className}
+			errorMessage={error}
 		/>
 	);
 };

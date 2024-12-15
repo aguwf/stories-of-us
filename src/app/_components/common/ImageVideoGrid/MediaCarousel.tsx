@@ -8,11 +8,19 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 import Video from "./Video";
 import Fade from "embla-carousel-fade";
 import ImageK from "../ImageK";
 import { cn } from "@/lib/utils";
 import { type CarouselApi } from "@/components/ui/carousel";
+import { Icon } from "../icon";
 
 interface MediaItem {
   type: "image" | "video";
@@ -49,29 +57,60 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ items }) => {
   }, [thumbnailApi]);
 
   const renderMediaItem = (item: MediaItem, isThumbnail: boolean = false) => {
+    const commonClasses = cn(
+      "w-full h-full object-cover",
+      isThumbnail ? "rounded-sm" : "rounded-lg"
+    );
+
+    const handleSaveImage = async (src: string) => {
+      try {
+        const response = await fetch(src);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `image-${Date.now()}.jpg`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      } catch (error) {
+        console.error('Error saving image:', error);
+      }
+    };
+
     if (item.type === "video") {
-      return (
-        <div className="relative w-full h-full flex items-center justify-center bg-black">
-          <Video src={item.src} className="max-w-full max-h-full" />
-        </div>
-      );
+      return <Video src={item.src} className={commonClasses} />;
     } else {
       return (
-        <div
-          className={cn(
-            "relative w-screen h-[50vh] flex items-center justify-center bg-black",
-            isThumbnail && "h-full w-full"
-          )}
-        >
+        <div className="relative group">
           <ImageK
             width={isThumbnail ? 100 : 500}
             height={isThumbnail ? 100 : 800}
             quality={100}
             src={item.src.split("/").pop() || ""}
-            alt={`Media item`}
-            sizes="100vw"
-            className="object-contain w-full h-full"
+            alt="Media item"
+            className={commonClasses}
           />
+          {!isThumbnail && (
+            <div className="absolute top-2 right-2 transition-opacity">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="bg-black/50 hover:bg-black/70">
+                    <Icon name="copy-outline" className="h-4 w-4 text-white" />
+                    {/* <Icon name="more-vertical" className="h-4 w-4 text-white" /> */}
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem className="border-gray-200 rounded-lg" onClick={() => handleSaveImage(item.src)}>
+                    <Icon name="bookmark-filled" className="h-4 w-4 mr-2" />
+                    {/* <Icon name="download" className="h-4 w-4 mr-2" /> */}
+                    Save Image
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </div>
       );
     }

@@ -1,5 +1,9 @@
-import { Button } from "@nextui-org/react";
-import { Popconfirm } from "antd";
+import { Button } from "@/components/ui/button";
+import {
+	Popover,
+	PopoverContent,
+	PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface CancelButtonProps {
 	dataName: string;
@@ -18,20 +22,33 @@ const CancelButton = ({
 	const handleCancel = () => cancel({ onClose });
 
 	return dataName ? (
-		<Popconfirm
-			title="Discard changes?"
-			description="Are you sure to discard this story?"
-			onConfirm={handleConfirm}
-			onCancel={handleCancel}
-			okText="Yes"
-			cancelText="No"
-		>
-			<Button color="danger" variant="light">
-				Cancel
-			</Button>
-		</Popconfirm>
+		<Popover>
+			<PopoverTrigger asChild>
+				<Button className="bg-accent" variant="default">
+					Cancel
+				</Button>
+			</PopoverTrigger>
+			<PopoverContent className="w-80">
+				<div className="grid gap-4">
+					<div className="space-y-2">
+						<h4 className="font-medium leading-none">Discard changes?</h4>
+						<p className="text-sm text-muted-foreground">
+							Are you want to save your draft?
+						</p>
+					</div>
+					<div className="flex justify-end gap-2">
+						<Button size="sm" variant="ghost" onClick={handleConfirm}>
+							No
+						</Button>
+						<Button size="sm" color="danger" onClick={handleCancel}>
+							Yes
+						</Button>
+					</div>
+				</div>
+			</PopoverContent>
+		</Popover>
 	) : (
-		<Button color="danger" variant="light" onClick={onClose}>
+		<Button color="danger" variant="ghost" onClick={onClose}>
 			Cancel
 		</Button>
 	);

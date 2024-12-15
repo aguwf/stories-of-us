@@ -29,6 +29,7 @@ export const storyRouter = createTRPCRouter({
         totalItems: z.number(),
         sort: z.enum(["createdAt", "name", "sort"]),
         orderBy: z.enum(["asc", "desc"]),
+        currentUserId: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -62,11 +63,19 @@ export const storyRouter = createTRPCRouter({
         limit,
         with: {
           user: true,
+          hearts: input.currentUserId ? {
+            where: (hearts, { eq }) => eq(hearts.userId, input.currentUserId!)
+          } : undefined
         },
       });
 
       return {
-        storyList,
+        storyList: storyList.map(story => ({
+          ...story,
+          isHearted: story.hearts && story.hearts.length > 0,
+          heartCount: story.hearts?.length ?? 0,
+          hearts: undefined
+        })),
         totalPages,
         totalCount: totalCount.count,
       };

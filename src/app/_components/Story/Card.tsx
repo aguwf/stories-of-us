@@ -68,7 +68,7 @@ const gradientClasses = {
   yellow: "bg-gradient-to-b from-[#FFFACD]/50 to-transparent",
   teal: "bg-gradient-to-b from-[#A7F3D0]/50 to-transparent",
   pink: "bg-gradient-to-b from-[#F9A8D4]/50 to-transparent",
-  indigo: "bg-gradient-to-b from-[#A5B4FC]/50 to-transparent",
+  indigo: "bg-gradient-to-b from-[#A5F3FC]/50 to-transparent",
   cyan: "bg-gradient-to-b from-[#A5F3FC]/50 to-transparent",
   lime: "bg-gradient-to-b from-[#D8F5A2]/50 to-transparent",
   emerald: "bg-gradient-to-b from-[#6EE7B7]/50 to-transparent",
@@ -169,29 +169,12 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
       setCreateIndex(index);
     };
 
-    const { data: hasHearted, isLoading: isHeartedLoading } = api.story.hasUserHearted.useQuery(
-      { storyId: item.id, userId: userId ?? "" },
-      { 
-        initialData: false,
-        enabled: !!userId // Only run query if userId exists
-      }
-    );
-
-    const { data: heartCount, isLoading: isHeartCountLoading } = api.story.getHeartCount.useQuery(
-      { storyId: item.id },
-      { 
-        initialData: 0,
-        staleTime: 30000 // Cache the result for 30 seconds
-      }
-    );
-
     const toggleHeart = api.story.toggleHeart.useMutation({
       onMutate: () => {
         setIsLiked(!isLiked);
       },
       onSuccess: async () => {
-        await utils.story.getHeartCount.invalidate({ storyId: item.id });
-        await utils.story.hasUserHearted.invalidate({ storyId: item.id });
+        await utils.story.invalidate();
       },
       onError: (error) => {
         setIsLiked(!isLiked);
@@ -215,10 +198,10 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
     }, []);
 
     useEffect(() => {
-      if (!isHeartedLoading) {
-        setIsLiked(hasHearted);
+      if (item) {
+        setIsLiked(item.isHearted);
       }
-    }, [hasHearted, isHeartedLoading]);
+    }, [item]);
 
     return (
       <div className="mb-10">
@@ -228,13 +211,13 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
           >
             <div className="flex items-center gap-2">
               <Avatar className="border-1 border-gray-200">
-                <AvatarImage src={item?.user?.avatar ?? ""} />
+                <AvatarImage src={item?.user?.avatar || ""} />
                 <AvatarFallback>
                   <Icon className="h-6 w-6" name="user-outline" />
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <span className="font-semibold text-sm">{item?.user?.name ?? ""}</span>
+                <span className="font-semibold text-sm">{item?.user?.name || ""}</span>
                 <div className="flex gap-1">
                   <span className="font-medium text-[#9f9f9f] text-sm">
                     {month}
@@ -340,7 +323,7 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
             <div className="flex items-center gap-2">
               <Icon className="h-4 w-4" name="heart-filled" />
               <span className="text-sm text-gray-400">
-                {isHeartCountLoading ? "..." : heartCount} hearts
+                {item.heartCount} hearts
               </span>
             </div>
             <div className="flex items-center gap-2">

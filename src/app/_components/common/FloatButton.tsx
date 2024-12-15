@@ -1,7 +1,5 @@
 import { Button } from "@/components/ui/button";
-import clsx from "clsx";
 import { AnimatePresence, motion, Variants } from "framer-motion";
-import { Settings } from "lucide-react";
 import type React from "react";
 import { memo, useEffect, useRef, useState } from "react";
 

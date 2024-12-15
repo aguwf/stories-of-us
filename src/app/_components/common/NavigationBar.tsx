@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import { AnimatePresence, motion } from "framer-motion";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Input } from "@/components/ui/input";
-import { Icon } from "./icon";
 
 export default function NavigationBar() {
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);

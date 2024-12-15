@@ -16,6 +16,8 @@
   --secondary: #e0e0e0; /* Slightly darker gray */
   --accent: #f08080; /* Light pink */
   --accent-hover: #dc143c; /* Darker pink */ /* White */ /* Dark gray */
+  --background: #f0f0f0; /* Light gray */
+  --foreground: #212529; /* Dark gray */
   --text: #212529; /* Dark gray */
   --border: #ced4da; /* Light gray */
   --shadow: rgba(0, 0, 0, 0.1); /* Light shadow */

@@ -66,7 +66,7 @@ const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({ items, story }) => {
   };
 
   return (
-    <div className={`grid gap-1 ${gridClassName()} max-w-2xl mx-auto`}>
+    <div className={`grid gap-1 mx-auto max-w-2xl ${gridClassName()}`}>
       <AnimatePresence>
         {items.slice(0, 4).map((item, index) => {
           return (
@@ -93,17 +93,17 @@ const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({ items, story }) => {
                   }`}
                   // onClick={() => setSelectedIndex(index)}
                 >
-                  <Card className="w-full h-full overflow-hidden cursor-pointer border-none">
+                  <Card className="overflow-hidden w-full h-full border-none cursor-pointer">
                     <CardContent className="p-0 h-full">
                       {renderMediaItem(item)}
                       {index === 3 && itemCount > 4 && (
                         <motion.div
-                          className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center rounded-md"
+                          className="flex absolute inset-0 justify-center items-center bg-black bg-opacity-50 rounded-md"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.5 }}
                         >
-                          <span className="text-white text-2xl font-bold">
+                          <span className="text-2xl font-bold text-white">
                             +{itemCount - 4}
                           </span>
                         </motion.div>
@@ -112,16 +112,16 @@ const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({ items, story }) => {
                   </Card>
                 </motion.div>
               </DialogTrigger>
-              <DialogContent className="w-full p-0 h-full border-none overflow-auto">
-                <div className="mt-16 px-4 flex items-center gap-2">
-                  <Avatar className="border-1 border-gray-200">
+              <DialogContent className="overflow-auto p-0 w-full h-full border-none">
+                <div className="flex gap-2 items-center px-4 mt-16">
+                  <Avatar className="border-gray-200 border-1">
                     <AvatarImage src={story?.user?.avatar ?? ""} />
                     <AvatarFallback>
-                      <Icon className="h-6 w-6" name="user-outline" />
+                      <Icon className="w-6 h-6" name="user-outline" />
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col">
-                    <span className="font-semibold text-sm">
+                    <span className="text-sm font-semibold">
                       {story?.user?.name}
                     </span>
                     <div className="flex gap-1">
@@ -134,11 +134,11 @@ const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({ items, story }) => {
                       <span className="font-medium text-[#9f9f9f] text-sm">
                         {formattedDate.getFullYear()}
                       </span>
-                      <hr className="my-2 border-r border-gray-200 w-full rotate-90" />
+                      <hr className="my-2 w-full border-r border-gray-200 rotate-90" />
                     </div>
                   </div>
                 </div>
-                <div className="mx-auto w-full max-w-screen-md px-4">
+                <div className="px-4 mx-auto w-full max-w-screen-md">
                   <h3 className="font-bold">{story?.name}</h3>
                   <p className="mt-2">{story?.description}</p>
                 </div>

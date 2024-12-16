@@ -56,7 +56,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             <svg
               aria-hidden="true"
               role="status"
-              className="inline w-4 h-4 me-3 text-white animate-spin"
+              className="inline w-4 h-4 text-white animate-spin me-3"
               viewBox="0 0 100 101"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"

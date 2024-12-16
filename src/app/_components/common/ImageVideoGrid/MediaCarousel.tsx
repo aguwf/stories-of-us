@@ -97,14 +97,14 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ items }) => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="bg-black/50 hover:bg-black/70">
-                    <Icon name="copy-outline" className="h-4 w-4 text-white" />
-                    {/* <Icon name="more-vertical" className="h-4 w-4 text-white" /> */}
+                    <Icon name="copy-outline" className="w-4 h-4 text-white" />
+                    {/* <Icon name="more-vertical" className="w-4 h-4 text-white" /> */}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem className="border-gray-200 rounded-lg" onClick={() => handleSaveImage(item.src)}>
-                    <Icon name="bookmark-filled" className="h-4 w-4 mr-2" />
-                    {/* <Icon name="download" className="h-4 w-4 mr-2" /> */}
+                  <DropdownMenuItem className="rounded-lg border-gray-200" onClick={() => handleSaveImage(item.src)}>
+                    <Icon name="bookmark-filled" className="mr-2 w-4 h-4" />
+                    {/* <Icon name="download" className="mr-2 w-4 h-4" /> */}
                     Save Image
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -150,7 +150,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ items }) => {
       </Carousel>
       {/* Carousel Dots */}
       <Carousel
-        className="w-screen px-4 relative"
+        className="relative px-4 w-screen"
         opts={{
           dragFree: true,
         }}

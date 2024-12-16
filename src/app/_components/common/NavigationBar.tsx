@@ -28,21 +28,21 @@ export default function NavigationBar() {
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container flex h-14 items-center">
+      <div className="container flex items-center h-14">
         <MainNav navItems={navItems} />
         <MobileNav navItems={navItems} />
-        <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-          <div className="w-full flex-1 md:w-auto md:flex-none">
+        <div className="flex flex-1 justify-between items-center space-x-2 md:justify-end">
+          <div className="flex-1 w-full md:w-auto md:flex-none">
             <SearchBar isOpen={isSearchOpen} setIsOpen={setIsSearchOpen} />
           </div>
           <nav className="flex items-center space-x-1">
             {/* <Button
               variant="ghost"
               size="icon"
-              className="h-9 w-9 md:hidden"
+              className="w-9 h-9 md:hidden"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
             >
-              <Icon className="h-4 w-4" name="magnifer-outline" />
+              <Icon className="w-4 h-4" name="magnifer-outline" />
               <span className="sr-only">Toggle search</span>
             </Button> */}
           </nav>
@@ -54,8 +54,8 @@ export default function NavigationBar() {
 
 function MainNav({ navItems }: any) {
   return (
-    <div className="mr-4 hidden md:flex">
-      <Link href="/" className="mr-6 flex items-center space-x-2">
+    <div className="hidden mr-4 md:flex">
+      <Link href="/" className="flex items-center mr-6 space-x-2">
         <motion.span
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -102,9 +102,9 @@ function MobileNav({ navItems }: any) {
       <SheetTrigger asChild>
         <Button
           variant="ghost"
-          className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+          className="px-0 mr-2 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
-          {/* <Menu className="h-5 w-5" /> */}
+          {/* <Menu className="w-5 h-5" /> */}
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>
@@ -175,7 +175,7 @@ function SearchBar({
           }}
           className="absolute left-0 top-full w-full bg-background md:static md:block"
         >
-          <div className="container flex items-center justify-between p-4 md:p-0">
+          <div className="container flex justify-between items-center p-4 md:p-0">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: "100%" }}
@@ -193,10 +193,10 @@ function SearchBar({
             <Button
               variant="ghost"
               size="icon"
-              className="h-9 w-9 shrink-0 md:hidden"
+              className="w-9 h-9 shrink-0 md:hidden"
               onClick={() => setIsOpen(false)}
             >
-              {/* <X className="h-4 w-4" /> */}
+              {/* <X className="w-4 h-4" /> */}
               <span className="sr-only">Close search</span>
             </Button>
           </div>
@@ -215,11 +215,11 @@ const ListItem = React.forwardRef<
       <NavigationMenuLink asChild>
         <a
           ref={ref}
-          className={`block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground ${className}`}
+          className={`block p-3 space-y-1 leading-none no-underline rounded-md transition-colors outline-none select-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground ${className}`}
           {...props}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          <p className="text-sm leading-snug line-clamp-2 text-muted-foreground">
             {children}
           </p>
         </a>

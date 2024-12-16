@@ -33,8 +33,8 @@ const Toolbar = ({ showSearch }: { showSearch: boolean }) => {
           <DropdownTrigger>
             <Button
               variant="light"
-              className="bg-transparent capitalize"
-              startContent={<Icon className="h-5 w-5" name="filter-outline" />}
+              className="capitalize bg-transparent"
+              startContent={<Icon className="w-5 h-5" name="filter-outline" />}
             >
               {selectedKeys}
             </Button>

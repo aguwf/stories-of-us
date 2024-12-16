@@ -25,7 +25,7 @@ const StoryTimelineContainer = () => {
 	const [showSearch, setShowSearch] = useState<boolean>(false);
 
 	return (
-		<div className="container mx-auto px-4">
+		<div className="container px-4 mx-auto">
 			<Greeting showSearch={showSearch} setShowSearch={setShowSearch} />
 			<Toolbar showSearch={showSearch} />
 			<ListStory

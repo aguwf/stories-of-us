@@ -28,23 +28,23 @@ const actionMenuOptions: ActionMenuOption[] = [
   {
     key: "copy",
     label: "Copy link",
-    icon: <Icon className="h-5 w-5" name="copy-outline" />,
+    icon: <Icon className="w-5 h-5" name="copy-outline" />,
   },
   {
     key: "edit",
     label: "Edit",
-    icon: <Icon className="h-5 w-5" name="pen-outline" />,
+    icon: <Icon className="w-5 h-5" name="pen-outline" />,
   },
   {
     key: "delete",
     label: "Delete",
     color: "danger" as const,
-    icon: <Icon className="h-5 w-5" name="trash-outline" />,
+    icon: <Icon className="w-5 h-5" name="trash-outline" />,
   },
   {
     key: "insertAfter",
     label: "Insert after",
-    icon: <Icon className="h-5 w-5" name="insert-outline" />,
+    icon: <Icon className="w-5 h-5" name="insert-outline" />,
   },
 ];
 
@@ -207,17 +207,17 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
       <div className="mb-10">
         <div className="relative">
           <div
-            className={`p-6 pb-8 rounded-xl flex items-start justify-between ${gradientClass}`}
+            className={`flex justify-between items-start p-6 pb-8 rounded-xl ${gradientClass}`}
           >
-            <div className="flex items-center gap-2">
-              <Avatar className="border-1 border-gray-200">
+            <div className="flex gap-2 items-center">
+              <Avatar className="border-gray-200 border-1">
                 <AvatarImage src={item?.user?.avatar || ""} />
                 <AvatarFallback>
-                  <Icon className="h-6 w-6" name="user-outline" />
+                  <Icon className="w-6 h-6" name="user-outline" />
                 </AvatarFallback>
               </Avatar>
               <div className="flex flex-col">
-                <span className="font-semibold text-sm">{item?.user?.name || ""}</span>
+                <span className="text-sm font-semibold">{item?.user?.name || ""}</span>
                 <div className="flex gap-1">
                   <span className="font-medium text-[#9f9f9f] text-sm">
                     {month}
@@ -231,10 +231,10 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-start gap-3">
+            <div className="flex gap-3 justify-start items-center">
               <Button
                 variant="ghost"
-                className="rounded-full py-0 px-1"
+                className="px-1 py-0 rounded-full"
                 onClick={handleLikeStory}
               >
                 <motion.div
@@ -250,7 +250,7 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
               </Button>
               <Button
                 variant="ghost"
-                className="rounded-full py-0 px-1"
+                className="px-1 py-0 rounded-full"
                 onClick={handleBookmarkStory}
               >
                 <motion.div
@@ -279,10 +279,10 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
           key={item.id}
           id={`${item.id}`}
         >
-          <div className="flex-1 flex justify-between">
+          <div className="flex flex-1 justify-between">
             <div>
               <h3 className="font-bold">{item.name}</h3>
-              <p className="mt-2 line-clamp-3 text-gray-400 text-sm">
+              <p className="mt-2 text-sm text-gray-400 line-clamp-3">
                 {item.description}
               </p>
             </div>
@@ -295,11 +295,11 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
                 >
                 </Button> */}
                   <Icon
-                    className="h-6 w-6 rotate-90"
+                    className="w-6 h-6 rotate-90"
                     name="menu-dots-outline"
                   />
               </DropdownMenuTrigger>
-              <DropdownMenuContent className="border-gray-200 rounded-lg">
+              <DropdownMenuContent className="rounded-lg border-gray-200">
                 {actionMenuOptions.map((option) => (
                   <DropdownMenuItem
                     key={option.key}
@@ -307,7 +307,7 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
                     onClick={() => handleActionMenu(option.key)}
                     disabled={option.key === "delete" && isDeleting}
                   >
-                    <span className="flex items-center gap-2">
+                    <span className="flex gap-2 items-center">
                       {option.icon}
                       {option.label}
                       {option.key === "delete" &&
@@ -319,21 +319,21 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="flex items-center justify-between mt-6">
-            <div className="flex items-center gap-2">
-              <Icon className="h-4 w-4" name="heart-filled" />
+          <div className="flex justify-between items-center mt-6">
+            <div className="flex gap-2 items-center">
+              <Icon className="w-4 h-4" name="heart-filled" />
               <span className="text-sm text-gray-400">
                 {item.heartCount} hearts
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <Icon className="h-4 w-4" name="eye-outline" />
+            <div className="flex gap-2 items-center">
+              <Icon className="w-4 h-4" name="eye-outline" />
               <span className="text-sm text-gray-400">
                 0 seen
               </span>
             </div>
-            <div className="flex items-center gap-2">
-              <Icon className="h-4 w-4" name="square-share-line-outline" />
+            <div className="flex gap-2 items-center">
+              <Icon className="w-4 h-4" name="square-share-line-outline" />
               <span className="text-sm text-gray-400">
                 0 shared
               </span>

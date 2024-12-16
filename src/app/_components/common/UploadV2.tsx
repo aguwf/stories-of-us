@@ -29,12 +29,12 @@ const FilePreview = memo(({
       src={objectURL}
       alt={typeof file === "string" ? file : file.name}
       height={102}
-      className="rounded-lg object-cover"
+      className="object-cover rounded-lg"
     />
-    <span className="close -right-2 -top-2 absolute cursor-pointer">
+    <span className="absolute -top-2 -right-2 cursor-pointer close">
       <Button
         isIconOnly
-        className="h-5 min-h-5 w-5 min-w-5 rounded-full"
+        className="w-5 h-5 rounded-full min-h-5 min-w-5"
         onClick={() => onRemove(index)}
       >
         <X size={12} />
@@ -112,10 +112,10 @@ export const UploadV2: React.FC<UploadV2Props> = ({
   return (
     <div className={className}>
       <span className="upload-wrapper">
-        <div className="upload-list flex flex-wrap gap-2 transition-all duration-300">
+        <div className="flex flex-wrap gap-2 transition-all duration-300 upload-list">
           {fileList.length < maxFiles && (
             <div className="upload-select h-[102px] w-[calc((100%-16px)/3)] cursor-pointer rounded-lg border-1 border-[#d9d9d9] border-dashed bg-black/[.02] text-center align-top transition-border-color duration-300 ease-in-out">
-              <span className="upload flex h-full flex-col items-center justify-center">
+              <span className="flex flex-col justify-center items-center h-full upload">
                 <input
                   accept="image/*"
                   multiple={true}

@@ -36,7 +36,7 @@ const FloatButton: React.FC<FloatButtonProps> = memo(
     >
       <AnimatePresence>
         <Button
-          className="h-10 w-10 min-w-full rounded-full p-0"
+          className="p-0 w-10 min-w-full h-10 rounded-full"
           onClick={onClick}
           {...options}
           aria-label={options?.["aria-label"] || "Float button"}

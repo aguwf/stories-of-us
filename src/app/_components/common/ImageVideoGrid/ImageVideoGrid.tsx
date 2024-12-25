@@ -20,9 +20,14 @@ interface MediaItem {
 interface ImageVideoGridProps {
   items: MediaItem[];
   story?: StoryType;
+  className?: string;
 }
 
-const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({ items, story }) => {
+const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({
+  items,
+  story,
+  className,
+}) => {
   // const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const formattedDate = new Date(story?.createdAt || new Date());
   const month = formattedDate
@@ -66,7 +71,7 @@ const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({ items, story }) => {
   };
 
   return (
-    <div className={`grid gap-1 mx-auto max-w-2xl ${gridClassName()}`}>
+    <div className={`grid gap-1 mx-auto max-w-2xl ${gridClassName()} ${className}`}>
       <AnimatePresence>
         {items.slice(0, 4).map((item, index) => {
           return (
@@ -142,7 +147,7 @@ const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({ items, story }) => {
                   <h3 className="font-bold">{story?.name}</h3>
                   <p className="mt-2">{story?.description}</p>
                 </div>
-                <MediaCarousel items={items} initialIndex={index} />
+                <MediaCarousel className="px-4" items={items} initialIndex={index} />
                 {/* <CommentSection
                   comments={[]} // Pass your comments data here
                   onAddComment={(content) => {

@@ -108,12 +108,6 @@ export default function ListStory({
     if ('storyList' in stories) {  // Type guard
       const { storyList, totalPages } = stories;
       if (storyList?.length > 0) {
-        // Pre-fetch heart data for all stories
-        // storyList.forEach(async(story) => {
-        //   await utils.story.getHeartCount.prefetch({ storyId: story.id });
-        // });
-        console.log("🚀 ~ file: ListStory.tsx:116 ~ storyList:", storyList)
-        
         setStories(storyList);
         setTotalPages(totalPages);
       }

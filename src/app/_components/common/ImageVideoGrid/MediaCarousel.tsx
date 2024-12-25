@@ -30,9 +30,14 @@ interface MediaItem {
 interface MediaCarouselProps {
   items: MediaItem[];
   initialIndex: number;
+  className?: string;
 }
 
-const MediaCarousel: React.FC<MediaCarouselProps> = ({ items }) => {
+const MediaCarousel: React.FC<MediaCarouselProps> = ({
+  items,
+  initialIndex,
+  className,
+}) => {
   const [mainApi, setMainApi] = React.useState<CarouselApi>();
   const [thumbnailApi, setThumbnailApi] = React.useState<CarouselApi>();
   const [isAtStart, setIsAtStart] = React.useState(true);
@@ -55,6 +60,11 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ items }) => {
       setIsAtEnd(thumbnailApi.selectedScrollSnap() === thumbnailApi.scrollSnapList().length - 1);
     });
   }, [thumbnailApi]);
+
+  useEffect(() => {
+    if (!mainApi) return;
+    mainApi.scrollTo(initialIndex);
+  }, [mainApi, initialIndex]);
 
   const renderMediaItem = (item: MediaItem, isThumbnail: boolean = false) => {
     const commonClasses = cn(
@@ -83,9 +93,9 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ items }) => {
       return <Video src={item.src} className={commonClasses} />;
     } else {
       return (
-        <div className="relative group">
+        <div className={"relative group"} key={item.src}>
           <ImageK
-            width={isThumbnail ? 100 : 500}
+            width={isThumbnail ? 100 : 400}
             height={isThumbnail ? 100 : 800}
             quality={100}
             src={item.src.split("/").pop() || ""}
@@ -97,13 +107,12 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ items }) => {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="bg-black/50 hover:bg-black/70">
-                    <Icon name="copy-outline" className="w-4 h-4 text-white" />
-                    {/* <Icon name="more-vertical" className="w-4 h-4 text-white" /> */}
+                    <Icon name="menu-dots-outline" className="w-4 h-4 text-white" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem className="rounded-lg border-gray-200" onClick={() => handleSaveImage(item.src)}>
-                    <Icon name="bookmark-filled" className="mr-2 w-4 h-4" />
+                    <Icon name="insert-outline" className="mr-2 w-4 h-4" />
                     {/* <Icon name="download" className="mr-2 w-4 h-4" /> */}
                     Save Image
                   </DropdownMenuItem>
@@ -136,9 +145,12 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ items }) => {
     <div>
       {/* Embla Carousel */}
       <Carousel
-        className="relative w-screen"
+        className={cn("relative w-screen", className)}
         plugins={[plugin.current]}
         setApi={setMainApi}
+        opts={{
+          loop: true,
+        }}
       >
         <CarouselContent>
           {items.map((item, index) => (
@@ -153,10 +165,13 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ items }) => {
         className="relative px-4 w-screen"
         opts={{
           dragFree: true,
+          containScroll: "trimSnaps",
+          axis: "x",
+          align: "center"
         }}
         setApi={setThumbnailApi}
       >
-        <div 
+        {/* <div 
           className={cn(
             "absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white/10 from-40% to-transparent to-90% z-10 transition-opacity duration-300",
             (!hasScroll || isAtEnd) && "opacity-0"
@@ -167,7 +182,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({ items }) => {
             "absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white/10 from-40% to-transparent to-90% z-10 transition-opacity duration-300",
             (!hasScroll || isAtStart) && "opacity-0"
           )}
-        />
+        /> */}
         <CarouselContent>
           {items.map((item, index) => (
             <CarouselItem

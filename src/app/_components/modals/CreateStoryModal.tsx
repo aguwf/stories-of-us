@@ -118,6 +118,7 @@ const useStoryModal = ({
         description: selectedStory.description || "",
       });
       setFileList(selectedStory.images);
+      onOpen();
     } else {
       resetModal();
     }

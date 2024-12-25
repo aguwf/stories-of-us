@@ -12,46 +12,38 @@
 
 :root {
   /* Light Mode */
-  --primary: #917fb2; /* Light gray */
-  --secondary: #e0e0e0; /* Slightly darker gray */
-  --accent: #f08080; /* Light pink */
-  --accent-hover: #dc143c; /* Darker pink */ /* White */ /* Dark gray */
-  --background: #f0f0f0; /* Light gray */
-  --foreground: #212529; /* Dark gray */
-  --text: #212529; /* Dark gray */
-  --border: #ced4da; /* Light gray */
-  --shadow: rgba(0, 0, 0, 0.1); /* Light shadow */
-  --highlight: #ffff00; /* Yellow */
-  --success: #28a745; /* Green */
-  --warning: #ffc107; /* Yellow */
-  --danger: #dc3545; /* Red */
-  --purple: #9779ce; /* Purple */
-  --pastel-blue: #6bc7e6; /* Pastel blue */
-  --pastel-green: #7af07a; /* Pastel green */
-  --pastel-yellow: #e8e87d; /* Pastel yellow */
-  --pastel-purple: #D8BFD8; /* Pastel purple */
+  --accent-hover: rgb(220, 20, 60);
+  --accent: rgb(240, 128, 128);
+  --danger: rgb(220, 53, 69);
+  --highlight: rgb(255, 255, 0);
+  --pastel-blue: rgb(107, 172, 214);
+  --pastel-green: rgb(122, 255, 120);
+  --pastel-purple: rgb(216, 191, 216);
+  --pastel-yellow: rgb(255, 255, 125);
+  --primary: rgb(205, 193, 255);
+  --purple: rgb(122, 101, 162);
+  --secondary: rgb(146, 217, 250);
+  --shadow: rgba(0, 0, 0, 0.102);
+  --success: rgb(40, 167, 69);
+  --warning: rgb(255, 193, 7);
 }
 
 [data-theme='dark'] {
   /* Dark Mode */
-  --primary: #212529; /* Dark gray */
-  --secondary: #343a40; /* Darker gray */
-  --accent: #cd6d6d; /* Light pink */
-  --accent-hover: #dc143c; /* Darker pink */
-  --background: #212529; /* Dark gray */
-  --foreground: #f0f0f0; /* Light gray */
-  --text: #f0f0f0; /* Light gray */
-  --border: #495057; /* Dark gray */
-  --shadow: #ffffff1a; /* Light shadow */
-  --highlight: #ffff00; /* Yellow */
-  --success: #28a745; /* Green */
-  --warning: #ffc107; /* Yellow */
-  --danger: #dc3545; /* Red */
-  --purple: #7a65a2; /* Purple */
-  --pastel-blue: #4d9cb6; /* Darker blue */
-  --pastel-green: #5cb65c; /* Darker green */
-  --pastel-yellow: #d8d863; /* Darker yellow */
-  --pastel-purple: #ad97ad; /* Darker purple */
+  --accent-hover: rgb(220, 20, 60);
+  --accent: rgb(205, 109, 109);
+  --danger: rgb(220, 53, 69);
+  --highlight: rgb(255, 255, 0);
+  --pastel-blue: rgb(77, 156, 182);
+  --pastel-green: rgb(92, 182, 92);
+  --pastel-purple: rgb(173, 151, 173);
+  --pastel-yellow: rgb(216, 216, 99);
+  --primary: rgb(132, 100, 192);
+  --purple: rgb(122, 101, 162);
+  --secondary: rgb(78, 153, 187);
+  --shadow: rgba(255, 255, 255, 0.102);
+  --success: rgb(40, 167, 69);
+  --warning: rgb(255, 193, 7);
 }
 
 .rtf {

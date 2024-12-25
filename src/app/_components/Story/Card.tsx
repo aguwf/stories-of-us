@@ -1,6 +1,5 @@
 import { api } from "@/trpc/react";
 import type { StoryType } from "@/types";
-import { Card } from "@nextui-org/react";
 import { message } from "antd";
 import { motion } from "framer-motion";
 import { memo, useState, useMemo, useEffect } from "react";
@@ -14,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import ImageVideoGrid from "../common/ImageVideoGrid/ImageVideoGrid";
 import {useUserStore} from "@/app/_store/userStore";
 
@@ -205,20 +205,17 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
 
     return (
       <div className="mb-10">
-        <div className="relative">
-          <div
-            className={`flex justify-between items-start p-6 pb-8 rounded-xl ${gradientClass}`}
-          >
-            <div className="flex gap-2 items-center">
-              <Avatar className="border-gray-200 border-1">
-                <AvatarImage src={item?.user?.avatar || ""} />
-                <AvatarFallback>
-                  <Icon className="w-6 h-6" name="user-outline" />
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col">
-                <span className="text-sm font-semibold">{item?.user?.name || ""}</span>
-                <div className="flex gap-1">
+        <Card className="relative">
+          <CardHeader className={cn("relative p-6 rounded-tl-xl rounded-tr-xl", gradientClass)}>
+            <div className="flex justify-between items-start">
+              <div className="flex gap-3 items-center">
+                <Avatar>
+                  <AvatarImage src={item?.user?.avatar || ""} />
+                  <AvatarFallback><Icon className="w-6 h-6" name="user-outline" /></AvatarFallback>
+                </Avatar>
+                <div>
+                  <p className="text-sm font-medium">{item?.user?.name}</p>
+                  <div className="flex gap-1">
                   <span className="font-medium text-[#9f9f9f] text-sm">
                     {month}
                   </span>
@@ -228,13 +225,57 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
                   <span className="font-medium text-[#9f9f9f] text-sm">
                     {formattedDate.getFullYear()}
                   </span>
+                  </div>
                 </div>
               </div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="p-0 w-10 h-10"
+                  >
+                    <Icon
+                      className="w-6 h-6"
+                      name="menu-dots-outline"
+                    />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {actionMenuOptions.map((option) => (
+                    <DropdownMenuItem
+                      key={option.key}
+                      className={cn(
+                        "flex items-center gap-2",
+                        option.color === "danger" && "text-destructive"
+                      )}
+                      onClick={() => handleActionMenu(option.key)}
+                    >
+                      {option.icon}
+                      {option.label}
+                    </DropdownMenuItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
-            <div className="flex gap-3 justify-start items-center">
+          </CardHeader>
+          <CardContent className="p-6">
+            <div>
+              <h3 className="font-bold">{item.name}</h3>
+              <p className="mt-2 text-sm text-muted-foreground line-clamp-3">
+                {item.description}
+              </p>
+            </div>
+            <ImageVideoGrid
+              items={item.images.map((image) => ({ type: 'image', src: image }))}
+              // videos={item.videos}
+              story={item}
+              className="mt-4"
+            />
+            <div className="flex items-center mt-4">
               <Button
                 variant="ghost"
-                className="px-1 py-0 rounded-full"
+                size="sm"
+                className="gap-2 p-0 w-1/3"
                 onClick={handleLikeStory}
               >
                 <motion.div
@@ -246,11 +287,13 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
                   ) : (
                     <Icon className="!h-6 !w-6" name="heart-outline" />
                   )}
+                  {isLiked ? ' Unlike' : ' Like'}
                 </motion.div>
               </Button>
               <Button
                 variant="ghost"
-                className="px-1 py-0 rounded-full"
+                size="sm"
+                className="gap-2 p-0 w-1/3"
                 onClick={handleBookmarkStory}
               >
                 <motion.div
@@ -262,68 +305,33 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
                   ) : (
                     <Icon className="!h-6 !w-6" name="bookmark-outline" />
                   )}
+                  {isBookmarked ? ' Unbookmark' : ' Bookmark'}
+                </motion.div>
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="gap-2 p-0 w-1/3"
+                // onClick={handleShareStory}
+              >
+                <motion.div
+                  animate={{ scale: isBookmarked ? [1, 1.2, 1] : 1 }}
+                  transition={{ duration: 0.5, times: [0, 0.5, 1] }}
+                >
+                  {isBookmarked ? (
+                    <Icon className="!h-6 !w-6" name="bookmark-filled" />
+                  ) : (
+                    <Icon className="!h-6 !w-6" name="bookmark-outline" />
+                  )}
+                  Share
                 </motion.div>
               </Button>
             </div>
-          </div>
-          <ImageVideoGrid
-            items={item.images.map((image) => ({ type: 'image', src: image }))}
-            // videos={item.videos}
-            story={item}
-          />
-        </div>
-        <Card
-          className={cn(
-            "-mt-16 first:mt-4 mx-auto p-4 overflow-visible w-[88%]"
-          )}
-          key={item.id}
-          id={`${item.id}`}
-        >
-          <div className="flex flex-1 justify-between">
-            <div>
-              <h3 className="font-bold">{item.name}</h3>
-              <p className="mt-2 text-sm text-gray-400 line-clamp-3">
-                {item.description}
-              </p>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger disabled={isDeleting}>
-                {/* <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full focus-visible:!shadow-none focus:outline-none"
-                >
-                </Button> */}
-                  <Icon
-                    className="w-6 h-6 rotate-90"
-                    name="menu-dots-outline"
-                  />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="rounded-lg border-gray-200">
-                {actionMenuOptions.map((option) => (
-                  <DropdownMenuItem
-                    key={option.key}
-                    className={option.color ? `text-${option.color}` : ""}
-                    onClick={() => handleActionMenu(option.key)}
-                    disabled={option.key === "delete" && isDeleting}
-                  >
-                    <span className="flex gap-2 items-center">
-                      {option.icon}
-                      {option.label}
-                      {option.key === "delete" &&
-                        isDeleting &&
-                        " (Deleting...)"}
-                    </span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="flex justify-between items-center mt-6">
+            <div className="flex justify-between items-center mt-6">
             <div className="flex gap-2 items-center">
               <Icon className="w-4 h-4" name="heart-filled" />
               <span className="text-sm text-gray-400">
-                {item.heartCount} hearts
+                {item?.heartCount} hearts
               </span>
             </div>
             <div className="flex gap-2 items-center">
@@ -339,6 +347,7 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
               </span>
             </div>
           </div>
+          </CardContent>
         </Card>
       </div>
     );

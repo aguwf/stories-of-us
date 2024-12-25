@@ -1,13 +1,14 @@
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import type React from "react";
 import { memo, useEffect, useRef, useState } from "react";
 
 // Animation variants for reusability
 const floatButtonVariants: Variants = {
-  initial: { opacity: 0, y: 50 },
-  animate: { opacity: 1, y: 0 },
-  exit: { opacity: 0, y: 50 }
+  initial: { opacity: 0, x: 50 },
+  animate: { opacity: 1, x: 0 },
+  exit: { opacity: 0, x: 50 },
 };
 
 interface FloatButtonProps {
@@ -16,33 +17,29 @@ interface FloatButtonProps {
   onClick?: () => void;
   options?: Omit<React.ComponentProps<typeof Button>, keyof FloatButtonProps>;
   index?: number;
+  className?: string;
 }
 
 const FloatButton: React.FC<FloatButtonProps> = memo(
-  ({ style, children, onClick, options, index = 0 }) => (
+  ({ style, children, onClick, options, index = 0, className }) => (
     <motion.div
       initial="initial"
       animate="animate"
       variants={floatButtonVariants}
       transition={{ duration: 0.5, delay: index * 0.1 }}
-      style={{
-        position: "fixed",
-        bottom: "90px",
-        right: "20px",
-        zIndex: 49,
-        borderRadius: "100%",
-        ...style,
-      }}
+      className={cn("fixed right-5 bottom-24 rounded-full z-[49]", className)}
     >
       <AnimatePresence>
-        <Button
-          className="p-0 w-10 min-w-full h-10 rounded-full"
+        <motion.button
+          className={"flex items-center justify-center p-0 w-10 h-10 rounded-full bg-primary hover:bg-primary/90"}
           onClick={onClick}
-          {...options}
+          whileTap={{ scale: 0.9 }}
+          transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          // {...options}
           aria-label={options?.["aria-label"] || "Float button"}
         >
           {children}
-        </Button>
+        </motion.button>
       </AnimatePresence>
     </motion.div>
   )
@@ -90,7 +87,8 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
       };
 
       document.addEventListener("mousedown", handleClickOutside);
-      return () => document.removeEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const toggleOpen = () => {
@@ -130,12 +128,8 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
         initial="initial"
         animate="animate"
         transition={{ duration: 0.3, ease: "easeInOut" }}
-        style={{
-          position: "fixed",
-          bottom: `${40 + offset}px`,
-          right: "20px",
-          zIndex: isOpen ? 50 : 49,
-        }}
+        className={`flex flex-row gap-2 fixed right-5 z-[${isOpen ? 50 : 49}]`}
+        style={{ bottom: 40 + offset + "px" }}
       >
         <AnimatePresence>
           {isOpen && (
@@ -145,22 +139,15 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
               animate="animate"
               exit="exit"
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "10px",
-              }}
+              className="flex flex-row gap-1"
             >
               {buttons.map((buttonProps, index) => (
                 <FloatButton
                   key={`float-button-${index}`}
                   index={index + 1}
                   {...buttonProps}
-                  style={{
-                    position: "static",
-                    width: "100%",
-                    height: "100%",
-                  }}
+                  className={`static w-full h-full`}
+                  style={{ bottom: 40 + offset + "px" }}
                 />
               ))}
             </motion.div>
@@ -170,8 +157,11 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
           onClick={toggleOpen}
           options={{
             variant: "default",
-            "aria-label": isOpen ? "Close float button group" : "Open float button group",
+            "aria-label": isOpen
+              ? "Close float button group"
+              : "Open float button group",
           }}
+          className={`static w-full h-full`}
         >
           {isOpen ? closeIcon : openIcon}
         </FloatButton>

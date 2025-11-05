@@ -1,5 +1,11 @@
+import {
+	Dialog,
+	DialogContent,
+	DialogHeader,
+	DialogTitle,
+} from "@/components/ui/dialog";
+import type { UploadFile } from "@/types/base";
 /* eslint-disable */
-import { Modal, type UploadFile } from "antd";
 import { useState } from "react";
 
 const useFilePreview = () => {
@@ -28,19 +34,15 @@ const useFilePreview = () => {
 		);
 	};
 
-	const hidePreview = () => {
-		setPreviewVisibility(false);
-	};
-
 	const previewContent = (
-		<Modal
-			open={previewVisibility}
-			title={previewTitle}
-			footer={null}
-			onCancel={hidePreview}
-		>
-			<img alt={previewTitle} className="w-full" src={previewImage} />
-		</Modal>
+		<Dialog open={previewVisibility} onOpenChange={setPreviewVisibility}>
+			<DialogContent>
+				<DialogHeader>
+					<DialogTitle>{previewTitle}</DialogTitle>
+				</DialogHeader>
+				<img alt={previewTitle} className="w-full" src={previewImage} />
+			</DialogContent>
+		</Dialog>
 	);
 
 	return [handlePreview, previewContent];

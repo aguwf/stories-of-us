@@ -1,4 +1,3 @@
- 
 import { getRequestConfig } from "next-intl/server";
 
 // NextJS Boilerplate uses Crowdin as the localization software.

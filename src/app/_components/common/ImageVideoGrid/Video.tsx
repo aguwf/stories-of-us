@@ -1,31 +1,33 @@
-import React, { useRef, useEffect } from 'react';
+import type React from "react";
+import { useEffect, useRef } from "react";
 
 interface VideoProps {
-  src: string;
-  className?: string;
+	src: string;
+	className?: string;
 }
 
 const Video: React.FC<VideoProps> = ({ src, className }) => {
-  const videoRef = useRef<HTMLVideoElement>(null);
+	const videoRef = useRef<HTMLVideoElement>(null);
 
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(error => console.error("Autoplay failed:", error));
-    }
-  }, []);
+	useEffect(() => {
+		if (videoRef.current) {
+			videoRef.current
+				.play()
+				.catch((error) => console.error("Autoplay failed:", error));
+		}
+	}, []);
 
-  return (
-    <video
-      ref={videoRef}
-      src={src}
-      className={className}
-      loop
-      muted
-      playsInline
-      controls
-    />
-  );
+	return (
+		<video
+			ref={videoRef}
+			src={src}
+			className={className}
+			loop
+			muted
+			playsInline
+			controls
+		/>
+	);
 };
 
 export default Video;
-

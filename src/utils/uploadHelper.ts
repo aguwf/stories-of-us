@@ -2,7 +2,7 @@ import { env } from "@/env";
 import { logger } from "@/lib/Logger";
 import ImageKit from "imagekit-javascript";
 import type { UploadOptions } from "imagekit-javascript/dist/src/interfaces";
-import { generateImageKitSignature } from "./Helpers";
+import { generateImageKitSignature } from "@/app/actions/imagekit";
 
 const imageKit = new ImageKit({
 	publicKey: env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,

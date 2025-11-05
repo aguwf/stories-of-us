@@ -1,6 +1,6 @@
 import Image from "next/image";
+import type { ImageProps } from "next/image";
 import React from "react";
-import { ImageProps } from "next/image";
 
 type ImageKitLoaderProps = {
 	src: string;
@@ -23,7 +23,7 @@ const imageKitLoader = ({ src, width, quality }: ImageKitLoaderProps) => {
 
 const ImageK = (props: Omit<ImageProps, "loader">) => {
 	const { fill, width, height, src, alt, ...restProps } = props;
-	
+
 	return (
 		<Image
 			loader={imageKitLoader}
@@ -34,7 +34,7 @@ const ImageK = (props: Omit<ImageProps, "loader">) => {
 				: {
 						width: width || 400,
 						height: height || 400,
-				  })}
+					})}
 			{...restProps}
 		/>
 	);

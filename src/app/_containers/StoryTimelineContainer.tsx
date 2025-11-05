@@ -4,16 +4,16 @@ import ListStory from "@/app/_components/Story/ListStory";
 import Toolbar from "@/app/_components/common/Toolbar";
 import CreateStoryModal from "@/app/_components/modals/CreateStoryModal";
 import type { StoryType } from "@/types";
+import { Moon, Plus, Settings, Sun } from "lucide-react";
 import { useState } from "react";
+import { useRef } from "react";
 import {
 	FloatButton,
 	FloatButtonGroup,
 } from "../_components/common/FloatButton";
-import { useThemeStore } from "../_store/clientStore";
-import { Moon, Plus, Settings, Sun } from "lucide-react";
 import Greeting from "../_components/greeting";
-import { useRef } from "react";
-import { CreateStoryModalRef } from "../_components/modals/CreateStoryModal";
+import type { CreateStoryModalRef } from "../_components/modals/CreateStoryModal";
+import { useThemeStore } from "../_store/clientStore";
 
 const StoryTimelineContainer = () => {
 	const { theme, setTheme } = useThemeStore();
@@ -43,11 +43,7 @@ const StoryTimelineContainer = () => {
 				buttons={[
 					{
 						children:
-							theme === "light" ? (
-								<Moon size={16} />
-							) : (
-								<Sun size={16} />
-							),
+							theme === "light" ? <Moon size={16} /> : <Sun size={16} />,
 						onClick: () => setTheme(theme === "light" ? "dark" : "light"),
 					},
 				]}

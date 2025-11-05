@@ -1,7 +1,7 @@
-import { useTranslations } from "next-intl";
-import React from "react";
 import NavigationBar from "@/app/_components/common/NavigationBar";
 import { AppConfig } from "@/utils/AppConfig";
+import { useTranslations } from "next-intl";
+import type React from "react";
 
 const BaseTemplate = (props: {
 	leftNav: React.ReactNode;
@@ -11,17 +11,9 @@ const BaseTemplate = (props: {
 	const t = useTranslations("BaseTemplate");
 
 	return (
-		// bg-main
 		<div className="w-full bg-cover bg-no-repeat px-1 text-gray-700 antialiased">
 			<div className="mx-auto max-w-screen-sm">
 				<header className="border-gray-300 border-b">
-					{/* <div>
-            <h1 className="sha bg-gradient-to-r from-[#ae86e7] via-[#8dbad3] to-[#79d7cf] bg-clip-text py-12 text-center text-6xl font-bold text-transparent drop-shadow">
-              {AppConfig.name}
-            </h1>
-            <h2 className="text-xl">{t('description')}</h2>
-          </div> */}
-
 					<div className="flex justify-between">
 						<NavigationBar />
 					</div>

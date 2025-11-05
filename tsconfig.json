@@ -1,66 +1,66 @@
 {
-  "compilerOptions": {
-    /* Base Options: */
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "target": "es2022",
-    "allowJs": true,
-    "resolveJsonModule": true,
-    "moduleDetection": "force",
-    "isolatedModules": true,
+	"compilerOptions": {
+		/* Base Options: */
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"target": "es2022",
+		"allowJs": true,
+		"resolveJsonModule": true,
+		"moduleDetection": "force",
+		"isolatedModules": true,
 
-    /* Strictness */
-    "strict": true,
-    "noUncheckedIndexedAccess": true,
-    "checkJs": true,
+		/* Strictness */
+		"strict": true,
+		"noUncheckedIndexedAccess": true,
+		"checkJs": true,
 
-    /* Bundled projects */
-    "lib": ["dom", "dom.iterable", "ES2022", "WebWorker"],
-    "noEmit": true,
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "jsx": "preserve",
-    "plugins": [{ "name": "next" }],
-    "incremental": true,
+		/* Bundled projects */
+		"lib": ["dom", "dom.iterable", "ES2022", "WebWorker"],
+		"noEmit": true,
+		"module": "ESNext",
+		"moduleResolution": "Bundler",
+		"jsx": "preserve",
+		"plugins": [{ "name": "next" }],
+		"incremental": true,
 
-    /* Path Aliases */
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./src/*"],
-      "@/public/*": ["./public/*"]
-    },
+		/* Path Aliases */
+		"baseUrl": ".",
+		"paths": {
+			"@/*": ["./src/*"],
+			"@/public/*": ["./public/*"]
+		},
 
-    "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "removeComments": true,
-    "preserveConstEnums": true,
-    "alwaysStrict": true,
-    "strictNullChecks": true,
+		"allowSyntheticDefaultImports": true,
+		"forceConsistentCasingInFileNames": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"alwaysStrict": true,
+		"strictNullChecks": true,
 
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "allowUnreachableCode": false,
-    "noFallthroughCasesInSwitch": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"allowUnreachableCode": false,
+		"noFallthroughCasesInSwitch": true,
 
-    "outDir": "out",
-    "sourceMap": true,
+		"outDir": "out",
+		"sourceMap": true,
 
-    "types": ["@serwist/next/typings"]
-  },
-  "include": [
-    ".eslintrc.cjs",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "**/*.cjs",
-    "**/*.js",
-    ".next/types/**/*.ts",
-    "src/types/base.d.ts",
-    "lint-staged.config.mjs",
-    "eslint.config.mjs"
-  ],
-  "exclude": ["./out/**/*", "node_modules", "public/sw.js"]
+		"types": ["@serwist/next/typings"]
+	},
+	"include": [
+		".eslintrc.cjs",
+		"next-env.d.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		"**/*.cjs",
+		"**/*.js",
+		".next/types/**/*.ts",
+		"src/types/base.d.ts",
+		"lint-staged.config.mjs",
+		"eslint.config.mjs"
+	],
+	"exclude": ["./out/**/*", "node_modules", "public/sw.js"]
 }

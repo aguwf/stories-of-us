@@ -1,11 +1,11 @@
-import { StoryType } from "./story";
+import type { StoryType } from "./story";
 
 export interface MediaItem {
-  type: "image" | "video";
-  src: string;
+	type: "image" | "video";
+	src: string;
 }
 
 export interface ImageVideoGridProps {
-  items: MediaItem[];
-  story?: StoryType;
-} 
+	items: MediaItem[];
+	story?: StoryType;
+}

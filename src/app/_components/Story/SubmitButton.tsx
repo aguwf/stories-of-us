@@ -20,7 +20,9 @@ const SubmitButton = ({
 	return (
 		<Button
 			className={cn(
-				selectedStory ? "bg-pastel-blue hover:bg-pastel-blue" : "bg-purple hover:bg-purple",
+				selectedStory
+					? "bg-pastel-blue hover:bg-pastel-blue"
+					: "bg-purple hover:bg-purple",
 				isUploading || isPending ? "loading" : "",
 			)}
 			variant={selectedStory ? "outline" : "default"}

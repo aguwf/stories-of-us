@@ -1,149 +1,152 @@
-import { Button } from "@nextui-org/react";
-import { Image } from "antd";
+import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
-import { useCallback, useEffect, useRef, useState, memo } from "react";
+import Image from "next/image";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 
 interface UploadV2Props {
-  fileList: (File | string)[];
-  setFileList: React.Dispatch<React.SetStateAction<(File | string)[]>>;
-  maxFiles?: number;
-  className?: string;
+	fileList: (File | string)[];
+	setFileList: React.Dispatch<React.SetStateAction<(File | string)[]>>;
+	maxFiles?: number;
+	className?: string;
 }
 
-const FilePreview = memo(({ 
-  file, 
-  index, 
-  objectURL, 
-  onRemove 
-}: { 
-  file: File | string; 
-  index: number; 
-  objectURL: string;
-  onRemove: (index: number) => void;
-}) => (
-  <div
-    className="upload-select relative w-[calc((100%-16px)/3)] text-center transition-all duration-300 ease-in-out"
-    key={typeof file === "string" ? file : `${file.name}-${file.size}`}
-  >
-    <Image
-      src={objectURL}
-      alt={typeof file === "string" ? file : file.name}
-      height={102}
-      className="object-cover rounded-lg"
-    />
-    <span className="absolute -top-2 -right-2 cursor-pointer close">
-      <Button
-        isIconOnly
-        className="w-5 h-5 rounded-full min-h-5 min-w-5"
-        onClick={() => onRemove(index)}
-      >
-        <X size={12} />
-      </Button>
-    </span>
-  </div>
-));
+const FilePreview = memo(
+	({
+		file,
+		index,
+		objectURL,
+		onRemove,
+	}: {
+		file: File | string;
+		index: number;
+		objectURL: string;
+		onRemove: (index: number) => void;
+	}) => (
+		<div
+			className="upload-select relative w-[calc((100%-16px)/3)] text-center transition-all duration-300 ease-in-out"
+			key={typeof file === "string" ? file : `${file.name}-${file.size}`}
+		>
+			<Image
+				src={objectURL}
+				alt={typeof file === "string" ? file : file.name}
+				width={102}
+				height={102}
+				className="object-cover rounded-lg w-full h-[102px]"
+			/>
+			<span className="absolute -top-2 -right-2 cursor-pointer close">
+				<Button
+					size="icon"
+					className="w-5 h-5 rounded-full min-h-5 min-w-5"
+					onClick={() => onRemove(index)}
+				>
+					<X size={12} />
+				</Button>
+			</span>
+		</div>
+	),
+);
 
-FilePreview.displayName = 'FilePreview';
+FilePreview.displayName = "FilePreview";
 
 export const UploadV2: React.FC<UploadV2Props> = ({
-  fileList,
-  setFileList,
-  maxFiles = 9,
-  className,
+	fileList,
+	setFileList,
+	maxFiles = 9,
+	className,
 }) => {
-  const inputFileRef = useRef<HTMLInputElement>(null);
-  const [objectURLs, setObjectURLs] = useState<string[]>([]);
+	const inputFileRef = useRef<HTMLInputElement>(null);
+	const [objectURLs, setObjectURLs] = useState<string[]>([]);
 
-  const handleClickUpload = useCallback(() => {
-    if (fileList.length >= maxFiles) {
-      alert(`Maximum ${maxFiles} files allowed`);
-      return;
-    }
-    inputFileRef.current?.click();
-  }, [fileList.length, maxFiles]);
+	const handleClickUpload = useCallback(() => {
+		if (fileList.length >= maxFiles) {
+			alert(`Maximum ${maxFiles} files allowed`);
+			return;
+		}
+		inputFileRef.current?.click();
+	}, [fileList.length, maxFiles]);
 
-  const handleChangeFile = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files;
-      if (!files) return;
+	const handleChangeFile = useCallback(
+		(event: React.ChangeEvent<HTMLInputElement>) => {
+			const files = event.target.files;
+			if (!files) return;
 
-      const remainingSlots = maxFiles - fileList.length;
-      const newFiles = Array.from(files).slice(0, remainingSlots);
-      
-      if (newFiles.length > 0) {
-        setFileList((prevList) => [...prevList, ...newFiles]);
-      }
-      
-      // Reset input value to allow uploading the same file again
-      event.target.value = '';
-    },
-    [setFileList, fileList.length, maxFiles],
-  );
+			const remainingSlots = maxFiles - fileList.length;
+			const newFiles = Array.from(files).slice(0, remainingSlots);
 
-  const handleRemoveFile = useCallback(
-    (index: number) => {
-      setFileList((prevList) => {
-        const newList = [...prevList];
-        newList.splice(index, 1);
-        return newList;
-      });
-    },
-    [setFileList],
-  );
+			if (newFiles.length > 0) {
+				setFileList((prevList) => [...prevList, ...newFiles]);
+			}
 
-  const createObjectURL = useCallback((file: File | string) => {
-    return typeof file === "string" ? file : URL.createObjectURL(file);
-  }, []);
+			// Reset input value to allow uploading the same file again
+			event.target.value = "";
+		},
+		[setFileList, fileList.length, maxFiles],
+	);
 
-  useEffect(() => {
-    const newObjectURLs = fileList.map(createObjectURL);
-    setObjectURLs(newObjectURLs);
+	const handleRemoveFile = useCallback(
+		(index: number) => {
+			setFileList((prevList) => {
+				const newList = [...prevList];
+				newList.splice(index, 1);
+				return newList;
+			});
+		},
+		[setFileList],
+	);
 
-    return () => {
-      // Only revoke URLs that we created (blob URLs)
-      newObjectURLs.forEach(url => {
-        if (url.startsWith('blob:')) {
-          URL.revokeObjectURL(url);
-        }
-      });
-    };
-  }, [fileList, createObjectURL]);
+	const createObjectURL = useCallback((file: File | string) => {
+		return typeof file === "string" ? file : URL.createObjectURL(file);
+	}, []);
 
-  return (
-    <div className={className}>
-      <span className="upload-wrapper">
-        <div className="flex flex-wrap gap-2 transition-all duration-300 upload-list">
-          {fileList.length < maxFiles && (
-            <div className="upload-select h-[102px] w-[calc((100%-16px)/3)] cursor-pointer rounded-lg border-1 border-[#d9d9d9] border-dashed bg-black/[.02] text-center align-top transition-border-color duration-300 ease-in-out">
-              <span className="flex flex-col justify-center items-center h-full upload">
-                <input
-                  accept="image/*"
-                  multiple={true}
-                  type="file"
-                  className="hidden"
-                  ref={inputFileRef}
-                  onChange={handleChangeFile}
-                />
-                <button type="button" onClick={handleClickUpload}>
-                  <Plus className="mx-auto" />
-                  <div className="mt-2">Upload</div>
-                </button>
-              </span>
-            </div>
-          )}
-          <Image.PreviewGroup>
-            {fileList.map((file, index) => (
-              <FilePreview
-                key={typeof file === "string" ? file : `${file.name}-${file.size}`}
-                file={file}
-                index={index}
-                objectURL={objectURLs[index] || ""}
-                onRemove={handleRemoveFile}
-              />
-            ))}
-          </Image.PreviewGroup>
-        </div>
-      </span>
-    </div>
-  );
+	useEffect(() => {
+		const newObjectURLs = fileList.map(createObjectURL);
+		setObjectURLs(newObjectURLs);
+
+		return () => {
+			// Only revoke URLs that we created (blob URLs)
+			newObjectURLs.forEach((url) => {
+				if (url.startsWith("blob:")) {
+					URL.revokeObjectURL(url);
+				}
+			});
+		};
+	}, [fileList, createObjectURL]);
+
+	return (
+		<div className={className}>
+			<span className="upload-wrapper">
+				<div className="flex flex-wrap gap-2 transition-all duration-300 upload-list">
+					{fileList.length < maxFiles && (
+						<div className="upload-select h-[102px] w-[calc((100%-16px)/3)] cursor-pointer rounded-lg border-1 border-[#d9d9d9] border-dashed bg-black/[.02] text-center align-top transition-border-color duration-300 ease-in-out">
+							<span className="flex flex-col justify-center items-center h-full upload">
+								<input
+									accept="image/*"
+									multiple={true}
+									type="file"
+									className="hidden"
+									ref={inputFileRef}
+									onChange={handleChangeFile}
+								/>
+								<button type="button" onClick={handleClickUpload}>
+									<Plus className="mx-auto" />
+									<div className="mt-2">Upload</div>
+								</button>
+							</span>
+						</div>
+					)}
+					{fileList.map((file, index) => (
+						<FilePreview
+							key={
+								typeof file === "string" ? file : `${file.name}-${file.size}`
+							}
+							file={file}
+							index={index}
+							objectURL={objectURLs[index] || ""}
+							onRemove={handleRemoveFile}
+						/>
+					))}
+				</div>
+			</span>
+		</div>
+	);
 };

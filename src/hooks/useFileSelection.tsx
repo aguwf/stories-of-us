@@ -1,15 +1,13 @@
- 
-import { type UploadFile, message } from "antd";
+import type { UploadFile } from "@/types/base";
 import { useState } from "react";
-
-// import { uploadImage } from '../utils/api';
+import { toast } from "sonner";
 
 const useFileSelection = () => {
 	const [isUploading, setIsUploading] = useState(false);
 
 	const uploadSelection = (files: UploadFile[]) => {
 		if (files.length === 0) {
-			message.error("You need to select at least one image");
+			toast.error("You need to select at least one image");
 			return;
 		}
 		setIsUploading(true);

@@ -5,17 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { TRPCClientErrorLike } from "@trpc/client";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
 import { useCallback, useEffect, useState } from "react";
 import { CreateStoryModalProps } from "@/app/_components/modals/CreateStoryModal";
 import { useUserStore } from "@/app/_store/userStore";
+import { StoryFormValidation } from "@/validations/StoryValidation";
+import { z } from "zod";
 
-const storySchema = z.object({
-  name: z.string().min(1, "Title is required"),
-  description: z.string(),
-});
-
-type StoryFormData = z.infer<typeof storySchema>;
+type StoryFormData = z.infer<typeof StoryFormValidation>;
 
 const useStoryModal = ({
   selectedStory,
@@ -30,7 +26,7 @@ const useStoryModal = ({
   const { user } = useUserStore();
 
   const form = useForm<StoryFormData>({
-    resolver: zodResolver(storySchema),
+    resolver: zodResolver(StoryFormValidation),
     defaultValues: {
       name: selectedStory?.name ?? "",
       description: selectedStory?.description ?? "",

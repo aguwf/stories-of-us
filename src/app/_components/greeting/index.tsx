@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
-import { Icon } from "../common/icon";
+import { Icon } from "../common/Icon";
 
 type WeatherData = {
 	current: {
@@ -64,7 +64,7 @@ const Greeting = ({
 					) : (
 						<p className="text-base text-[#a6aeb2] mt-2 flex items-center">
 							{weather?.current.condition.text},{" "}
-							{Math.round(weather?.current.temp_c)}°C
+							{Math.round(weather?.current.temp_c ?? 0)}°C
 						</p>
 					)}
 				</div>

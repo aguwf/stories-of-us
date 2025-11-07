@@ -1,8 +1,9 @@
+import 'mapbox-gl/dist/mapbox-gl.css';
 import "@/styles/globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/react";
-import { AppConfig } from "@/utils/AppConfig";
+import { AppConfig } from "@/utils/appConfig";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { NextIntlClientProvider, useMessages } from "next-intl";

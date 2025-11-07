@@ -1,6 +1,4 @@
 import { memo } from "react";
-import { Icon } from "../../common/icon";
-import { ICON_SIZE_SMALL } from "@/utils/constants";
 
 interface StoryCardStatsProps {
   heartCount: number;

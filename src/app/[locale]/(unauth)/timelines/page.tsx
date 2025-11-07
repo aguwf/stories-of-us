@@ -2,7 +2,7 @@ import StoryTimelineContainer from "@/app/_containers/StoryTimelineContainer";
 
 const Timelines = () => {
 	return (
-		<section>
+		<section className="mx-auto max-w-screen-sm">
 			<StoryTimelineContainer />
 		</section>
 	);

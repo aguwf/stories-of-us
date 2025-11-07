@@ -3,6 +3,6 @@ type Messages = typeof import("../locales/en.json");
 type IntlMessages = Messages;
 
 declare module "*.glb" {
-	const content: any;
+	const content: string;
 	export default content;
 }

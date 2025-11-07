@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { memo } from "react";
 import AnimatedActionButton from "../AnimatedActionButton";
-import { Icon } from "../../common/icon";
-import { ICON_SIZE_LARGE, ICON_SIZE_MEDIUM } from "@/utils/constants";
+import { Icon } from "../../common/Icon";
 
 interface StoryCardActionsProps {
     isLiked: boolean;

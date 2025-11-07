@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { memo } from "react";
 import { motion } from "framer-motion";
-import { Icon, IconName } from "../common/icon";
+import { Icon, IconName } from "../common/Icon";
 import {
     ANIMATION_DURATION,
     ANIMATION_SCALE_KEYFRAMES,

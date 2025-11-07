@@ -10,7 +10,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { Icon } from "./icon";
+import { Icon } from "./Icon";
 
 const Toolbar = ({ showSearch }: { showSearch: boolean }) => {
 	const router = useRouter();

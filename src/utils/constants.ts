@@ -55,6 +55,151 @@ const gradientClasses = {
   tomato: "bg-gradient-to-b from-[#FF6347]/50 to-transparent",
 } as const;
 
+const BEAR_STORES = [
+  {
+    name: "Vincom Center Bà Triệu",
+    address: "191 Bà Triệu, Hai Bà Trưng, Hà Nội, Việt Nam",
+    latitude: 21.011301,
+    longitude: 105.849396,
+    notes: "TTTM lớn, có khu gắp thú bông.",
+  },
+  {
+    name: "Vincom Mega Mall Times City",
+    address: "458 Minh Khai, Hai Bà Trưng, Hà Nội, Việt Nam",
+    latitude: 21.026,
+    longitude: 105.87,
+    notes: "Khu thương mại với nhiều máy gắp.",
+  },
+  {
+    name: "AEON Mall Long Biên",
+    address: "27 Cổ Linh, Long Biên, Hà Nội, Việt Nam",
+    latitude: 21.055,
+    longitude: 105.893,
+    notes: "Mall lớn, khu giải trí Dream Games.",
+  },
+  {
+    name: "Royal City (Vincom Mega Mall Royal City)",
+    address: "72A Nguyễn Trãi, Thanh Xuân, Hà Nội, Việt Nam",
+    latitude: 21.0045,
+    longitude: 105.816,
+    notes: "Trung tâm thương mại + khu vui chơi; máy gắp thú.",
+  },
+  {
+    name: "The LINC (ParkCity Hanoi)",
+    address: "The LINC, KĐT ParkCity Hanoi, La Khê, Hà Đông, Hà Nội, Việt Nam",
+    latitude: 20.96566,
+    longitude: 105.75671,
+    notes: "Khu đô thị + TTTM; chuỗi gắp thú có cơ sở ở đây.",
+  },
+  {
+    name: "Vincom Plaza Bắc Từ Liêm",
+    address: "234 Phạm Văn Đồng, Cổ Nhuế, Bắc Từ Liêm, Hà Nội, Việt Nam",
+    latitude: 21.085,
+    longitude: 105.786,
+    notes: "TTTM, liệt kê có máy gắp.",
+  },
+  {
+    name: "Vincom Skylake Phạm Hùng",
+    address: "Đường Phạm Hùng, Mỹ Đình 1, Nam Từ Liêm, Hà Nội, Việt Nam",
+    latitude: 21.035,
+    longitude: 105.781,
+    notes: "TTTM, khu giải trí gắp thú.",
+  },
+  {
+    name: "The Garden Shopping Center (The Manor Mỹ Đình)",
+    address:
+      "Tầng 4, KĐT The Manor Hà Nội, đường Mễ Trì, Mỹ Đình 1, Nam Từ Liêm, Hà Nội, Việt Nam",
+    latitude: 21.028,
+    longitude: 105.778,
+    notes: "Khu gắp thú bông trong TTTM.",
+  },
+  {
+    name: "Pick Miu – 188 Bạch Mai",
+    address: "188 Bạch Mai, Hai Bà Trưng, Hà Nội, Việt Nam",
+    latitude: 21.005,
+    longitude: 105.853,
+    notes: "Cửa hàng chuyên gắp thú bông và blind-box.",
+  },
+  {
+    name: "The Coffee House – 98 Nguyễn Trãi",
+    address: "98 Nguyễn Trãi, Thanh Xuân, Hà Nội, Việt Nam",
+    latitude: 20.999,
+    longitude: 105.821,
+    notes: "Quán cà phê có máy gắp thú bông.",
+  },
+  {
+    name: "Cộng Cà Phê – 15 Trần Quốc Toản",
+    address: "15 Trần Quốc Toản, Hoàn Kiếm, Hà Nội, Việt Nam",
+    latitude: 21.028,
+    longitude: 105.856,
+    notes: "Quán cà phê & máy gắp thú.",
+  },
+  {
+    name: "Highlands Coffee – 27 Huỳnh Thúc Kháng",
+    address: "27 Huỳnh Thúc Kháng, Đống Đa, Hà Nội, Việt Nam",
+    latitude: 21.025,
+    longitude: 105.837,
+    notes: "Chi nhánh có máy gắp thú bông được liệt kê.",
+  },
+  {
+    name: "Pick Me – Tầng 5 Tràng Tiền Plaza",
+    address:
+      "Tầng 5, Tràng Tiền Plaza, 24-26 Tràng Tiền, Hoàn Kiếm, Hà Nội, Việt Nam",
+    latitude: 21.0285,
+    longitude: 105.854,
+    notes: "Chuỗi Pick Me (máy gắp thú) tại mall hạng sang.",
+  },
+  {
+    name: "Tiệm gắp thú Momo – Hàng Bông",
+    address: "Số 1 phố Tống Duy Tân, Hàng Bông, Hoàn Kiếm, Hà Nội, Việt Nam",
+    latitude: 21.033,
+    longitude: 105.853,
+    notes: "Tiệm gắp thú bông nhỏ; ghi trong FB.",
+  },
+  {
+    name: "Gắp gấu 5K – Vincom Mega Mall Times City",
+    address: "458 Minh Khai, Hai Bà Trưng, Hà Nội, Việt Nam",
+    latitude: 21.026,
+    longitude: 105.87,
+    notes: "Phụ mục trong Times City; thương hiệu gắp thú giá hợp lý.",
+  },
+  {
+    name: "Khu vui chơi – Công viên Thống Nhất",
+    address: "216 Trần Quang Hải, Hai Bà Trưng, Hà Nội, Việt Nam",
+    latitude: 21.026,
+    longitude: 105.847,
+    notes: "Công viên liệt kê có máy gắp thú bông.",
+  },
+  {
+    name: "Khu vui chơi – Công viên Lê Nin",
+    address: "1 Lê Nin, Hoàn Kiếm, Hà Nội, Việt Nam",
+    latitude: 21.028,
+    longitude: 105.835,
+    notes: "Công viên có khu máy gắp thú bông.",
+  },
+  {
+    name: "Khu vui chơi – Công viên Hồ Tây",
+    address: "614 Lạc Long Quân, Tây Hồ, Hà Nội, Việt Nam",
+    latitude: 21.056,
+    longitude: 105.822,
+    notes: "Công viên + khu giải trí; được liệt kê trong bài viết.",
+  },
+  {
+    name: "Pick Now – 242 Thượng Đình",
+    address: "242 Thượng Đình, Thanh Xuân, Hà Nội, Việt Nam",
+    latitude: 20.999,
+    longitude: 105.82,
+    notes: "Tiệm gắp thú bông chuyên nghiệp.",
+  },
+  {
+    name: "Tiệm gắp thú nhỏ – Chi nhánh nào đó",
+    address: "Số 5A Lương Ngọc Quyến, Hoàn Kiếm, Hà Nội, Việt Nam",
+    latitude: 21.028,
+    longitude: 105.853,
+    notes: "Cửa hàng gắp thú bông liệt kê tại bài viết.",
+  },
+];
+
 export {
   ANIMATION_SCALE_KEYFRAMES,
   ANIMATION_DURATION,
@@ -64,4 +209,5 @@ export {
   ICON_SIZE_LARGE,
   DELETE_CONFIRMATION_MESSAGE,
   gradientClasses,
+  BEAR_STORES,
 };

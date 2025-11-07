@@ -27,6 +27,7 @@ export const env = createEnv({
 		NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT: z.string().url(),
 		NEXT_PUBLIC_API_NINJAS_API_KEY: z.string(),
 		NEXT_PUBLIC_WEATHER_API_KEY: z.string(),
+		NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: z.string(),
 	},
 
 	/**
@@ -46,6 +47,7 @@ export const env = createEnv({
 			process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
 		NEXT_PUBLIC_API_NINJAS_API_KEY: process.env.NEXT_PUBLIC_API_NINJAS_API_KEY,
 		NEXT_PUBLIC_WEATHER_API_KEY: process.env.NEXT_PUBLIC_WEATHER_API_KEY,
+		NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
 	},
 	/**
 	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

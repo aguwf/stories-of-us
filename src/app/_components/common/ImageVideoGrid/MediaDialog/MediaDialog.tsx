@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import type { MediaItem, StoryType } from "@/types";
-import { Icon } from "../../icon";
+import { Icon } from "../../Icon";
 import MediaCarousel from "../MediaCarousel";
 
 interface MediaDialogProps {

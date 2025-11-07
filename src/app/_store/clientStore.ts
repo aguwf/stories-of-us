@@ -1,27 +1,35 @@
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
+import { persist } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
 
-// State types
-interface States {
+interface ThemeSlice {
 	theme: string;
-}
-
-interface Actions {
 	setTheme: (theme: string) => void;
 	toggleTheme: () => void;
 }
 
-export const useThemeStore = create(
-	persist<States & Actions>(
-		(set) => ({
-			theme: "",
-			setTheme: (theme) => set({ theme }),
-			toggleTheme: () =>
-				set((state) => ({ theme: state.theme === "light" ? "dark" : "light" })),
+const createThemeSlice = (
+	set: (fn: (state: ThemeSlice) => void) => void,
+): ThemeSlice => ({
+	theme: "",
+	setTheme: (theme) =>
+		set((state) => {
+			state.theme = theme;
 		}),
+	toggleTheme: () =>
+		set((state) => {
+			state.theme = state.theme === "light" ? "dark" : "light";
+		}),
+});
+
+export const useThemeStore = create<ThemeSlice>()(
+	persist(
+		immer((set) => ({
+			...createThemeSlice(set),
+		})),
 		{
 			name: "theme-store",
-			storage: createJSONStorage(() => localStorage),
+			version: 1,
 		},
 	),
 );

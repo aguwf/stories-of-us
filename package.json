@@ -66,6 +66,7 @@
 		"framer-motion": "^11.3.19",
 		"imagekit-javascript": "^3.0.2",
 		"lucide-react": "^0.460.0",
+		"mapbox-gl": "^3.16.0",
 		"next": "^14.2.5",
 		"next-intl": "^3.17.2",
 		"next-themes": "^0.3.0",
@@ -120,7 +121,9 @@
 		"initVersion": "7.36.2"
 	},
 	"release": {
-		"branches": ["main"],
+		"branches": [
+			"main"
+		],
 		"plugins": [
 			[
 				"@semantic-release/commit-analyzer",

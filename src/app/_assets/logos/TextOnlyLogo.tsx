@@ -1,4 +1,4 @@
-import { AppConfig } from "@/utils/AppConfig";
+import { AppConfig } from "@/utils/appConfig";
 import React from "react";
 
 export const TextOnlyLogo = ({ size }: { size: string }) => (

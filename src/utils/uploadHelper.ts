@@ -1,5 +1,5 @@
 import { env } from "@/env";
-import { logger } from "@/lib/Logger";
+import { logger } from "@/lib/logger";
 import ImageKit from "imagekit-javascript";
 import type { UploadOptions } from "imagekit-javascript/dist/src/interfaces";
 import { generateImageKitSignature } from "@/app/actions/imagekit";

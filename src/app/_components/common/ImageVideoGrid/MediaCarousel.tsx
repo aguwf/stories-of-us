@@ -19,7 +19,7 @@ import { cn } from "@/lib/utils";
 import Fade from "embla-carousel-fade";
 import React, { useCallback, useEffect } from "react";
 import ImageK from "../ImageK";
-import { Icon } from "../icon";
+import { Icon } from "../Icon";
 import Video from "./Video";
 
 interface MediaItem {

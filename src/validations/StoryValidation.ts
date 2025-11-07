@@ -9,6 +9,11 @@ export const StoryValidation = z.object({
 	sort: z.number().optional(),
 });
 
+export const StoryFormValidation = z.object({
+	name: z.string().min(1, "Title is required"),
+	description: z.string(),
+});
+
 export const EditStoryValidation = z.object({
 	id: z.coerce.number(),
 	title: z.string().min(1),

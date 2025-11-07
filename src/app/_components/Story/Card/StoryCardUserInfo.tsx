@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { memo } from "react";
-import { Icon } from "../../common/icon";
+import { Icon } from "../../common/Icon";
 import { ICON_SIZE_LARGE } from "@/utils/constants";
 
 export interface FormattedDateInfo {

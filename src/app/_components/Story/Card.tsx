@@ -6,7 +6,7 @@ import type { StoryType } from "@/types";
 import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import ImageVideoGrid from "../common/ImageVideoGrid/ImageVideoGrid";
-import { Icon } from "../common/icon";
+import { Icon } from "../common/Icon";
 import {
   DELETE_CONFIRMATION_MESSAGE,
   gradientClasses,

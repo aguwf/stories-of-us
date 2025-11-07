@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { memo } from "react";
-import { Icon } from "../../common/icon";
+import { Icon } from "../../common/Icon";
 import { ICON_SIZE_LARGE } from "@/utils/constants";
 
 export type ActionMenuKey = "copy" | "edit" | "delete" | "insertAfter";

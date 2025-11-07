@@ -81,8 +81,8 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 		return (
 			<div className={"relative group"} key={item.src}>
 				<ImageK
-					width={isThumbnail ? 100 : 400}
-					height={isThumbnail ? 100 : 800}
+					width={isThumbnail ? 76 : 400}
+					height={isThumbnail ? 50 : 800}
 					quality={100}
 					src={item.src.split("/").pop() || ""}
 					alt="Media item"
@@ -122,7 +122,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 
 	const renderCarouselThumb = (item: MediaItem) => {
 		return (
-			<div className="h-[15.5vw] border rounded-xl overflow-hidden mt-2 select-none cursor-pointer">
+			<div className="aspect-square w-20 h-20 border-2 rounded-lg overflow-hidden select-none cursor-pointer hover:border-primary transition-colors">
 				{renderMediaItem(item, true)}
 			</div>
 		);
@@ -137,10 +137,10 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 	);
 
 	return (
-		<div>
-			{/* Embla Carousel */}
+		<div className="w-full">
+			{/* Main Carousel */}
 			<Carousel
-				className={cn("relative w-screen", className)}
+				className={cn("relative w-full", className)}
 				plugins={[plugin.current]}
 				setApi={setMainApi}
 				opts={{
@@ -149,47 +149,42 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 			>
 				<CarouselContent>
 					{items.map((item, index) => (
-						<CarouselItem key={index}>{renderMediaItem(item)}</CarouselItem>
-					))}
-				</CarouselContent>
-				<CarouselPrevious />
-				<CarouselNext />
-			</Carousel>
-			{/* Carousel Dots */}
-			<Carousel
-				className="relative px-4 w-screen"
-				opts={{
-					dragFree: true,
-					containScroll: "trimSnaps",
-					axis: "x",
-					align: "center",
-				}}
-				setApi={setThumbnailApi}
-			>
-				{/* <div 
-          className={cn(
-            "absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white/10 from-40% to-transparent to-90% z-10 transition-opacity duration-300",
-            (!hasScroll || isAtEnd) && "opacity-0"
-          )}
-        />
-        <div 
-          className={cn(
-            "absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white/10 from-40% to-transparent to-90% z-10 transition-opacity duration-300",
-            (!hasScroll || isAtStart) && "opacity-0"
-          )}
-        /> */}
-				<CarouselContent>
-					{items.map((item, index) => (
-						<CarouselItem
-							className="basis-1/5"
-							key={index}
-							onClick={() => onThumbClick(index)}
-						>
-							{renderCarouselThumb(item)}
+						<CarouselItem key={index} className="flex items-center justify-center">
+							<div className="w-full max-w-4xl mx-auto">
+								{renderMediaItem(item)}
+							</div>
 						</CarouselItem>
 					))}
 				</CarouselContent>
+				<CarouselPrevious className="left-4" />
+				<CarouselNext className="right-4" />
 			</Carousel>
+
+			{/* Thumbnail Carousel */}
+			{items.length > 1 && (
+				<Carousel
+					className="relative w-full mt-4 px-4"
+					opts={{
+						dragFree: true,
+						containScroll: "trimSnaps",
+						axis: "x",
+						align: "start",
+					}}
+					setApi={setThumbnailApi}
+				>
+					<CarouselContent className="-ml-2">
+						{items.map((item, index) => (
+							<CarouselItem
+								className="basis-1/5 md:basis-1/6 lg:basis-1/8 pl-2"
+								key={index}
+								onClick={() => onThumbClick(index)}
+							>
+								{renderCarouselThumb(item)}
+							</CarouselItem>
+						))}
+					</CarouselContent>
+				</Carousel>
+			)}
 		</div>
 	);
 };

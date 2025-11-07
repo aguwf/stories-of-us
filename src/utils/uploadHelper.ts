@@ -25,7 +25,7 @@ export const handleUploadImage = async (images?: any[]) => {
 
 const uploadImage = async (image: File, folder = "stories-of-us") => {
 	try {
-		const ikSign = generateImageKitSignature({
+		const ikSign = await generateImageKitSignature({
 			expireTime: 1000,
 		});
 

@@ -1,7 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import type { MediaItem, StoryType } from "@/types";
-import CommentSection from "../../CommentSection/CommentSection";
 import { Icon } from "../../icon";
 import MediaCarousel from "../MediaCarousel";
 
@@ -32,42 +31,53 @@ export const MediaDialog: React.FC<MediaDialogProps> = ({
 	return (
 		<Dialog onOpenChange={onOpenChange}>
 			<DialogTrigger asChild>{children}</DialogTrigger>
-			<DialogContent className="w-full p-0 h-full border-none overflow-auto">
-				<div className="mt-16 px-4 flex items-center gap-2">
-					<Avatar className="border-1 border-gray-200">
-						<AvatarImage src={story?.user.avatar ?? ""} />
-						<AvatarFallback>
-							<Icon className="h-6 w-6" name="user-outline" />
-						</AvatarFallback>
-					</Avatar>
-					<div className="flex flex-col">
-						<span className="font-semibold text-sm">{story?.user.name}</span>
-						<div className="flex gap-1">
-							<span className="font-medium text-[#9f9f9f] text-sm">
-								{month}
-							</span>
-							<span className="font-medium text-[#9f9f9f] text-sm">
-								{formattedDate.getDate()}
-							</span>
-							<span className="font-medium text-[#9f9f9f] text-sm">
-								{formattedDate.getFullYear()}
-							</span>
-							<hr className="my-2 border-r border-gray-200 w-full rotate-90" />
+			<DialogContent className="max-w-7xl w-[95vw] h-[95vh] p-0 border-none bg-white/95 backdrop-blur-sm overflow-hidden flex flex-col">
+				<div className="flex-1 overflow-y-auto">
+					<div className="flex flex-col gap-6 p-6">
+						{/* User Info Header */}
+						<div className="flex items-center gap-3">
+							<Avatar className="h-12 w-12 border-2 border-gray-200">
+								<AvatarImage src={story?.user?.avatar ?? ""} />
+								<AvatarFallback>
+									<Icon className="h-6 w-6" name="user-outline" />
+								</AvatarFallback>
+							</Avatar>
+							<div className="flex flex-col">
+								<span className="font-semibold text-base">{story?.user?.name}</span>
+								<div className="flex items-center gap-1 text-muted-foreground">
+									<span className="text-sm">
+										{month} {formattedDate.getDate()}, {formattedDate.getFullYear()}
+									</span>
+								</div>
+							</div>
 						</div>
+
+						{/* Story Content */}
+						<div className="space-y-3">
+							<h3 className="text-2xl font-bold">{story?.name}</h3>
+							{story?.description && (
+								<p className="text-muted-foreground leading-relaxed">
+									{story.description}
+								</p>
+							)}
+						</div>
+
+						{/* Media Carousel */}
+						<div className="w-full -mx-6">
+							<MediaCarousel items={items} initialIndex={selectedIndex ?? index} />
+						</div>
+
+						{/* Comment Section - Uncomment when ready */}
+						{/* <div className="border-t pt-6">
+							<CommentSection
+								comments={[]}
+								onAddComment={(content) => {
+									console.log("New comment:", content);
+								}}
+							/>
+						</div> */}
 					</div>
 				</div>
-				<div className="mx-auto w-full max-w-screen-md px-4">
-					<h3 className="font-bold">{story?.name}</h3>
-					<p className="mt-2">{story?.description}</p>
-				</div>
-				<MediaCarousel items={items} initialIndex={selectedIndex ?? index} />
-				<CommentSection
-					comments={[]} // Pass your comments data here
-					onAddComment={(content) => {
-						// Implement your comment adding logic here
-						console.log("New comment:", content);
-					}}
-				/>
 			</DialogContent>
 		</Dialog>
 	);

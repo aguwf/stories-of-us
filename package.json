@@ -72,6 +72,7 @@
 		"next-themes": "^0.3.0",
 		"pino": "^9.3.2",
 		"pino-pretty": "^11.2.2",
+		"postgres": "^3.4.7",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
 		"react-hook-form": "^7.53.2",

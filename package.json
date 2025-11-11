@@ -65,6 +65,7 @@
 		"eslint-plugin-tailwindcss": "^3.17.5",
 		"framer-motion": "^11.3.19",
 		"imagekit-javascript": "^3.0.2",
+		"immer": "^10.2.0",
 		"lucide-react": "^0.460.0",
 		"mapbox-gl": "^3.16.0",
 		"next": "^14.2.5",

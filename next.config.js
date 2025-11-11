@@ -19,7 +19,7 @@ const withSerwist = withSerwistInit({
 
 const jiti = createJiti(fileURLToPath(import.meta.url));
 
-jiti("./src/lib/Env");
+jiti("./src/env.js");
 
 const withNextIntlConfig = withNextIntl("./src/lib/i18n.ts");
 

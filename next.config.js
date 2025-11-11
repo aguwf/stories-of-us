@@ -5,6 +5,7 @@ import withBundleAnalyzer from "@next/bundle-analyzer";
 import withSerwistInit from "@serwist/next";
 import createJiti from "jiti";
 import withNextIntl from "next-intl/plugin";
+import path from "node:path";
 
 const withSerwist = withSerwistInit({
 	// Note: This is only an example. If you use Pages Router,
@@ -59,6 +60,10 @@ const config = {
 				permanent: true,
 			},
 		];
+	},
+	webpack: (config) => {
+		config.resolve.alias['@'] = path.resolve(__dirname, 'src')
+		return config
 	},
 };
 

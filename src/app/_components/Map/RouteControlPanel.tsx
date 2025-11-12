@@ -5,7 +5,6 @@ import {
   ChevronDown,
   ChevronUp,
   X,
-  Clock,
   MapIcon,
   Share2,
   Save,

@@ -11,7 +11,7 @@ export default function Provider({ children }: { children: React.ReactNode }) {
 		<ThemeProvider
 			attribute="class"
 			defaultTheme="system"
-			enableSystem
+			enableSystem={true}
 			forcedTheme={themeStore}
 		>
 			<InitializeUser />

@@ -17,7 +17,7 @@ const isProtectedRoute = createRouteMatcher([
 
 export default function middleware(
 	request: NextRequest,
-	event: NextFetchEvent,
+	event: NextFetchEvent
 ) {
 	if (
 		request.nextUrl.pathname.includes("/sign-in") ||

@@ -14,29 +14,29 @@ interface StorySlice {
 }
 
 const createStorySlice = (
-	set: (fn: (state: StorySlice) => void) => void,
+	set: (fn: (state: StorySlice) => void) => void
 ): StorySlice => ({
 	stories: [],
 	totalPages: 0,
-	setTotalPages: (totalPages) =>
-		set((state) => {
+	setTotalPages: totalPages =>
+		set(state => {
 			state.totalPages = totalPages;
 		}),
-	setStories: (stories) =>
-		set((state) => {
+	setStories: stories =>
+		set(state => {
 			state.stories = stories;
 		}),
-	addStory: (story) =>
-		set((state) => {
+	addStory: story =>
+		set(state => {
 			state.stories.push(story);
 		}),
-	removeStory: (story) =>
-		set((state) => {
-			state.stories = state.stories.filter((s) => s.id !== story.id);
+	removeStory: story =>
+		set(state => {
+			state.stories = state.stories.filter(s => s.id !== story.id);
 		}),
-	updateStory: (story) =>
-		set((state) => {
-			const index = state.stories.findIndex((s) => s.id === story.id);
+	updateStory: story =>
+		set(state => {
+			const index = state.stories.findIndex(s => s.id === story.id);
 			if (index !== -1) {
 				state.stories[index] = story;
 			}
@@ -45,16 +45,16 @@ const createStorySlice = (
 
 export const useStoryStore = create<StorySlice>()(
 	persist(
-		immer((set) => ({
+		immer(set => ({
 			...createStorySlice(set),
 		})),
 		{
 			name: "story-store",
 			version: 1,
-			partialize: (state) => ({
+			partialize: state => ({
 				stories: state.stories,
 				totalPages: state.totalPages,
 			}),
-		},
-	),
+		}
+	)
 );

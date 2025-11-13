@@ -5,7 +5,7 @@ const IslandScene = dynamic(
 	() => import("@/app/_components/Scene/IslandScene"),
 	{
 		ssr: false,
-	},
+	}
 );
 
 export async function generateMetadata(props: { params: { locale: string } }) {

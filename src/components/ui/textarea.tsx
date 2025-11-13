@@ -14,7 +14,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 				<textarea
 					className={cn(
 						"flex px-3 py-2 w-full text-base bg-transparent rounded-md border shadow-sm min-h-[60px] border-input placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-						className,
+						className
 					)}
 					ref={ref}
 					{...props}
@@ -22,7 +22,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 				{error && <p className="text-sm text-destructive">{error}</p>}
 			</div>
 		);
-	},
+	}
 );
 Textarea.displayName = "Textarea";
 

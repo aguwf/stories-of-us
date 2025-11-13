@@ -1,15 +1,15 @@
+import type { CreateStoryModalProps } from "@/app/_components/modals/CreateStoryModal";
+import { useUserStore } from "@/app/_store/userStore";
 import useDisclosure from "@/hooks/useDisclosure";
 import { api } from "@/trpc/react";
 import { handleUploadImage } from "@/utils/uploadHelper";
+import { StoryFormValidation } from "@/validations/StoryValidation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { TRPCClientErrorLike } from "@trpc/client";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { useCallback, useEffect, useState } from "react";
-import { CreateStoryModalProps } from "@/app/_components/modals/CreateStoryModal";
-import { useUserStore } from "@/app/_store/userStore";
-import { StoryFormValidation } from "@/validations/StoryValidation";
-import { z } from "zod";
+import type { z } from "zod";
 
 type StoryFormData = z.infer<typeof StoryFormValidation>;
 
@@ -77,7 +77,7 @@ const useStoryModal = ({
     } else {
       resetModal();
     }
-  }, [selectedStory, resetModal, form]);
+  }, [selectedStory, resetModal, form, onOpen]);
 
   const uploadNewImages = async (
     newImages: File[],
@@ -121,6 +121,7 @@ const useStoryModal = ({
     [form, selectedStory, createIndex, maxIndex, user]
   );
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const handleSubmit = useCallback(async () => {
     if (fileList.length === 0) {
       toast.error("You need to select at least one image");
@@ -150,7 +151,13 @@ const useStoryModal = ({
       // Error already handled in uploadNewImages
       console.error("Submission failed:", error);
     }
-  }, [fileList, createStoryData, selectedStory, createStory, updateStory]);
+  }, [
+    fileList,
+    createStoryData,
+    selectedStory,
+    createStory,
+    updateStory
+  ]);
 
   return {
     isOpen,

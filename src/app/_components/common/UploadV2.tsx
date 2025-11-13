@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { Plus, X } from "lucide-react";
 import Image from "next/image";
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
-import { cn } from "@/lib/utils";
 
 // Constants
 const DEFAULT_MAX_FILES = 9;
@@ -75,7 +75,7 @@ const FilePreview = memo<FilePreviewProps>(
 				)}
 			</div>
 		);
-	},
+	}
 );
 
 FilePreview.displayName = "FilePreview";
@@ -95,7 +95,7 @@ export const UploadV2: React.FC<UploadV2Props> = ({
 	// Check if max files limit is reached
 	const isMaxFilesReached = useMemo(
 		() => fileList.length >= maxFiles,
-		[fileList.length, maxFiles],
+		[fileList.length, maxFiles]
 	);
 
 	// Handle upload button click
@@ -122,18 +122,18 @@ export const UploadV2: React.FC<UploadV2Props> = ({
 
 			if (newFiles.length < files.length) {
 				toast.warning(
-					`Only ${newFiles.length} file(s) added. Maximum ${maxFiles} files allowed.`,
+					`Only ${newFiles.length} file(s) added. Maximum ${maxFiles} files allowed.`
 				);
 			}
 
 			if (newFiles.length > 0) {
-				setFileList((prevList) => [...prevList, ...newFiles]);
+				setFileList(prevList => [...prevList, ...newFiles]);
 			}
 
 			// Reset input value to allow uploading the same file again
 			event.target.value = "";
 		},
-		[setFileList, fileList.length, maxFiles],
+		[setFileList, fileList.length, maxFiles]
 	);
 
 	// Handle file removal
@@ -141,9 +141,9 @@ export const UploadV2: React.FC<UploadV2Props> = ({
 		(index: number) => {
 			if (disabled) return;
 
-			setFileList((prevList) => prevList.filter((_, i) => i !== index));
+			setFileList(prevList => prevList.filter((_, i) => i !== index));
 		},
-		[setFileList, disabled],
+		[setFileList, disabled]
 	);
 
 	// Manage object URLs for file previews
@@ -153,7 +153,7 @@ export const UploadV2: React.FC<UploadV2Props> = ({
 
 		return () => {
 			// Only revoke URLs that we created (blob URLs)
-			newObjectURLs.forEach((url) => {
+			newObjectURLs.forEach(url => {
 				if (isBlobURL(url)) {
 					URL.revokeObjectURL(url);
 				}

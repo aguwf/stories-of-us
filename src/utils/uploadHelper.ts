@@ -1,8 +1,8 @@
+import { generateImageKitSignature } from "@/app/actions/imagekit";
 import { env } from "@/env";
 import { logger } from "@/lib/logger";
 import ImageKit from "imagekit-javascript";
 import type { UploadOptions } from "imagekit-javascript/dist/src/interfaces";
-import { generateImageKitSignature } from "@/app/actions/imagekit";
 
 const imageKit = new ImageKit({
 	publicKey: env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
@@ -17,7 +17,7 @@ export const handleUploadImage = async (images?: any[]) => {
 	}
 
 	const uploadedImages = await Promise.all(
-		images.map((image) => uploadImage(image)),
+		images.map(image => uploadImage(image))
 	);
 
 	return uploadedImages;

@@ -23,7 +23,7 @@ const CancelButton = ({
 
 	return dataName ? (
 		<Popover>
-			<PopoverTrigger asChild>
+			<PopoverTrigger asChild={true}>
 				<Button className="bg-accent" variant="default">
 					Cancel
 				</Button>

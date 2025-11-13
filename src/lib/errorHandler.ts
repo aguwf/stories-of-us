@@ -1,16 +1,17 @@
-import { logger } from "./logger";
 import { toast } from "sonner";
+import { logger } from "./logger";
 
 /**
  * Centralized error handler for consistent error handling across the application
  */
 export function handleError(error: unknown, userMessage?: string): void {
 	// Extract error message
-	const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
-	
+	const errorMessage =
+		error instanceof Error ? error.message : "An unexpected error occurred";
+
 	// Log the error for debugging
 	logger.error(errorMessage, error);
-	
+
 	// Show user-friendly message
 	toast.error(userMessage || errorMessage);
 }
@@ -59,16 +60,15 @@ export class ValidationError extends AppError {
 }
 
 export class AuthenticationError extends AppError {
-	constructor(message: string = "Authentication required") {
+	constructor(message = "Authentication required") {
 		super(message, "AUTH_ERROR", 401);
 		this.name = "AuthenticationError";
 	}
 }
 
 export class NotFoundError extends AppError {
-	constructor(message: string = "Resource not found") {
+	constructor(message = "Resource not found") {
 		super(message, "NOT_FOUND", 404);
 		this.name = "NotFoundError";
 	}
 }
-

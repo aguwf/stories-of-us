@@ -11,7 +11,7 @@ export default function LocaleSwitcher() {
 	const pathname = usePathname();
 	const locale = useLocale();
 
-	const handleChange: ChangeEventHandler<HTMLSelectElement> = (event) => {
+	const handleChange: ChangeEventHandler<HTMLSelectElement> = event => {
 		router.push(pathname, { locale: event.target.value });
 		router.refresh();
 	};
@@ -22,7 +22,7 @@ export default function LocaleSwitcher() {
 			onChange={handleChange}
 			className="border border-gray-300 font-medium focus:outline-none focus-visible:ring"
 		>
-			{AppConfig.locales.map((elt) => (
+			{AppConfig.locales.map(elt => (
 				<option key={elt} value={elt}>
 					{elt.toUpperCase()}
 				</option>

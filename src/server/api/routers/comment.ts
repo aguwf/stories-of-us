@@ -11,7 +11,7 @@ export const commentRouter = createTRPCRouter({
 				content: z.string(),
 				reactions: z.record(z.string(), z.array(z.string())),
 				replies: z.array(z.number()),
-			}),
+			})
 		)
 		.mutation(async ({ ctx, input }) => {
 			const comment = await ctx.db.insert(comments).values({

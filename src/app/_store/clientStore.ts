@@ -9,27 +9,27 @@ interface ThemeSlice {
 }
 
 const createThemeSlice = (
-	set: (fn: (state: ThemeSlice) => void) => void,
+	set: (fn: (state: ThemeSlice) => void) => void
 ): ThemeSlice => ({
 	theme: "",
-	setTheme: (theme) =>
-		set((state) => {
+	setTheme: theme =>
+		set(state => {
 			state.theme = theme;
 		}),
 	toggleTheme: () =>
-		set((state) => {
+		set(state => {
 			state.theme = state.theme === "light" ? "dark" : "light";
 		}),
 });
 
 export const useThemeStore = create<ThemeSlice>()(
 	persist(
-		immer((set) => ({
+		immer(set => ({
 			...createThemeSlice(set),
 		})),
 		{
 			name: "theme-store",
 			version: 1,
-		},
-	),
+		}
+	)
 );

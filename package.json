@@ -10,8 +10,9 @@
 		"check-types": "tsc --noEmit --pretty",
 		"clean": "rimraf .next .swc out coverage",
 		"commit": "cz",
-		"check": "bunx biome check  --fix --unsafe",
-		"lint": "eslint --fix --no-warn-ignored",
+		"check": "bunx biome check --write --unsafe",
+		"format": "bunx biome format --write",
+		"lint": "bunx biome lint --fix",
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"db:push": "drizzle-kit push",
@@ -29,7 +30,6 @@
 		"@hello-pangea/dnd": "^16.6.0",
 		"@hookform/resolvers": "^3.9.1",
 		"@libsql/client": "^0.14.0",
-		"@next/eslint-plugin-next": "^15.0.4",
 		"@radix-ui/react-alert-dialog": "^1.1.2",
 		"@radix-ui/react-avatar": "^1.1.1",
 		"@radix-ui/react-dialog": "^1.1.15",
@@ -61,8 +61,6 @@
 		"embla-carousel-autoplay": "^8.1.8",
 		"embla-carousel-fade": "^8.5.1",
 		"embla-carousel-react": "^8.5.1",
-		"eslint-plugin-jsx-a11y": "^6.10.2",
-		"eslint-plugin-tailwindcss": "^3.17.5",
 		"framer-motion": "^11.3.19",
 		"imagekit-javascript": "^3.0.2",
 		"immer": "^10.2.0",
@@ -91,7 +89,6 @@
 		"@biomejs/biome": "1.8.3",
 		"@commitlint/config-conventional": "^19.5.0",
 		"@commitlint/types": "^19.0.3",
-		"@eslint/js": "^9.16.0",
 		"@next/bundle-analyzer": "^14.2.5",
 		"@types/bun": "latest",
 		"@types/fs-extra": "^11.0.4",
@@ -100,13 +97,8 @@
 		"@types/react-dom": "^18.3.0",
 		"@types/uuid": "^10.0.0",
 		"drizzle-kit": "^0.30.1",
-		"eslint": "^9.16.0",
-		"eslint-config-next": "^14.2.5",
-		"eslint-plugin-drizzle": "^0.2.3",
-		"eslint-plugin-react": "^7.37.2",
 		"fs-extra": "^11.2.0",
 		"glob": "^11.0.0",
-		"globals": "^15.13.0",
 		"jiti": "^1.21.6",
 		"lefthook": "^1.7.12",
 		"node-html-parser": "^6.1.13",
@@ -116,16 +108,13 @@
 		"serwist": "^9.0.5",
 		"tailwindcss": "^3.4.7",
 		"typescript": "^5.5.4",
-		"typescript-eslint": "^8.17.0",
 		"webpack": "^5.93.0"
 	},
 	"ct3aMetadata": {
 		"initVersion": "7.36.2"
 	},
 	"release": {
-		"branches": [
-			"main"
-		],
+		"branches": ["main"],
 		"plugins": [
 			[
 				"@semantic-release/commit-analyzer",

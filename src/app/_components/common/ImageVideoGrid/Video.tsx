@@ -13,7 +13,7 @@ const Video: React.FC<VideoProps> = ({ src, className }) => {
 		if (videoRef.current) {
 			videoRef.current
 				.play()
-				.catch((error) => console.error("Autoplay failed:", error));
+				.catch(error => console.error("Autoplay failed:", error));
 		}
 	}, []);
 
@@ -22,10 +22,10 @@ const Video: React.FC<VideoProps> = ({ src, className }) => {
 			ref={videoRef}
 			src={src}
 			className={className}
-			loop
-			muted
-			playsInline
-			controls
+			loop={true}
+			muted={true}
+			playsInline={true}
+			controls={true}
 		/>
 	);
 };

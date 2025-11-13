@@ -103,7 +103,7 @@ export function InitializeUser() {
 				avatar: generateAvatarUrl(userInfo.name, userInfo.gender),
 			},
 			{
-				onSuccess: (newUser) => {
+				onSuccess: newUser => {
 					setUser({
 						id: newUser?.id ?? "",
 						name: newUser?.name ?? "",
@@ -112,10 +112,10 @@ export function InitializeUser() {
 					});
 					setOpen(false);
 				},
-				onError: (error) => {
+				onError: error => {
 					console.error("Failed to create user:", error);
 				},
-			},
+			}
 		);
 	};
 
@@ -144,8 +144,8 @@ export function InitializeUser() {
 						<Input
 							placeholder="Name"
 							value={userInfo.name}
-							onChange={(e) =>
-								setUserInfo((prev) => ({ ...prev, name: e.target.value }))
+							onChange={e =>
+								setUserInfo(prev => ({ ...prev, name: e.target.value }))
 							}
 							className={errors.name ? "border-red-500" : ""}
 						/>
@@ -159,8 +159,8 @@ export function InitializeUser() {
 							type="email"
 							placeholder="Email"
 							value={userInfo.email}
-							onChange={(e) =>
-								setUserInfo((prev) => ({ ...prev, email: e.target.value }))
+							onChange={e =>
+								setUserInfo(prev => ({ ...prev, email: e.target.value }))
 							}
 							className={errors.email ? "border-red-500" : ""}
 						/>
@@ -172,8 +172,8 @@ export function InitializeUser() {
 					<div className="space-y-2">
 						<RadioGroup
 							value={userInfo.gender}
-							onValueChange={(value) =>
-								setUserInfo((prev) => ({
+							onValueChange={value =>
+								setUserInfo(prev => ({
 									...prev,
 									gender: value as UserFormData["gender"],
 								}))

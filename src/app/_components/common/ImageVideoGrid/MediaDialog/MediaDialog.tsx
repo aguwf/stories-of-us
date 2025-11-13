@@ -30,7 +30,7 @@ export const MediaDialog: React.FC<MediaDialogProps> = ({
 
 	return (
 		<Dialog onOpenChange={onOpenChange}>
-			<DialogTrigger asChild>{children}</DialogTrigger>
+			<DialogTrigger asChild={true}>{children}</DialogTrigger>
 			<DialogContent className="max-w-7xl w-[95vw] h-[95vh] p-0 border-none bg-white/95 backdrop-blur-sm overflow-hidden flex flex-col">
 				<div className="flex-1 overflow-y-auto">
 					<div className="flex flex-col gap-6 p-6">
@@ -43,10 +43,13 @@ export const MediaDialog: React.FC<MediaDialogProps> = ({
 								</AvatarFallback>
 							</Avatar>
 							<div className="flex flex-col">
-								<span className="font-semibold text-base">{story?.user?.name}</span>
+								<span className="font-semibold text-base">
+									{story?.user?.name}
+								</span>
 								<div className="flex items-center gap-1 text-muted-foreground">
 									<span className="text-sm">
-										{month} {formattedDate.getDate()}, {formattedDate.getFullYear()}
+										{month} {formattedDate.getDate()},{" "}
+										{formattedDate.getFullYear()}
 									</span>
 								</div>
 							</div>
@@ -64,7 +67,10 @@ export const MediaDialog: React.FC<MediaDialogProps> = ({
 
 						{/* Media Carousel */}
 						<div className="w-full -mx-6">
-							<MediaCarousel items={items} initialIndex={selectedIndex ?? index} />
+							<MediaCarousel
+								items={items}
+								initialIndex={selectedIndex ?? index}
+							/>
 						</div>
 
 						{/* Comment Section - Uncomment when ready */}

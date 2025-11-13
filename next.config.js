@@ -67,5 +67,5 @@ function defineNextConfig() {
 }
 
 export default withSerwist(
-	bundleAnalyzer(withNextIntlConfig(defineNextConfig())),
+	bundleAnalyzer(withNextIntlConfig(defineNextConfig()))
 );

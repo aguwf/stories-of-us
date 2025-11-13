@@ -18,8 +18,8 @@ import {
 import { cn } from "@/lib/utils";
 import Fade from "embla-carousel-fade";
 import React, { useCallback, useEffect } from "react";
-import ImageK from "../ImageK";
 import { Icon } from "../Icon";
+import ImageK from "../ImageK";
 import Video from "./Video";
 
 interface MediaItem {
@@ -44,7 +44,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 	const plugin = React.useRef(
 		Fade({
 			active: true,
-		}) as any,
+		}) as any
 	);
 
 	useEffect(() => {
@@ -55,7 +55,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 	const renderMediaItem = (item: MediaItem, isThumbnail = false) => {
 		const commonClasses = cn(
 			"w-full h-full object-cover",
-			isThumbnail ? "rounded-sm" : "rounded-lg",
+			isThumbnail ? "rounded-sm" : "rounded-lg"
 		);
 
 		const handleSaveImage = async (src: string) => {
@@ -91,7 +91,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 				{!isThumbnail && (
 					<div className="absolute top-2 right-2 transition-opacity">
 						<DropdownMenu>
-							<DropdownMenuTrigger asChild>
+							<DropdownMenuTrigger asChild={true}>
 								<Button
 									variant="ghost"
 									size="icon"
@@ -133,7 +133,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 			if (!mainApi) return;
 			mainApi.scrollTo(index);
 		},
-		[mainApi],
+		[mainApi]
 	);
 
 	return (
@@ -149,7 +149,10 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 			>
 				<CarouselContent>
 					{items.map((item, index) => (
-						<CarouselItem key={index} className="flex items-center justify-center">
+						<CarouselItem
+							key={index}
+							className="flex items-center justify-center"
+						>
 							<div className="w-full max-w-4xl mx-auto">
 								{renderMediaItem(item)}
 							</div>

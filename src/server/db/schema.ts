@@ -17,7 +17,7 @@ import {
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const createTable = pgTableCreator((name) => `stories-of-us_${name}`);
+export const createTable = pgTableCreator(name => `stories-of-us_${name}`);
 
 export const stories = createTable("story", {
 	id: serial("id").primaryKey(),
@@ -31,7 +31,7 @@ export const stories = createTable("story", {
 		.default(sql`CURRENT_TIMESTAMP`)
 		.notNull(),
 	updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-		() => new Date(),
+		() => new Date()
 	),
 });
 
@@ -81,12 +81,12 @@ export const accounts = createTable(
 		id_token: text("id_token"),
 		session_state: varchar("session_state", { length: 255 }),
 	},
-	(account) => ({
+	account => ({
 		compoundKey: primaryKey({
 			columns: [account.provider, account.providerAccountId],
 		}),
 		userIdIdx: index("account_user_id_idx").on(account.userId),
-	}),
+	})
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({

@@ -3,7 +3,7 @@ import { useCallback, useState } from "react";
 function useDisclosure(
 	defaultOpen = false,
 	onOpenCallback?: () => void,
-	onCloseCallback?: () => void,
+	onCloseCallback?: () => void
 ) {
 	const [isOpen, setIsOpen] = useState(defaultOpen);
 
@@ -17,7 +17,7 @@ function useDisclosure(
 		if (onCloseCallback) onCloseCallback();
 	}, [onCloseCallback]);
 
-	const toggle = useCallback(() => setIsOpen((prev) => !prev), []);
+	const toggle = useCallback(() => setIsOpen(prev => !prev), []);
 
 	return {
 		isOpen,

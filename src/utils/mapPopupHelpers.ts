@@ -1,14 +1,14 @@
-import type { PopupProps } from '@/types/map.types';
-import { sanitizeStoreName } from './mapHelpers';
+import type { PopupProps } from "@/types/map.types";
+import { sanitizeStoreName } from "./mapHelpers";
 
 /**
  * Generate HTML content for store popup
  */
 export const createPopupHTML = (props: PopupProps): string => {
-  const { name, address, notes, coordinates, isFavorite } = props;
-  const sanitizedName = sanitizeStoreName(name);
+	const { name, address, notes, coordinates, isFavorite } = props;
+	const sanitizedName = sanitizeStoreName(name);
 
-  return `
+	return `
     <div style="
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       padding: 0;
@@ -77,8 +77,8 @@ export const createPopupHTML = (props: PopupProps): string => {
             style="
               flex: 1;
               padding: 10px 16px;
-              background: ${isFavorite ? '#B7A3E3' : 'white'};
-              color: ${isFavorite ? 'white' : '#B7A3E3'};
+              background: ${isFavorite ? "#B7A3E3" : "white"};
+              color: ${isFavorite ? "white" : "#B7A3E3"};
               border: 2px solid #B7A3E3;
               border-radius: 8px;
               font-size: 14px;
@@ -93,10 +93,10 @@ export const createPopupHTML = (props: PopupProps): string => {
             onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(183, 163, 227, 0.3)';"
             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFavorite ? 'white' : 'none'}" stroke="currentColor" stroke-width="2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFavorite ? "white" : "none"}" stroke="currentColor" stroke-width="2">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
             </svg>
-            ${isFavorite ? 'Saved' : 'Save'}
+            ${isFavorite ? "Saved" : "Save"}
           </button>
           
           <button 
@@ -137,8 +137,11 @@ export const createPopupHTML = (props: PopupProps): string => {
 /**
  * Generate HTML for route information display
  */
-export const createRouteInfoHTML = (distanceKm: string, durationMin: number): string => {
-  return `
+export const createRouteInfoHTML = (
+	distanceKm: string,
+	durationMin: number
+): string => {
+	return `
     <div style="
       margin-top: 12px;
       padding: 12px;
@@ -181,4 +184,3 @@ export const createRouteInfoHTML = (distanceKm: string, durationMin: number): st
     </div>
   `;
 };
-

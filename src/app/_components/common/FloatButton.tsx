@@ -44,7 +44,7 @@ const FloatButton: React.FC<FloatButtonProps> = memo(
 				</motion.button>
 			</AnimatePresence>
 		</motion.div>
-	),
+	)
 );
 
 FloatButton.displayName = "FloatButton";
@@ -98,7 +98,7 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
 				window.dispatchEvent(
 					new CustomEvent("closeFloatButtonGroup", {
 						detail: { groupId: openGroupId },
-					}),
+					})
 				);
 			}
 			openGroupId = isOpen ? null : groupId.current;
@@ -114,12 +114,12 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
 
 			window.addEventListener(
 				"closeFloatButtonGroup",
-				handleCloseGroup as EventListener,
+				handleCloseGroup as EventListener
 			);
 			return () =>
 				window.removeEventListener(
 					"closeFloatButtonGroup",
-					handleCloseGroup as EventListener,
+					handleCloseGroup as EventListener
 				);
 		}, []);
 
@@ -169,7 +169,7 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
 				</FloatButton>
 			</motion.div>
 		);
-	},
+	}
 );
 
 FloatButtonGroup.displayName = "FloatButtonGroup";

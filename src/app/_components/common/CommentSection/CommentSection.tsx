@@ -39,15 +39,15 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 					<div className="flex-1 relative">
 						<Textarea
 							value={newComment}
-							onChange={(e) => setNewComment(e.target.value)}
+							onChange={e => setNewComment(e.target.value)}
 							placeholder="Write a comment..."
 							className="min-h-[40px] px-4 py-2 rounded-2xl bg-secondary resize-none overflow-hidden focus:ring-1 focus:ring-primary/20"
 						/>
 						<div className="flex justify-between items-center mt-2">
 							<div className="flex items-center gap-2">
 								<EmojiPicker
-									onEmojiSelect={(emoji) =>
-										setNewComment((prev) => prev + emoji.native)
+									onEmojiSelect={emoji =>
+										setNewComment(prev => prev + emoji.native)
 									}
 								/>
 							</div>
@@ -64,7 +64,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 			</form>
 
 			<div className="space-y-4">
-				{comments.map((comment) => (
+				{comments.map(comment => (
 					<Comment key={comment.id} comment={comment} />
 				))}
 			</div>

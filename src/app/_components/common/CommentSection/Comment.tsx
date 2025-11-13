@@ -76,7 +76,7 @@ const Comment: React.FC<CommentProps> = ({ comment }) => {
 							<div className="flex-1">
 								<Textarea
 									value={replyContent}
-									onChange={(e) => setReplyContent(e.target.value)}
+									onChange={e => setReplyContent(e.target.value)}
 									placeholder="Write a reply..."
 									className="min-h-[40px] px-4 py-2 rounded-2xl bg-secondary resize-none overflow-hidden focus:ring-1 focus:ring-primary/20"
 								/>
@@ -105,7 +105,7 @@ const Comment: React.FC<CommentProps> = ({ comment }) => {
 				{/* Nested replies */}
 				{comment.replies && (
 					<div className="mt-2 ml-6 space-y-3">
-						{comment.replies.map((reply) => (
+						{comment.replies.map(reply => (
 							<Comment key={reply.id} comment={reply} />
 						))}
 					</div>

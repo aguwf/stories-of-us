@@ -30,7 +30,7 @@ export const storyRouter = createTRPCRouter({
 				sort: z.enum(["createdAt", "name", "sort"]),
 				orderBy: z.enum(["asc", "desc"]),
 				currentUserId: z.string().optional(),
-			}),
+			})
 		)
 		.query(async ({ ctx, input }) => {
 			const offset = (input.page - 1) * input.totalItems;
@@ -66,14 +66,14 @@ export const storyRouter = createTRPCRouter({
 					hearts: input.currentUserId
 						? {
 								where: (hearts, { eq }) =>
-									eq(hearts.userId, input.currentUserId!),
+									eq(hearts.userId, input.currentUserId || ""),
 							}
 						: undefined,
 				},
 			});
 
 			return {
-				storyList: storyList.map((story) => ({
+				storyList: storyList.map(story => ({
 					...story,
 					isHearted: story.hearts && story.hearts.length > 0,
 					heartCount: story.hearts?.length ?? 0,
@@ -109,7 +109,7 @@ export const storyRouter = createTRPCRouter({
 				coverImage: z.string().optional(),
 				images: z.string().array().optional(),
 				sort: z.number().optional(),
-			}),
+			})
 		)
 		.mutation(async ({ ctx, input }) => {
 			const story = await ctx.db.query.stories.findFirst({
@@ -150,10 +150,10 @@ export const storyRouter = createTRPCRouter({
 		.input(z.object({ storyId: z.number(), userId: z.string() }))
 		.mutation(async ({ ctx, input }) => {
 			const existingHeart = await ctx.db.query.hearts.findFirst({
-				where: (hearts) =>
+				where: hearts =>
 					and(
 						eq(hearts.storyId, input.storyId),
-						eq(hearts.userId, input.userId),
+						eq(hearts.userId, input.userId)
 					),
 			});
 
@@ -183,10 +183,10 @@ export const storyRouter = createTRPCRouter({
 		.input(z.object({ storyId: z.number(), userId: z.string() }))
 		.query(async ({ ctx, input }) => {
 			const heart = await ctx.db.query.hearts.findFirst({
-				where: (hearts) =>
+				where: hearts =>
 					and(
 						eq(hearts.storyId, input.storyId),
-						eq(hearts.userId, input.userId),
+						eq(hearts.userId, input.userId)
 					),
 			});
 			return !!heart;

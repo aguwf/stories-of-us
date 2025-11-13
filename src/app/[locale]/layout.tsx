@@ -1,4 +1,4 @@
-import 'mapbox-gl/dist/mapbox-gl.css';
+import "mapbox-gl/dist/mapbox-gl.css";
 import "@/styles/globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
@@ -56,7 +56,7 @@ export default function RootLayout(props: {
 	const messages = useMessages();
 
 	return (
-		<html lang={props.params.locale} suppressHydrationWarning>
+		<html lang={props.params.locale} suppressHydrationWarning={true}>
 			<body
 				className={`min-h-screen bg-background antialiased ${poppinsFont.className}`}
 			>

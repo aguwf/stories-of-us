@@ -10,28 +10,28 @@ interface UserSlice {
 }
 
 const createUserSlice = (
-	set: (fn: (state: UserSlice) => void) => void,
+	set: (fn: (state: UserSlice) => void) => void
 ): UserSlice => ({
 	user: null,
-	setUser: (user) =>
-		set((state) => {
+	setUser: user =>
+		set(state => {
 			state.user = user;
 		}),
 	clearUser: () =>
-		set((state) => {
+		set(state => {
 			state.user = null;
 		}),
 });
 
 export const useUserStore = create<UserSlice>()(
 	persist(
-		immer((set) => ({
+		immer(set => ({
 			...createUserSlice(set),
 		})),
 		{
 			name: "user-storage",
 			version: 1,
-			partialize: (state) => ({ user: state.user }),
-		},
-	),
+			partialize: state => ({ user: state.user }),
+		}
+	)
 );

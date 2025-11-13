@@ -18,19 +18,19 @@ const useFilePreview = () => {
 			const reader = new FileReader();
 			reader.readAsDataURL(file);
 			reader.onload = () => resolve(reader.result);
-			reader.onerror = (error) => reject(error);
+			reader.onerror = error => reject(error);
 		});
 
 	const handlePreview = async (file: UploadFile) => {
 		if (!file.url && !file.preview) {
 			file.preview = (await getBase64Representation(
-				file.originFileObj,
+				file.originFileObj
 			)) as string;
 		}
 		setPreviewImage(file.url || file.preview || "");
 		setPreviewVisibility(true);
 		setPreviewTitle(
-			file.name || file?.url?.substring(file.url.lastIndexOf("/") + 1) || "",
+			file.name || file?.url?.substring(file.url.lastIndexOf("/") + 1) || ""
 		);
 	};
 

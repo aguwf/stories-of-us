@@ -2,6 +2,7 @@
 
 import { useStoryStore } from "@/app/_store/storyStore";
 import { useUserStore } from "@/app/_store/userStore";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
 	Pagination,
 	PaginationContent,
@@ -11,7 +12,6 @@ import {
 	PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { api } from "@/trpc/react";
 import type { StoryType } from "@/types";
@@ -41,7 +41,7 @@ const DEFAULT_TOTAL_ITEMS = 5;
 const reorder = <TList extends unknown[]>(
 	list: TList,
 	startIndex: number,
-	endIndex: number,
+	endIndex: number
 ): TList => {
 	const result = Array.from(list) as TList;
 	const [removed] = result.splice(startIndex, 1);
@@ -52,7 +52,7 @@ const reorder = <TList extends unknown[]>(
 
 const getItemStyle = (
 	isDragging: boolean,
-	draggableStyle: DraggableStyle = {},
+	draggableStyle: DraggableStyle = {}
 ) => ({
 	userSelect: "none" as const,
 	...draggableStyle,
@@ -75,7 +75,7 @@ export default function ListStory({
 	const page = Math.max(+(searchParams.get("page") ?? DEFAULT_PAGE), 1);
 	const totalItems = Math.max(
 		+(searchParams.get("totalItems") ?? DEFAULT_TOTAL_ITEMS),
-		1,
+		1
 	);
 
 	const [stories, { isLoading }] = api.story.getAll.useSuspenseQuery({
@@ -119,7 +119,7 @@ export default function ListStory({
 
 	useEffect(() => {
 		if (storiesStore.length > 0) {
-			const maxSort = Math.max(...storiesStore.map((story) => story.sort ?? 0));
+			const maxSort = Math.max(...storiesStore.map(story => story.sort ?? 0));
 			setMaxIndex(maxSort);
 		}
 	}, [storiesStore, setMaxIndex]);
@@ -135,7 +135,7 @@ export default function ListStory({
 		const newStoryList = reorder(
 			storiesStore,
 			source.index,
-			destination.index,
+			destination.index
 		).map((story, index) => ({ ...story, sort: index }));
 
 		setStories(newStoryList);
@@ -198,7 +198,7 @@ export default function ListStory({
 		<div className="mt-7">
 			<DragDropContext onDragEnd={handleDragEnd}>
 				<Droppable droppableId="story-list">
-					{(droppableProvided) => (
+					{droppableProvided => (
 						<div ref={droppableProvided.innerRef}>
 							{storiesStore.map((item, index) => {
 								const nextItem = storiesStore[index + 1];
@@ -220,7 +220,7 @@ export default function ListStory({
 												{...draggableProvided.dragHandleProps}
 												style={getItemStyle(
 													draggableSnapshot.isDragging,
-													draggableProvided.draggableProps.style,
+													draggableProvided.draggableProps.style
 												)}
 											>
 												<StoryCard
@@ -252,7 +252,7 @@ export default function ListStory({
 							/>
 						</PaginationItem>
 						{Array.from({ length: totalPages }, (_, i) => i + 1).map(
-							(pageNum) => (
+							pageNum => (
 								<PaginationItem key={pageNum}>
 									<PaginationLink
 										onClick={() => handleChangePagination(pageNum)}
@@ -262,7 +262,7 @@ export default function ListStory({
 										{pageNum}
 									</PaginationLink>
 								</PaginationItem>
-							),
+							)
 						)}
 						<PaginationItem>
 							<PaginationNext

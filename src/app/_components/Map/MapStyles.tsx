@@ -1,8 +1,8 @@
-import type { FunctionComponent } from 'react';
+import type { FunctionComponent } from "react";
 
 export const MapStyles: FunctionComponent = () => {
-  return (
-    <style jsx>{`
+	return (
+		<style jsx={true}>{`
       .user-location-marker {
         animation: pulse 2s infinite;
       }
@@ -36,6 +36,5 @@ export const MapStyles: FunctionComponent = () => {
         border-radius: 4px;
       }
     `}</style>
-  );
+	);
 };
-

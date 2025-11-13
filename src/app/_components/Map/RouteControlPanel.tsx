@@ -1,14 +1,7 @@
-import { useState, useEffect, type FunctionComponent } from "react";
+import { type FunctionComponent, useState } from "react";
 import type { RouteData } from "@/types/map.types";
 import { formatRouteInfo } from "@/utils/mapHelpers";
-import {
-  ChevronDown,
-  ChevronUp,
-  X,
-  MapIcon,
-  Share2,
-  Save,
-} from "lucide-react";
+import { ChevronDown, ChevronUp, X, MapIcon, Share2, Save } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 

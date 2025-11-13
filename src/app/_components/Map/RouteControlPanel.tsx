@@ -1,9 +1,10 @@
-import { type FunctionComponent, useState } from "react";
-import type { RouteData } from "@/types/map.types";
-import { formatRouteInfo } from "@/utils/mapHelpers";
-import { ChevronDown, ChevronUp, X, MapIcon, Share2, Save } from "lucide-react";
+import { useState, type FunctionComponent } from "react";
+
 import { cn } from "@/lib/utils";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { formatRouteInfo } from "@/utils/mapHelpers";
+import type { RouteData } from "@/types/map.types";
+import { ChevronDown, ChevronUp, MapIcon, Save, Share2, X } from "lucide-react";
 
 interface RouteControlPanelProps {
   route: RouteData;

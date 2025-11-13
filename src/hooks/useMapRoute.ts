@@ -1,6 +1,7 @@
 import { env } from "@/env";
 import type { DirectionsResponse, RouteData } from "@/types/map.types";
 import { MAP_COLORS } from "@/utils/mapConstants";
+import type * as GeoJSON from "geojson";
 import mapboxgl from "mapbox-gl";
 import { useCallback, useState } from "react";
 
@@ -86,9 +87,9 @@ export const useMapRoute = (mapRef: React.RefObject<mapboxgl.Map | null>) => {
 
 			// Fit map to show entire route
 			const bounds = new mapboxgl.LngLatBounds();
-			route.geometry.coordinates.forEach(coord => {
+			for (const coord of route.geometry.coordinates) {
 				bounds.extend(coord as [number, number]);
-			});
+			}
 			map.fitBounds(bounds, { padding: 50 });
 		},
 		[mapRef]

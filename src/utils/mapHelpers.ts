@@ -1,4 +1,5 @@
 import type { RouteInfo, StoreLocation } from "@/types/map.types";
+import type * as GeoJSON from "geojson";
 
 /**
  * Format route distance and duration for display

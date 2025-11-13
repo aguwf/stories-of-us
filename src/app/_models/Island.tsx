@@ -174,7 +174,6 @@ export function Island({
 	}, [
 		gl,
 		handlePointerDown,
-		handlePointerUp,
 		handlePointerMove,
 		handleKeyDown,
 		handleKeyUp,

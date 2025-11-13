@@ -13,6 +13,7 @@ export const UserLocationButton: FunctionComponent<UserLocationButtonProps> = ({
 
 	return (
 		<button
+			type="button"
 			onClick={onClick}
 			className="absolute bottom-4 right-4 bg-white hover:bg-gray-50 rounded-full shadow-lg p-3 z-10 transition-all hover:scale-105"
 			aria-label="Get my location"

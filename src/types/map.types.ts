@@ -1,3 +1,4 @@
+import type * as GeoJSON from "geojson";
 export interface RouteData {
 	distance: number;
 	duration: number;

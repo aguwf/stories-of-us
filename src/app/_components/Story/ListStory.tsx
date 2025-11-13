@@ -115,7 +115,7 @@ export default function ListStory({
 				setTotalPages(totalPages);
 			}
 		}
-	}, [stories, setStories, setTotalPages, utils.story, user?.id]);
+	}, [stories, setStories, setTotalPages]);
 
 	useEffect(() => {
 		if (storiesStore.length > 0) {

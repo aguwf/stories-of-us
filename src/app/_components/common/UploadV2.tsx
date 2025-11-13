@@ -153,11 +153,11 @@ export const UploadV2: React.FC<UploadV2Props> = ({
 
 		return () => {
 			// Only revoke URLs that we created (blob URLs)
-			newObjectURLs.forEach(url => {
+			for (const url of newObjectURLs) {
 				if (isBlobURL(url)) {
 					URL.revokeObjectURL(url);
 				}
-			});
+			}
 		};
 	}, [fileList]);
 

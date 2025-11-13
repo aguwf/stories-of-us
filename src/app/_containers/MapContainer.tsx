@@ -26,6 +26,7 @@ import {
 import { createPopupHTML, createRouteInfoHTML } from "@/utils/mapPopupHelpers";
 import mapboxgl from "mapbox-gl";
 import { type FunctionComponent, useEffect, useRef, useState } from "react";
+import type * as GeoJSON from "geojson";
 
 interface StoreData {
 	name: string;

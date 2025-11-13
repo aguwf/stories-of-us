@@ -15,7 +15,7 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 	};
 }
 
-export default async function Index() {
+export default function Index() {
 	return (
 		<HydrateClient>
 			<InitializeUser />

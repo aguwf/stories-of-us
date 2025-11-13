@@ -24,11 +24,13 @@ export default function middleware(
 		request.nextUrl.pathname.includes("/sign-up") ||
 		isProtectedRoute(request)
 	) {
-		return clerkMiddleware((auth: () => any, req: NextRequest) => {
-			if (isProtectedRoute(req)) auth().protect();
+		return clerkMiddleware(
+			(auth: () => { protect: () => void }, req: NextRequest) => {
+				if (isProtectedRoute(req)) auth().protect();
 
-			return intlMiddleware(req);
-		})(request, event);
+				return intlMiddleware(req);
+			}
+		)(request, event);
 	}
 
 	return intlMiddleware(request);

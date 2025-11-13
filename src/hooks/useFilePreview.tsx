@@ -13,8 +13,12 @@ const useFilePreview = () => {
 	const [previewImage, setPreviewImage] = useState("");
 	const [previewTitle, setPreviewTitle] = useState("");
 
-	const getBase64Representation = (file: any) =>
-		new Promise((resolve, reject) => {
+	const getBase64Representation = (file?: File) =>
+		new Promise<string | ArrayBuffer | null>((resolve, reject) => {
+			if (!file) {
+				resolve(null);
+				return;
+			}
 			const reader = new FileReader();
 			reader.readAsDataURL(file);
 			reader.onload = () => resolve(reader.result);

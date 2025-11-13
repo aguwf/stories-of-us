@@ -9,7 +9,7 @@ const imageKit = new ImageKit({
 	urlEndpoint: env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
 });
 
-export const handleUploadImage = async (images?: any[]) => {
+export const handleUploadImage = async (images?: File[]) => {
 	if (!images) return;
 
 	if (!images.length) {

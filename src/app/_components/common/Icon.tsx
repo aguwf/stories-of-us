@@ -26,6 +26,7 @@ export function Icon({
 		);
 	}
 	return (
+		// biome-ignore lint/a11y/noSvgWithoutTitle: <explanation>
 		<svg
 			{...props}
 			className={cn("inline self-center w-[1em] h-[1em]", className)}

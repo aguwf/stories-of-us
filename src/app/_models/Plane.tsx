@@ -12,7 +12,7 @@ import type { Mesh } from "three";
 
 type PlaneModelProps = {
 	isRotating: boolean;
-	[key: string]: any;
+	[key: string]: unknown;
 };
 
 export function PlaneModel({ isRotating, ...props }: PlaneModelProps) {

@@ -16,7 +16,7 @@ const Toolbar = ({ showSearch }: { showSearch: boolean }) => {
 	const router = useRouter();
 	const [selectedKeys, setSelectedKeys] = useState<string>("Sort by");
 
-	const handleChangeOrder = (key: any) => {
+	const handleChangeOrder = (key: string) => {
 		setSelectedKeys(key);
 		router.push(`?orderBy=${key}`);
 	};

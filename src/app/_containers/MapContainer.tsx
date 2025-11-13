@@ -24,9 +24,9 @@ import {
 	sanitizeStoreName,
 } from "@/utils/mapHelpers";
 import { createPopupHTML, createRouteInfoHTML } from "@/utils/mapPopupHelpers";
+import type * as GeoJSON from "geojson";
 import mapboxgl from "mapbox-gl";
 import { type FunctionComponent, useEffect, useRef, useState } from "react";
-import type * as GeoJSON from "geojson";
 
 interface StoreData {
 	name: string;

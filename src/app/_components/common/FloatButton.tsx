@@ -12,6 +12,7 @@ const floatButtonVariants: Variants = {
 };
 
 interface FloatButtonProps {
+	id?: string;
 	style?: React.CSSProperties;
 	children?: React.ReactNode;
 	onClick?: () => void;
@@ -145,7 +146,7 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
 						>
 							{buttons.map((buttonProps, index) => (
 								<FloatButton
-									key={`float-button-${index}`}
+									key={buttonProps.id || `button-${index}`}
 									index={index + 1}
 									{...buttonProps}
 									className={"static w-full h-full"}

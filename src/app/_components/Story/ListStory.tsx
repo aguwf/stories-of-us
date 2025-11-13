@@ -154,34 +154,37 @@ export default function ListStory({
 	if (isLoading || !hasFetched) {
 		return (
 			<div className="mt-7 space-y-4">
-				{Array.from({ length: 3 }).map((_, index) => (
-					<Card key={index} className="w-full">
-						<CardHeader className="space-y-3">
-							<div className="flex items-center justify-between">
-								<div className="flex items-center gap-3">
-									<Skeleton className="h-10 w-10 rounded-full" />
-									<div className="space-y-2">
-										<Skeleton className="h-4 w-32" />
-										<Skeleton className="h-3 w-24" />
+				{(() => {
+					const placeholders = ["skeleton-1", "skeleton-2", "skeleton-3"];
+					return placeholders.map(id => (
+						<Card key={id} className="w-full">
+							<CardHeader className="space-y-3">
+								<div className="flex items-center justify-between">
+									<div className="flex items-center gap-3">
+										<Skeleton className="h-10 w-10 rounded-full" />
+										<div className="space-y-2">
+											<Skeleton className="h-4 w-32" />
+											<Skeleton className="h-3 w-24" />
+										</div>
 									</div>
+									<Skeleton className="h-8 w-8 rounded-md" />
 								</div>
-								<Skeleton className="h-8 w-8 rounded-md" />
-							</div>
-						</CardHeader>
-						<CardContent className="space-y-4">
-							<Skeleton className="h-4 w-full" />
-							<Skeleton className="h-4 w-3/4" />
-							<Skeleton className="h-48 w-full rounded-lg" />
-							<div className="flex items-center justify-between pt-2">
-								<div className="flex gap-4">
-									<Skeleton className="h-8 w-16" />
-									<Skeleton className="h-8 w-16" />
+							</CardHeader>
+							<CardContent className="space-y-4">
+								<Skeleton className="h-4 w-full" />
+								<Skeleton className="h-4 w-3/4" />
+								<Skeleton className="h-48 w-full rounded-lg" />
+								<div className="flex items-center justify-between pt-2">
+									<div className="flex gap-4">
+										<Skeleton className="h-8 w-16" />
+										<Skeleton className="h-8 w-16" />
+									</div>
+									<Skeleton className="h-8 w-8" />
 								</div>
-								<Skeleton className="h-8 w-8" />
-							</div>
-						</CardContent>
-					</Card>
-				))}
+							</CardContent>
+						</Card>
+					));
+				})()}
 			</div>
 		);
 	}

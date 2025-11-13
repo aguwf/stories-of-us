@@ -51,6 +51,7 @@ const useStoryModal = ({
 		[utils.story, resetModal]
 	);
 
+	// biome-ignore lint/suspicious/noExplicitAny: <explanation>
 	const handleMutationError = useCallback((error: TRPCClientErrorLike<any>) => {
 		setIsUploading(false);
 		toast.error(error.message || "An error occurred");

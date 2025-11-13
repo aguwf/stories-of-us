@@ -19,6 +19,7 @@ export const UserLocationButton: FunctionComponent<UserLocationButtonProps> = ({
 			aria-label="Get my location"
 			title="Get my location"
 		>
+			{/** biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 			<svg
 				width="24"
 				height="24"

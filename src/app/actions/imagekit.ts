@@ -9,13 +9,13 @@ interface ImageKitSignatureOptions {
 	expireTime?: number;
 }
 
-export function generateImageKitSignature({
+export async function generateImageKitSignature({
 	expireTime = 3600,
-}: ImageKitSignatureOptions = {}): {
+}: ImageKitSignatureOptions = {}): Promise<{
 	signature: string;
 	expire: number;
 	token: string;
-} {
+}> {
 	// Private key
 	const privateKey = env.NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY;
 

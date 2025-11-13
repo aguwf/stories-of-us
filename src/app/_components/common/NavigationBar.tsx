@@ -14,7 +14,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import React from "react";
-import { MenuIcon, Search, User } from "lucide-react";
+import { MenuIcon, User } from "lucide-react";
 
 // Types
 interface NavItem {

@@ -15,32 +15,18 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 interface RouteControlPanelProps {
   route: RouteData;
   onClear: () => void;
-  startPoint?: string;
-  endPoint?: string;
 }
 
 export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
   route,
   onClear,
-  startPoint = "Starting point",
-  endPoint = "Destination",
 }) => {
   const { distanceKm, durationMin } = formatRouteInfo(
     route.distance,
     route.duration
   );
   const [isExpanded, setIsExpanded] = useState(true);
-  const [estimatedArrival, setEstimatedArrival] = useState<string>("");
   const isMobile = useMediaQuery("(max-width: 768px)");
-
-  // Calculate estimated arrival time
-  useEffect(() => {
-    const now = new Date();
-    const arrivalTime = new Date(now.getTime() + durationMin * 60 * 1000);
-    setEstimatedArrival(
-      arrivalTime.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    );
-  }, [durationMin]);
 
   const toggleExpand = () => setIsExpanded(!isExpanded);
 

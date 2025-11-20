@@ -20,11 +20,13 @@ export type FormattingAction =
 interface PostFormattingToolbarProps {
   onAction?: (action: FormattingAction) => void;
   activeActions?: FormattingAction[];
+  className?: string;
 }
 
 export default function PostFormattingToolbar({
   onAction,
   activeActions = [],
+  className = "",
 }: PostFormattingToolbarProps) {
   const tools = [
     {
@@ -72,7 +74,12 @@ export default function PostFormattingToolbar({
   ];
 
   return (
-    <div className="flex flex-wrap gap-1 p-2 bg-muted/30 rounded-md my-2">
+    <div
+      className={`flex flex-wrap items-center gap-2 p-2 bg-muted/30 rounded-md my-2 ${className}`}
+    >
+      <span className="text-xs font-medium text-muted-foreground mr-1">
+        Quick actions
+      </span>
       <TooltipProvider>
         {tools.map((tool) => (
           <Tooltip key={tool.action}>

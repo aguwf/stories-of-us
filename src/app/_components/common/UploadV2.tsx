@@ -7,8 +7,9 @@ import { toast } from "sonner";
 
 // Constants
 const DEFAULT_MAX_FILES = 9;
-const IMAGE_SIZE = 102;
-const ACCEPTED_IMAGE_TYPES = "image/*";
+const MEDIA_SIZE = 102;
+const ACCEPTED_MEDIA_TYPES = "image/*,video/*";
+const VIDEO_EXTENSIONS = ["mp4", "webm", "ogg", "mov", "mkv"];
 
 // Types
 interface UploadV2Props {
@@ -19,6 +20,7 @@ interface UploadV2Props {
 	accept?: string;
 	disabled?: boolean;
 	onMaxFilesReached?: () => void;
+	onPickerReady?: (trigger: () => void) => void;
 }
 
 interface FilePreviewProps {
@@ -42,6 +44,15 @@ const createObjectURL = (file: File | string): string => {
 	return typeof file === "string" ? file : URL.createObjectURL(file);
 };
 
+const isVideoFile = (file: File | string): boolean => {
+	if (file instanceof File) {
+		return file.type.startsWith("video/");
+	}
+
+	const extension = file.split(".").pop()?.toLowerCase() ?? "";
+	return VIDEO_EXTENSIONS.includes(extension);
+};
+
 const isBlobURL = (url: string): boolean => {
 	return url.startsWith("blob:");
 };
@@ -50,16 +61,27 @@ const isBlobURL = (url: string): boolean => {
 const FilePreview = memo<FilePreviewProps>(
 	({ file, index, objectURL, onRemove, disabled = false }) => {
 		const fileName = getFileName(file);
+		const isVideo = isVideoFile(file);
 
 		return (
 			<div className="upload-select relative w-[calc((100%-16px)/3)] text-center transition-all duration-300 ease-in-out">
-				<Image
-					src={objectURL}
-					alt={fileName}
-					width={IMAGE_SIZE}
-					height={IMAGE_SIZE}
-					className="object-cover rounded-lg w-full h-[102px]"
-				/>
+				{isVideo ? (
+					<video
+						src={objectURL}
+						className="object-cover rounded-lg w-full h-[102px]"
+						controls={true}
+						muted={true}
+						playsInline={true}
+					/>
+				) : (
+					<Image
+						src={objectURL}
+						alt={fileName}
+						width={MEDIA_SIZE}
+						height={MEDIA_SIZE}
+						className="object-cover rounded-lg w-full h-[102px]"
+					/>
+				)}
 				{!disabled && (
 					<span className="absolute -top-2 -right-2 cursor-pointer close">
 						<Button
@@ -85,9 +107,10 @@ export const UploadV2: React.FC<UploadV2Props> = ({
 	setFileList,
 	maxFiles = DEFAULT_MAX_FILES,
 	className,
-	accept = ACCEPTED_IMAGE_TYPES,
+	accept = ACCEPTED_MEDIA_TYPES,
 	disabled = false,
 	onMaxFilesReached,
+	onPickerReady,
 }) => {
 	const inputFileRef = useRef<HTMLInputElement>(null);
 	const [objectURLs, setObjectURLs] = useState<string[]>([]);
@@ -110,6 +133,13 @@ export const UploadV2: React.FC<UploadV2Props> = ({
 
 		inputFileRef.current?.click();
 	}, [disabled, isMaxFilesReached, maxFiles, onMaxFilesReached]);
+
+	// Expose picker trigger to parent
+	useEffect(() => {
+		if (onPickerReady) {
+			onPickerReady(handleClickUpload);
+		}
+	}, [handleClickUpload, onPickerReady]);
 
 	// Handle file selection
 	const handleChangeFile = useCallback(

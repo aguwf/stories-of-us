@@ -21,10 +21,20 @@ export const storyRouter = createTRPCRouter({
 			await ctx.db.insert(stories).values({
 				name: input.name ?? "",
 				description: input.description ?? "",
-				coverImage: input.coverImage ?? "",
+				coverImage: input.coverImage ?? input.images[0] ?? "",
 				images: input.images ?? [],
 				sort: input.sort ?? 0,
 				userId,
+				location: input.location,
+				locationLat: input.locationLat,
+				locationLng: input.locationLng,
+				feeling: input.feeling,
+				activity: input.activity,
+				privacy: input.privacy ?? "public",
+				backgroundStyle: input.backgroundStyle,
+				mentionedUsers: input.mentionedUsers ?? [],
+				scheduledPublishTime: input.scheduledPublishTime,
+				postFormat: input.postFormat ?? "standard",
 			});
 		}),
 
@@ -107,16 +117,7 @@ export const storyRouter = createTRPCRouter({
 		}),
 
 	update: protectedProcedure
-		.input(
-			z.object({
-				id: z.number(),
-				name: z.string().optional(),
-				description: z.string().optional(),
-				coverImage: z.string().optional(),
-				images: z.string().array().optional(),
-				sort: z.number().optional(),
-			})
-		)
+		.input(StoryValidation.partial().extend({ id: z.number() }))
 		.mutation(async ({ ctx, input }) => {
 			const userId = ctx.auth?.userId;
 			if (!userId) {
@@ -134,15 +135,35 @@ export const storyRouter = createTRPCRouter({
 				throw new TRPCError({ code: "FORBIDDEN" });
 			}
 
+			const updatePayload: Record<string, unknown> = {};
+			if (input.name !== undefined) updatePayload.name = input.name;
+			if (input.description !== undefined)
+				updatePayload.description = input.description;
+			if (input.coverImage !== undefined)
+				updatePayload.coverImage = input.coverImage;
+			if (input.images !== undefined) updatePayload.images = input.images;
+			if (input.sort !== undefined) updatePayload.sort = input.sort;
+			if (input.location !== undefined) updatePayload.location = input.location;
+			if (input.locationLat !== undefined)
+				updatePayload.locationLat = input.locationLat;
+			if (input.locationLng !== undefined)
+				updatePayload.locationLng = input.locationLng;
+			if (input.feeling !== undefined) updatePayload.feeling = input.feeling;
+			if (input.activity !== undefined)
+				updatePayload.activity = input.activity;
+			if (input.privacy !== undefined) updatePayload.privacy = input.privacy;
+			if (input.backgroundStyle !== undefined)
+				updatePayload.backgroundStyle = input.backgroundStyle;
+			if (input.mentionedUsers !== undefined)
+				updatePayload.mentionedUsers = input.mentionedUsers;
+			if (input.scheduledPublishTime !== undefined)
+				updatePayload.scheduledPublishTime = input.scheduledPublishTime;
+			if (input.postFormat !== undefined)
+				updatePayload.postFormat = input.postFormat;
+
 			await ctx.db
 				.update(stories)
-				.set({
-					name: input.name,
-					description: input.description,
-					coverImage: input.coverImage,
-					images: input.images,
-					sort: input.sort,
-				})
+				.set(updatePayload)
 				.where(eq(stories.id, input.id));
 
 			return {

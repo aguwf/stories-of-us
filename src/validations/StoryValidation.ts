@@ -17,6 +17,8 @@ export const StoryValidation = z.object({
   mentionedUsers: z.array(z.string()).optional(),
   scheduledPublishTime: z.date().optional(),
   postFormat: z.enum(["standard", "background", "poll"]).default("standard"),
+  pollQuestion: z.string().optional(),
+  pollOptions: z.array(z.string()).optional(),
 });
 
 export const StoryFormValidation = z.object({
@@ -32,6 +34,8 @@ export const StoryFormValidation = z.object({
   mentionedUsers: z.array(z.string()).optional(),
   scheduledPublishTime: z.date().optional(),
   postFormat: z.enum(["standard", "background", "poll"]).default("standard"),
+  pollQuestion: z.string().optional(),
+  pollOptions: z.array(z.string()).optional(),
 });
 
 export const EditStoryValidation = z.object({

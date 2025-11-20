@@ -60,6 +60,13 @@ export default function RichTextEditor({
     immediatelyRender: false,
   });
 
+  // Keep editor state in sync when editing existing content
+  React.useEffect(() => {
+    if (editor && content !== editor.getHTML()) {
+      editor.commands.setContent(content || "");
+    }
+  }, [content, editor]);
+
   // Standard text formatting tools
   const textFormatTools = [
     {
@@ -102,7 +109,7 @@ export default function RichTextEditor({
   ];
 
   return (
-    <div className="border rounded-md">
+    <div className="border rounded-md bg-card shadow-sm">
       {/* Text formatting toolbar */}
       <div className="flex flex-wrap gap-1 p-2 bg-muted/30 rounded-md border-b">
         <TooltipProvider>

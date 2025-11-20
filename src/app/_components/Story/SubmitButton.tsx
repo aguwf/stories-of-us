@@ -1,9 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import type { SyntheticEvent } from "react";
 import type { StoryType } from "@/types";
 
 interface SubmitButtonProps {
-	handleSubmit: () => void;
+	handleSubmit?: (event?: SyntheticEvent) => void;
 	isUploading: boolean;
 	selectedStory?: StoryType | null;
 	type?: "submit" | "reset" | "button" | undefined;
@@ -17,16 +18,18 @@ const SubmitButton = ({
 	type,
 	isPending,
 }: SubmitButtonProps) => {
+	const isSubmitType = !type || type === "submit";
+
 	return (
 		<Button
 			className={cn(
 				selectedStory
 					? "bg-pastel-blue hover:bg-pastel-blue"
-					: "bg-purple hover:bg-purple",
+				: "bg-purple hover:bg-purple",
 				isUploading || isPending ? "loading" : ""
 			)}
 			variant={selectedStory ? "outline" : "default"}
-			onClick={handleSubmit}
+			onClick={isSubmitType ? undefined : handleSubmit}
 			isLoading={isUploading || isPending}
 			type={type}
 		>

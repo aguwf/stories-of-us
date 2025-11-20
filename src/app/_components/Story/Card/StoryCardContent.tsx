@@ -1,6 +1,5 @@
 import { MapPin, SmilePlus, Globe } from "lucide-react";
 import { memo } from "react";
-import { cn } from "@/lib/utils";
 
 interface StoryCardContentProps {
   title: string;
@@ -12,9 +11,30 @@ interface StoryCardContentProps {
   postFormat?: "standard" | "background" | "poll";
 }
 
+const sanitizeHTML = (value: string) =>
+  value
+    .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
+    .replace(/on\w+="[^"]*"/gi, "");
+
 const StoryCardContent = memo<StoryCardContentProps>(
   ({ title, description, location, feeling, activity, privacy, postFormat }) => {
     const showMetadata = location || feeling || activity;
+
+    const parsePoll = () => {
+      if (!description) return null;
+      try {
+        const parsed = JSON.parse(description);
+        if (parsed?.question) {
+          return {
+            question: parsed.question as string,
+            options: (parsed.options as string[]) || [],
+          };
+        }
+      } catch {
+        return null;
+      }
+      return null;
+    };
     
     const privacyLabels = {
       public: "Public",
@@ -29,20 +49,29 @@ const StoryCardContent = memo<StoryCardContentProps>(
     };
     
     const renderDescription = () => {
+      if (!description) return null;
+      const safeDescription = sanitizeHTML(description);
+
       if (postFormat === "background" && description) {
         return (
-          <p className="mt-4 p-4 text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg">
-            {description}
-          </p>
+          <div
+            className="mt-4 p-4 text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg prose prose-sm prose-invert max-w-none"
+            dangerouslySetInnerHTML={{ __html: safeDescription }}
+            suppressHydrationWarning
+          />
         );
       }
       
-      return description && (
-        <p className="mt-2 text-sm text-muted-foreground line-clamp-3">
-          {description}
-        </p>
+      return (
+        <div
+          className="mt-2 text-sm text-muted-foreground prose prose-sm max-w-none"
+          dangerouslySetInnerHTML={{ __html: safeDescription }}
+          suppressHydrationWarning
+        />
       );
     };
+
+    const pollData = postFormat === "poll" ? parsePoll() : null;
     
     return (
       <div>
@@ -75,7 +104,24 @@ const StoryCardContent = memo<StoryCardContentProps>(
           </div>
         )}
         
-        {renderDescription()}
+        {pollData ? (
+          <div className="mt-3 rounded-md border bg-muted/40 p-3">
+            <p className="font-semibold text-sm">{pollData.question}</p>
+            <div className="mt-2 space-y-2">
+              {pollData.options?.map((option, idx) => (
+                <div
+                  key={`${option}-${idx}`}
+                  className="flex items-center gap-2 text-sm text-muted-foreground"
+                >
+                  <span className="h-2 w-2 rounded-full bg-primary" />
+                  <span>{option}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          renderDescription()
+        )}
       </div>
     );
   }

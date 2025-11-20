@@ -89,6 +89,13 @@ const confirmDelete = (): boolean => {
 	return window.confirm(DELETE_CONFIRMATION_MESSAGE);
 };
 
+const VIDEO_EXTENSIONS = ["mp4", "mov", "webm", "ogg", "mkv"];
+
+const getMediaType = (src: string): "image" | "video" => {
+	const extension = src.split(".").pop()?.toLowerCase() ?? "";
+	return VIDEO_EXTENSIONS.includes(extension) ? "video" : "image";
+};
+
 // Main Component
 export const StoryCard: React.FC<StoryCardProps> = memo(
 	({ item, setSelectedStory, sort, openModal, setCreateIndex }) => {
@@ -111,7 +118,7 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
 		const mediaItems = useMemo(
 			() =>
 				item.images.map(image => ({
-					type: "image" as const,
+					type: getMediaType(image),
 					src: image,
 				})),
 			[item.images]

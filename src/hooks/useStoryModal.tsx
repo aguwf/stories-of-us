@@ -37,6 +37,9 @@ const useStoryModal = ({
       backgroundStyle: selectedStory?.backgroundStyle ?? "",
       mentionedUsers: selectedStory?.mentionedUsers ?? [],
       postFormat: selectedStory?.postFormat ?? "standard",
+      pollQuestion: "",
+      pollOptions: ["", ""],
+      scheduledPublishTime: selectedStory?.scheduledPublishTime,
     },
   });
 
@@ -55,6 +58,9 @@ const useStoryModal = ({
       backgroundStyle: "",
       mentionedUsers: [],
       postFormat: "standard",
+      pollQuestion: "",
+      pollOptions: ["", ""],
+      scheduledPublishTime: undefined,
     });
     setCreateIndex(null);
     onClose();
@@ -100,6 +106,9 @@ const useStoryModal = ({
         backgroundStyle: selectedStory.backgroundStyle || "",
         mentionedUsers: selectedStory.mentionedUsers || [],
         postFormat: selectedStory.postFormat || "standard",
+        pollQuestion: "",
+        pollOptions: ["", ""],
+        scheduledPublishTime: selectedStory.scheduledPublishTime,
       });
       setFileList(selectedStory.images);
       onOpen();
@@ -139,30 +148,66 @@ const useStoryModal = ({
   };
 
   const createStoryData = useCallback(
-    (allImages: string[]) => ({
-      ...form.getValues(),
-      coverImage: selectedStory?.coverImage || allImages[0] || "",
-      images: allImages,
-      sort:
-        createIndex !== null && createIndex !== undefined
-          ? createIndex
-          : maxIndex !== null && maxIndex !== undefined
-            ? (maxIndex || 0) + 100
-            : 0,
-      ...(createIndex !== null && { index: createIndex }),
-    }),
+    (allImages: string[]) => {
+      const {
+        pollOptions = [],
+        pollQuestion,
+        description,
+        postFormat,
+        scheduledPublishTime,
+        ...restValues
+      } = form.getValues();
+
+      const cleanedOptions = pollOptions
+        ?.map(option => option.trim())
+        .filter(Boolean);
+
+      const pollPrompt = pollQuestion || description || "";
+
+      const descriptionWithPoll =
+        postFormat === "poll" && cleanedOptions.length
+          ? `<p>${pollPrompt}</p><ul>${cleanedOptions
+              .map(option => `<li>${option}</li>`)
+              .join("")}</ul>`
+          : description;
+
+      return {
+        ...restValues,
+        description: descriptionWithPoll,
+        postFormat,
+        scheduledPublishTime: scheduledPublishTime || undefined,
+        coverImage: selectedStory?.coverImage || allImages[0] || "",
+        images: allImages,
+        sort:
+          createIndex !== null && createIndex !== undefined
+            ? createIndex
+            : maxIndex !== null && maxIndex !== undefined
+              ? (maxIndex || 0) + 100
+              : 0,
+        ...(createIndex !== null && { index: createIndex }),
+      };
+    },
     [form, selectedStory, createIndex, maxIndex]
   );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const handleSubmit = useCallback(async () => {
+    const { postFormat, pollOptions = [] } = form.getValues();
+    if (postFormat === "poll") {
+      const validOptions = pollOptions.filter(option => option.trim().length > 0);
+      if (validOptions.length < 2) {
+        toast.error("Please provide at least 2 poll options");
+        return;
+      }
+    }
+
     if (fileList.length === 0) {
       toast.error("You need to select at least one image");
       return;
     }
 
     setIsUploading(true);
-    toast.loading("Uploading...");
+    const toastId = toast.loading("Uploading...");
 
     const existedImages = fileList.filter(
       (file): file is string => typeof file === "string"
@@ -180,7 +225,10 @@ const useStoryModal = ({
       } else {
         await createStory.mutateAsync(storyData);
       }
+      toast.dismiss(toastId);
     } catch (error) {
+      toast.dismiss(toastId);
+      setIsUploading(false);
       // Error already handled in uploadNewImages
       console.error("Submission failed:", error);
     }

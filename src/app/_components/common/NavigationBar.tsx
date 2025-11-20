@@ -1,9 +1,12 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { MenuIcon, User } from "lucide-react";
+import { MenuIcon } from "lucide-react";
 import Link from "next/link";
+import { useLocale } from "next-intl";
 import React from "react";
+
+import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 
 import { TextOnlyLogo } from "@/app/_assets/logos/TextOnlyLogo";
 import { Button } from "@/components/ui/button";
@@ -16,6 +19,7 @@ import {
 	navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { getI18nPath } from "@/utils/helpers";
 
 // Types
 interface NavItem {
@@ -90,6 +94,7 @@ const inputWidthAnimation = {
 
 export default function NavigationBar() {
 	const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+	const locale = useLocale();
 
 	return (
 		<header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -101,20 +106,14 @@ export default function NavigationBar() {
 				<div className="flex flex-1 items-center justify-center md:hidden">
 					<TextOnlyLogo size="text-md" />
 				</div>
-				<div className="flex items-center gap-2 md:hidden">
-					<Button
-						variant="ghost"
-						size="icon"
-						className="hover:bg-transparent focus-visible:ring-0"
-					>
-						<User className="w-5 h-5" />
-						<span className="sr-only">User profile</span>
-					</Button>
+				<div className="flex items-center gap-3 md:hidden">
+					<AuthActions locale={locale} />
 				</div>
-				<div className="hidden md:flex md:flex-1 md:justify-end">
+				<div className="hidden md:flex md:flex-1 md:items-center md:justify-end md:gap-4">
 					<div className="flex-1 w-full md:w-auto md:flex-none">
 						<SearchBar isOpen={isSearchOpen} setIsOpen={setIsSearchOpen} />
 					</div>
+					<AuthActions locale={locale} />
 				</div>
 			</div>
 		</header>
@@ -123,7 +122,7 @@ export default function NavigationBar() {
 
 function MainNav() {
 	return (
-		<div className="hidden mr-4 md:flex">
+		<div className="hidden md:flex md:mr-4">
 			<Link href="/" className="flex items-center mr-6 space-x-2">
 				<motion.span
 					{...logoAnimation}
@@ -147,6 +146,41 @@ function MainNav() {
 					))}
 				</NavigationMenuList>
 			</NavigationMenu>
+		</div>
+	);
+}
+
+function AuthActions({ locale }: { locale: string }) {
+	const signInUrl = getI18nPath("/sign-in", locale);
+	const signUpUrl = getI18nPath("/sign-up", locale);
+	const dashboardUrl = getI18nPath("/dashboard", locale);
+
+	return (
+		<div className="flex items-center gap-2">
+			<SignedOut>
+				<Button
+					variant="outline"
+					size="sm"
+					asChild={true}
+					className="border-border px-4 text-foreground"
+				>
+					<Link href={signInUrl}>Log in</Link>
+				</Button>
+				<Button
+					size="sm"
+					asChild={true}
+					className="px-4 bg-primary text-primary-foreground hover:bg-primary/90"
+				>
+					<Link href={signUpUrl}>Sign up</Link>
+				</Button>
+			</SignedOut>
+			<SignedIn>
+				<UserButton afterSignOutUrl={signInUrl} defaultOpen={false}>
+					<UserButton.MenuItems>
+						<UserButton.Link label="Dashboard" href={dashboardUrl} />
+					</UserButton.MenuItems>
+				</UserButton>
+			</SignedIn>
 		</div>
 	);
 }

@@ -12,6 +12,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Icon } from "../common/Icon";
 import ImageVideoGrid from "../common/ImageVideoGrid/ImageVideoGrid";
+import { useAuth } from "@clerk/nextjs";
 import StoryCardActionMenu, {
 	type ActionMenuKey,
 	type ActionMenuOption,
@@ -101,6 +102,7 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
 	({ item, setSelectedStory, sort, openModal, setCreateIndex }) => {
 		// Hooks
 		const { user } = useUserStore();
+		const { userId: clerkUserId } = useAuth();
 		const utils = api.useUtils();
 
 		// State
@@ -109,7 +111,10 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
 		const [isDeleting, setIsDeleting] = useState(false);
 
 		// Memoized values
-		const userId = useMemo(() => user?.id, [user?.id]);
+		const userId = useMemo(
+			() => user?.id ?? clerkUserId ?? null,
+			[user?.id, clerkUserId]
+		);
 		const dateInfo = useMemo(
 			() => formatDate(item.createdAt),
 			[item.createdAt]

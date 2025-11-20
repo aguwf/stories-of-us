@@ -1,4 +1,3 @@
-import { InitializeUser } from "@/app/_components/InitializeUser";
 import StoryTimelineContainer from "@/app/_containers/StoryTimelineContainer";
 import { HydrateClient } from "@/trpc/server";
 import { getTranslations } from "next-intl/server";
@@ -18,7 +17,6 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 export default function Index() {
 	return (
 		<HydrateClient>
-			<InitializeUser />
 			<StoryTimelineContainer />
 		</HydrateClient>
 	);

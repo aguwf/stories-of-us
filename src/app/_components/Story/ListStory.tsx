@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useRouterHelper } from "@/hooks/useRouterHelper";
 import { api } from "@/trpc/react";
 import type { StoryType } from "@/types";
+import { useAuth } from "@clerk/nextjs";
 import {
 	DragDropContext,
 	Draggable,
@@ -67,6 +68,8 @@ export default function ListStory({
 	setMaxIndex,
 }: ListStoryProps) {
 	const { user } = useUserStore();
+	const { userId: clerkUserId } = useAuth();
+	const currentUserId = user?.id ?? clerkUserId ?? undefined;
 
 	const utils = api.useUtils();
 	const searchParams = useSearchParams();
@@ -84,7 +87,7 @@ export default function ListStory({
 		page,
 		totalItems,
 		sort: "sort",
-		currentUserId: user?.id,
+		currentUserId,
 	});
 
 	const {

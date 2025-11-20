@@ -1,32 +1,38 @@
-import { createTRPCRouter, publicProcedure } from "@/server/api/trpc";
+import { createTRPCRouter, protectedProcedure } from "@/server/api/trpc";
 import { users } from "@/server/db/schema";
 import { UserValidation } from "@/validations/UserValidation";
+import { TRPCError } from "@trpc/server";
 import { eq } from "drizzle-orm";
 
 export const userRouter = createTRPCRouter({
-	create: publicProcedure
+	create: protectedProcedure
 		.input(UserValidation)
 		.mutation(async ({ ctx, input }) => {
-			// First check if user exists
+			const userId = ctx.auth?.userId;
+			if (!userId) {
+				throw new TRPCError({ code: "UNAUTHORIZED" });
+			}
+
+			// Ensure we always reuse the authenticated Clerk user id as our primary key
 			const existingUser = await ctx.db.query.users.findFirst({
-				where: eq(users.email, input.email),
+				where: eq(users.id, userId),
 			});
 
-			// If user exists, return the existing user
 			if (existingUser) {
 				return existingUser;
 			}
 
-			// If user doesn't exist, create new user
-			await ctx.db.insert(users).values({
-				name: input.name ?? "",
-				email: input.email ?? "",
-				emailVerified: new Date(),
-				avatar: input.avatar ?? "",
-			});
+			const [createdUser] = await ctx.db
+				.insert(users)
+				.values({
+					id: userId,
+					name: input.name ?? "",
+					email: input.email ?? "",
+					emailVerified: input.emailVerified ?? new Date(),
+					avatar: input.avatar ?? "",
+				})
+				.returning();
 
-			return ctx.db.query.users.findFirst({
-				where: eq(users.email, input.email),
-			});
+			return createdUser;
 		}),
 });

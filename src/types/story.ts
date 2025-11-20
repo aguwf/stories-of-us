@@ -14,16 +14,16 @@ export interface StoryType {
   updatedAt: Date | null;
 
   // New fields
-  location?: string;
-  locationLat?: number;
-  locationLng?: number;
-  feeling?: string;
-  activity?: string;
-  privacy: "public" | "friends" | "onlyme";
-  backgroundStyle?: string;
-  mentionedUsers?: string[];
-  scheduledPublishTime?: Date;
-  postFormat: "standard" | "background" | "poll";
+  location?: string | null;
+  locationLat?: number | null;
+  locationLng?: number | null;
+  feeling?: string | null;
+  activity?: string | null;
+  privacy: "public" | "friends" | "onlyme" | string;
+  backgroundStyle?: string | null;
+  mentionedUsers?: string[] | null;
+  scheduledPublishTime?: Date | null;
+  postFormat: "standard" | "background" | "poll" | string;
 
   // Virtual fields
   user?: UserType;

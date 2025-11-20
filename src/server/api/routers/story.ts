@@ -3,11 +3,60 @@ import {
 	protectedProcedure,
 	publicProcedure,
 } from "@/server/api/trpc";
-import { hearts, stories } from "@/server/db/schema";
+import { hearts, stories, users } from "@/server/db/schema";
 import { StoryValidation } from "@/validations/StoryValidation";
 import { and, count, eq } from "drizzle-orm";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
+import { clerkClient } from "@clerk/nextjs/server";
+
+type EnsureUserCtx = {
+	auth?: { userId: string | null };
+	db: typeof import("@/server/db").db;
+};
+
+const ensureUserExists = async (ctx: EnsureUserCtx) => {
+	const userId = ctx.auth?.userId;
+	if (!userId) {
+		throw new TRPCError({ code: "UNAUTHORIZED" });
+	}
+
+	const existingUser = await ctx.db.query.users.findFirst({
+		where: eq(users.id, userId),
+	});
+	if (existingUser) {
+		return existingUser;
+	}
+
+	const clerkUser = await clerkClient.users.getUser(userId);
+	const primaryEmail =
+		clerkUser.emailAddresses.find(
+			email => email.id === clerkUser.primaryEmailAddressId
+		) ?? clerkUser.emailAddresses[0];
+
+	const email = primaryEmail?.emailAddress ?? `${userId}@unknown.local`;
+	const name = clerkUser.fullName ?? clerkUser.username ?? email;
+	const avatar = clerkUser.imageUrl ?? "";
+	const emailVerified =
+		primaryEmail?.verification?.status === "verified"
+			? new Date()
+			: new Date();
+
+	await ctx.db
+		.insert(users)
+		.values({
+			id: userId,
+			name,
+			email,
+			emailVerified,
+			avatar,
+		})
+		.onConflictDoNothing();
+
+	return ctx.db.query.users.findFirst({
+		where: eq(users.id, userId),
+	});
+};
 
 export const storyRouter = createTRPCRouter({
 	create: protectedProcedure
@@ -17,6 +66,8 @@ export const storyRouter = createTRPCRouter({
 			if (!userId) {
 				throw new TRPCError({ code: "UNAUTHORIZED" });
 			}
+
+			await ensureUserExists(ctx);
 
 			await ctx.db.insert(stories).values({
 				name: input.name ?? "",
@@ -204,6 +255,8 @@ export const storyRouter = createTRPCRouter({
 			if (!userId) {
 				throw new TRPCError({ code: "UNAUTHORIZED" });
 			}
+
+			await ensureUserExists(ctx);
 
 			const existingHeart = await ctx.db.query.hearts.findFirst({
 				where: hearts =>

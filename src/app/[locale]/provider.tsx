@@ -1,7 +1,6 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
-import { InitializeUser } from "../_components/InitializeUser";
 import { useThemeStore } from "../_store/clientStore";
 
 export default function Provider({ children }: { children: React.ReactNode }) {
@@ -14,7 +13,6 @@ export default function Provider({ children }: { children: React.ReactNode }) {
 			enableSystem={true}
 			forcedTheme={themeStore}
 		>
-			<InitializeUser />
 			{children}
 		</ThemeProvider>
 	);

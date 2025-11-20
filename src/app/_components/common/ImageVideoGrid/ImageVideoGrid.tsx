@@ -44,11 +44,9 @@ const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({
 					return (
 						<MediaDialog
 							key={index}
-							item={item}
 							index={index}
 							items={items}
 							story={story}
-							itemCount={itemCount}
 							selectedIndex={selectedIndex}
 							onOpenChange={open => !open && setSelectedIndex(null)}
 						>

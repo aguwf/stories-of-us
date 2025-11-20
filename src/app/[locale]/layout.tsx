@@ -10,71 +10,96 @@ import { NextIntlClientProvider, useMessages } from "next-intl";
 import { Poppins } from "next/font/google";
 import { notFound } from "next/navigation";
 import Provider from "./provider";
+import { ClerkProvider } from "@clerk/nextjs";
+import { enUS, frFR } from "@clerk/localizations";
 
 export const metadata: Metadata = {
-	title: "Stories of Us",
-	description: "Create by AGuwf",
-	icons: [
-		{
-			rel: "apple-touch-icon",
-			url: "/apple-touch-icon.png",
-		},
-		{
-			rel: "icon",
-			type: "image/png",
-			sizes: "32x32",
-			url: "/favicon-32x32.png",
-		},
-		{
-			rel: "icon",
-			type: "image/png",
-			sizes: "16x16",
-			url: "/favicon-16x16.png",
-		},
-		{
-			rel: "icon",
-			url: "/favicon.ico",
-		},
-	],
-	manifest: "/manifest.json",
+  title: "Stories of Us",
+  description: "Create by AGuwf",
+  icons: [
+    {
+      rel: "apple-touch-icon",
+      url: "/apple-touch-icon.png",
+    },
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "32x32",
+      url: "/favicon-32x32.png",
+    },
+    {
+      rel: "icon",
+      type: "image/png",
+      sizes: "16x16",
+      url: "/favicon-16x16.png",
+    },
+    {
+      rel: "icon",
+      url: "/favicon.ico",
+    },
+  ],
+  manifest: "/manifest.json",
 };
 
 const poppinsFont = Poppins({
-	subsets: ["latin"],
-	weight: ["400", "500", "600", "700"],
-	variable: "--font-poppins",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
 });
 
 export default function RootLayout(props: {
-	children: React.ReactNode;
-	params: { locale: string };
+  children: React.ReactNode;
+  params: { locale: string };
 }) {
-	// Validate that the incoming `locale` parameter is valid
-	if (!AppConfig.locales.includes(props.params.locale)) notFound();
+  let clerkLocale = enUS;
+  let signInUrl = "/sign-in";
+  let signUpUrl = "/sign-up";
+  let dashboardUrl = "/dashboard";
 
-	// Using internationalization in Client Components
-	const messages = useMessages();
+  if (props.params.locale === "fr") {
+    clerkLocale = frFR;
+  }
 
-	return (
-		<html lang={props.params.locale} suppressHydrationWarning={true}>
-			<body
-				className={`min-h-screen bg-background antialiased ${poppinsFont.className}`}
-			>
-				<TRPCReactProvider>
-					<NextIntlClientProvider
-						locale={props.params.locale}
-						messages={messages}
-					>
-						<Provider>
-							{props.children}
-							<Toaster />
-						</Provider>
-					</NextIntlClientProvider>
-				</TRPCReactProvider>
-				<SpeedInsights />
-			</body>
-		</html>
-	);
+  if (props.params.locale !== "en") {
+    signInUrl = `/${props.params.locale}${signInUrl}`;
+    signUpUrl = `/${props.params.locale}${signUpUrl}`;
+    dashboardUrl = `/${props.params.locale}${dashboardUrl}`;
+  }
+
+  // Validate that the incoming `locale` parameter is valid
+  if (!AppConfig.locales.includes(props.params.locale)) notFound();
+
+  // Using internationalization in Client Components
+  const messages = useMessages();
+
+  return (
+    <ClerkProvider
+      localization={clerkLocale}
+      signInUrl={signInUrl}
+      signUpUrl={signUpUrl}
+      signInFallbackRedirectUrl={dashboardUrl}
+      signUpFallbackRedirectUrl={dashboardUrl}
+    >
+      <html lang={props.params.locale} suppressHydrationWarning={true}>
+        <body
+          className={`min-h-screen bg-background antialiased ${poppinsFont.className}`}
+        >
+          <TRPCReactProvider>
+            <NextIntlClientProvider
+              locale={props.params.locale}
+              messages={messages}
+            >
+              <Provider>
+                {props.children}
+                <Toaster />
+              </Provider>
+            </NextIntlClientProvider>
+          </TRPCReactProvider>
+          <SpeedInsights />
+        </body>
+      </html>
+    </ClerkProvider>
+  );
 }
 
 // Enable edge runtime but you are required to disable the `migrate` function in `src/libs/DB.ts`

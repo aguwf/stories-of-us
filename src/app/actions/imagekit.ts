@@ -18,7 +18,7 @@ export async function generateImageKitSignature({
   token: string;
 }> {
   // Private key
-  const privateKey = env.NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY;
+  const privateKey = env.IMAGEKIT_PRIVATE_KEY;
 
   if (!privateKey) {
     throw new Error("Missing ImageKit private key");

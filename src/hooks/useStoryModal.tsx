@@ -1,5 +1,4 @@
 import type { CreateStoryModalProps } from "@/app/_components/modals/CreateStoryModal";
-import { useUserStore } from "@/app/_store/userStore";
 import useDisclosure from "@/hooks/useDisclosure";
 import { api } from "@/trpc/react";
 import { handleUploadImage } from "@/utils/uploadHelper";
@@ -23,7 +22,6 @@ const useStoryModal = ({
   const [fileList, setFileList] = useState<(File | string)[]>([]);
   const [isUploading, setIsUploading] = useState(false);
   const utils = api.useUtils();
-  const { user } = useUserStore();
 
   const form = useForm<StoryFormData>({
     resolver: zodResolver(StoryFormValidation),
@@ -145,11 +143,15 @@ const useStoryModal = ({
       ...form.getValues(),
       coverImage: selectedStory?.coverImage || allImages[0] || "",
       images: allImages,
-      sort: createIndex ?? maxIndex ? (maxIndex || 0) + 100 : 0,
-      userId: user?.id || "default-id",
+      sort:
+        createIndex !== null && createIndex !== undefined
+          ? createIndex
+          : maxIndex !== null && maxIndex !== undefined
+            ? (maxIndex || 0) + 100
+            : 0,
       ...(createIndex !== null && { index: createIndex }),
     }),
-    [form, selectedStory, createIndex, maxIndex, user]
+    [form, selectedStory, createIndex, maxIndex]
   );
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>

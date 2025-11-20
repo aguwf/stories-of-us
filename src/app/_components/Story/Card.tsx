@@ -187,7 +187,7 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
 				toast.error("Please sign in to like stories");
 				return;
 			}
-			toggleHeart.mutate({ storyId: item.id, userId });
+			toggleHeart.mutate({ storyId: item.id });
 		}, [toggleHeart, item.id, userId]);
 
 		const handleBookmarkStory = useCallback(() => {

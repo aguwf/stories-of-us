@@ -5,7 +5,7 @@ export const StoryValidation = z.object({
   description: z.string().min(1).optional(),
   coverImage: z.string().min(1).optional(),
   images: z.array(z.string().min(1)),
-  userId: z.string().min(1),
+  userId: z.string().min(1).optional(),
   sort: z.number().optional(),
   location: z.string().optional(),
   locationLat: z.number().optional(),

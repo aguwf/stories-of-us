@@ -8,7 +8,7 @@
  */
 
 import { db } from "@/server/db";
-import { initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
@@ -24,8 +24,13 @@ import { ZodError } from "zod";
  *
  * @see https://trpc.io/docs/server/context
  */
+type AuthContext = {
+	userId: string | null;
+};
+
 export const createTRPCContext = (opts: {
 	headers: Headers;
+	auth?: AuthContext;
 }) => {
 	return {
 		db,
@@ -117,14 +122,16 @@ export const publicProcedure = t.procedure.use(timingMiddleware);
  */
 export const protectedProcedure = t.procedure
 	.use(timingMiddleware)
-	.use(({ next }) => {
-		// if (!ctx.session || !ctx.session.user) {
-		//   throw new TRPCError({ code: "UNAUTHORIZED" });
-		// }
+	.use(({ ctx, next }) => {
+		const userId = ctx.auth?.userId;
+
+		if (!userId) {
+			throw new TRPCError({ code: "UNAUTHORIZED" });
+		}
+
 		return next({
 			ctx: {
-				// infers the `session` as non-nullable
-				// session: { ...ctx.session, user: ctx.session.user },
+				...ctx,
 			},
 		});
 	});

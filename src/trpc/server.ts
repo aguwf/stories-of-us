@@ -3,6 +3,7 @@ import "server-only";
 import { createHydrationHelpers } from "@trpc/react-query/rsc";
 import { headers } from "next/headers";
 import { cache } from "react";
+import { auth } from "@clerk/nextjs/server";
 
 import { type AppRouter, createCaller } from "@/server/api/root";
 import { createTRPCContext } from "@/server/api/trpc";
@@ -18,6 +19,7 @@ const createContext = cache(() => {
 
 	return createTRPCContext({
 		headers: heads,
+		auth: auth(),
 	});
 });
 

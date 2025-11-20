@@ -10,6 +10,7 @@ export const env = createEnv({
 		POSTGRES_URL: z.string().url(),
 		QSTASH_URL: z.string().url(),
 		QSTASH_TOKEN: z.string().min(1),
+		IMAGEKIT_PRIVATE_KEY: z.string().min(1),
 		NODE_ENV: z
 			.enum(["development", "test", "production"])
 			.default("development"),
@@ -23,7 +24,6 @@ export const env = createEnv({
 	client: {
 		// NEXT_PUBLIC_CLIENTVAR: z.string(),
 		NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY: z.string(),
-		NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY: z.string(),
 		NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT: z.string().url(),
 		NEXT_PUBLIC_API_NINJAS_API_KEY: z.string(),
 		NEXT_PUBLIC_WEATHER_API_KEY: z.string(),
@@ -38,11 +38,10 @@ export const env = createEnv({
 		POSTGRES_URL: process.env.POSTGRES_URL,
 		QSTASH_URL: process.env.QSTASH_URL,
 		QSTASH_TOKEN: process.env.QSTASH_TOKEN,
+		IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY,
 		NODE_ENV: process.env.NODE_ENV,
 		NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY:
 			process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
-		NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY:
-			process.env.NEXT_PUBLIC_IMAGEKIT_PRIVATE_KEY,
 		NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT:
 			process.env.NEXT_PUBLIC_IMAGEKIT_URL_ENDPOINT,
 		NEXT_PUBLIC_API_NINJAS_API_KEY: process.env.NEXT_PUBLIC_API_NINJAS_API_KEY,

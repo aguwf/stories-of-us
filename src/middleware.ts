@@ -19,10 +19,13 @@ export default function middleware(
 	request: NextRequest,
 	event: NextFetchEvent
 ) {
+	const isTrpcRoute = request.nextUrl.pathname.includes("/api/trpc");
+
 	if (
 		request.nextUrl.pathname.includes("/sign-in") ||
 		request.nextUrl.pathname.includes("/sign-up") ||
-		isProtectedRoute(request)
+		isProtectedRoute(request) ||
+		isTrpcRoute
 	) {
 		return clerkMiddleware(
 			(auth: () => { protect: () => void }, req: NextRequest) => {

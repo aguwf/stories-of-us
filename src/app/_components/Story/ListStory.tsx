@@ -96,25 +96,15 @@ export default function ListStory({
 
 	const [hasFetched, setHasFetched] = useState(false);
 
-	const updateStory = api.story.update.useMutation({
-		onSuccess: async () => {
-			// Reset state
-			setSelectedStory(null);
-			setCreateIndex(null);
-			toast.success("Update successfully");
-			await utils.story.invalidate();
-		},
-	});
+	const updateStory = api.story.update.useMutation();
 
 	useEffect(() => {
 		if ("storyList" in stories) {
 			// Type guard
 			const { storyList, totalPages } = stories;
 			setHasFetched(true);
-			if (storyList?.length > 0) {
-				setStories(storyList);
-				setTotalPages(totalPages);
-			}
+			setStories(storyList ?? []);
+			setTotalPages(totalPages);
 		}
 	}, [stories, setStories, setTotalPages]);
 
@@ -129,7 +119,7 @@ export default function ListStory({
 		push("page", page.toString());
 	};
 
-	const handleDragEnd = (result: DropResult) => {
+	const handleDragEnd = async (result: DropResult) => {
 		const { source, destination } = result;
 		if (!destination || source.index === destination.index) return;
 
@@ -140,16 +130,23 @@ export default function ListStory({
 		).map((story, index) => ({ ...story, sort: index }));
 
 		setStories(newStoryList);
-		("");
-
-		updateStory.mutate({
-			id: storiesStore[source.index]?.id ?? 0,
-			sort: newStoryList[destination.index]?.sort ?? 0,
-		});
-		updateStory.mutate({
-			id: storiesStore[destination.index]?.id ?? 0,
-			sort: newStoryList[source.index]?.sort ?? 0,
-		});
+		try {
+			await Promise.all(
+				newStoryList.map(story =>
+					updateStory.mutateAsync({
+						id: story.id,
+						sort: story.sort ?? 0,
+					})
+				)
+			);
+			toast.success("Order updated");
+			await utils.story.invalidate();
+			setSelectedStory(null);
+			setCreateIndex(null);
+		} catch (error) {
+			console.error("Failed to update order", error);
+			toast.error("Failed to update order");
+		}
 	};
 
 	if (isLoading || !hasFetched) {
@@ -203,10 +200,8 @@ export default function ListStory({
 						<div ref={droppableProvided.innerRef}>
 							{storiesStore.map((item, index) => {
 								const nextItem = storiesStore[index + 1];
-								const nextSort = nextItem
-									? nextItem.sort ?? 0 + 1
-									: item.sort ?? 0 + 1;
-								const sort = (item.sort ?? 0 + nextSort) / 2;
+								const nextSort = (nextItem?.sort ?? item.sort ?? 0) + 1;
+								const sort = ((item.sort ?? 0) + nextSort) / 2;
 								// const isLastItem = index === storiesStore.length - 1;
 								return (
 									<Draggable

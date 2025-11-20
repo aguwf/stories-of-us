@@ -1,1 +1,0 @@
-ALTER TABLE "stories-of-us_story" DROP CONSTRAINT "stories-of-us_story_sort_unique";

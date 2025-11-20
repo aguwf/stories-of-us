@@ -38,14 +38,25 @@
 		"@radix-ui/react-navigation-menu": "^1.2.1",
 		"@radix-ui/react-popover": "^1.1.2",
 		"@radix-ui/react-radio-group": "^1.2.1",
+		"@radix-ui/react-scroll-area": "^1.2.10",
 		"@radix-ui/react-slot": "^1.2.4",
+		"@radix-ui/react-tabs": "^1.1.13",
 		"@radix-ui/react-toast": "^1.2.2",
+		"@radix-ui/react-tooltip": "^1.2.8",
 		"@react-spring/three": "^9.7.4",
 		"@react-three/drei": "^9.112.0",
 		"@react-three/fiber": "^8.17.6",
 		"@serwist/next": "^9.0.5",
 		"@t3-oss/env-nextjs": "^0.10.1",
 		"@tanstack/react-query": "^5.51.15",
+		"@tiptap/extension-bullet-list": "^3.10.8",
+		"@tiptap/extension-image": "^3.10.8",
+		"@tiptap/extension-link": "^3.10.8",
+		"@tiptap/extension-ordered-list": "^3.10.8",
+		"@tiptap/extension-placeholder": "^3.10.8",
+		"@tiptap/pm": "^3.10.8",
+		"@tiptap/react": "^3.10.8",
+		"@tiptap/starter-kit": "^3.10.8",
 		"@trpc/client": "^11.0.0-rc.467",
 		"@trpc/react-query": "^11.0.0-rc.467",
 		"@trpc/server": "^11.0.0-rc.467",
@@ -114,7 +125,9 @@
 		"initVersion": "7.36.2"
 	},
 	"release": {
-		"branches": ["main"],
+		"branches": [
+			"main"
+		],
 		"plugins": [
 			[
 				"@semantic-release/commit-analyzer",
@@ -134,5 +147,6 @@
 			"@semantic-release/github"
 		]
 	},
-	"module": "index.ts"
+	"module": "index.ts",
+	"packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

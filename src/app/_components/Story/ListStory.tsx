@@ -26,6 +26,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { StoryCard } from "./Card";
+import EmptyTimelineState from "@/app_components/Story/EmptyTimelineState";
 
 interface ListStoryProps {
 	setSelectedStory: (story: StoryType | null) => void;
@@ -189,12 +190,9 @@ export default function ListStory({
 		);
 	}
 
+	// In ListStory.tsx, replace:
 	if (hasFetched && !storiesStore?.length) {
-		return (
-			<div className="flex h-[50vh] items-center justify-center">
-				<h1 className="text-2xl">No stories found</h1>
-			</div>
-		);
+		return <EmptyTimelineState openCreateModal={openModal} />;
 	}
 
 	return (

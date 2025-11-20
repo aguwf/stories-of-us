@@ -33,6 +33,16 @@ export const stories = createTable("story", {
 	updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
 		() => new Date()
 	),
+	location: varchar("location", { length: 256 }),
+	locationLat: real("location_lat"),
+	locationLng: real("location_lng"),
+	feeling: varchar("feeling", { length: 100 }),
+	activity: varchar("activity", { length: 100 }),
+	privacy: varchar("privacy", { length: 50 }).default("public").notNull(),
+	backgroundStyle: text("background_style"),
+	mentionedUsers: text("mentioned_users").array().default(sql`'{}'::text[]`),
+	scheduledPublishTime: timestamp("scheduled_publish_time", { withTimezone: true }),
+	postFormat: varchar("post_format", { length: 50 }).default("standard").notNull(),
 });
 
 export const storiesRelations = relations(stories, ({ one, many }) => ({
@@ -151,7 +161,7 @@ export const heartsRelations = relations(hearts, ({ one }) => ({
 
 export const comments = createTable("comment", {
 	id: serial("id").primaryKey(),
-	userId: integer("user_id")
+	userId: varchar("user_id", { length: 255 }) // Changed from integer to varchar to match users.id type
 		.notNull()
 		.references(() => users.id),
 	storyId: integer("story_id")

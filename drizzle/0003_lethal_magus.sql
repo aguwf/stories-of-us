@@ -1,1 +1,0 @@
-ALTER TABLE "stories-of-us_story" ALTER COLUMN "sort" SET DATA TYPE real;

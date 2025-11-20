@@ -175,11 +175,7 @@ function AuthActions({ locale }: { locale: string }) {
 				</Button>
 			</SignedOut>
 			<SignedIn>
-				<UserButton afterSignOutUrl={signInUrl} defaultOpen={false}>
-					<UserButton.MenuItems>
-						<UserButton.Link label="Dashboard" href={dashboardUrl} />
-					</UserButton.MenuItems>
-				</UserButton>
+				<UserButton defaultOpen={false} />
 			</SignedIn>
 		</div>
 	);

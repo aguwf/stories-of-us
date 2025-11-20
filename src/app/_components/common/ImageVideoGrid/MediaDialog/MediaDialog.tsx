@@ -294,7 +294,7 @@ export const MediaDialog: React.FC<MediaDialogProps> = ({
 										className="gap-2"
 										onClick={handleShare}
 									>
-										<Icon name="share-outline" className="h-4 w-4" />
+										<Icon name="square-share-line-outline" className="h-4 w-4" />
 										Share
 									</Button>
 									<Button

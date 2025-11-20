@@ -20,7 +20,7 @@ import FeelingActivityPicker from "@/app_components/Story/FeelingActivityPicker"
 import LocationPicker from "@/app_components/Story/LocationPicker";
 import PrivacySelector from "@/app_components/Story/PrivacySelector";
 import RichTextEditor from "@/app_components/Story/RichTextEditor";
-import { FormattingAction } from "@/app_components/Story/PostFormattingToolbar";
+import type { FormattingAction } from "@/app_components/Story/PostFormattingToolbar";
 import {
 	forwardRef,
 	useCallback,

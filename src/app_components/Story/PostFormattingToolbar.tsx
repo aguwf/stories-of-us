@@ -83,7 +83,7 @@ export default function PostFormattingToolbar({
       <TooltipProvider>
         {tools.map((tool) => (
           <Tooltip key={tool.action}>
-            <TooltipTrigger asChild>
+            <TooltipTrigger asChild={true}>
               <Button
                 variant={tool.isActive ? "secondary" : "ghost"}
                 size="sm"

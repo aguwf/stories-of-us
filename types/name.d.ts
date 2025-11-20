@@ -3,6 +3,7 @@
 export type IconName =
 	| "bookmark-filled"
 	| "bookmark-outline"
+	| "close-outline"
 	| "copy-outline"
 	| "eye-outline"
 	| "filter-outline"
@@ -11,7 +12,11 @@ export type IconName =
 	| "insert-outline"
 	| "magnifer-outline"
 	| "menu-dots-outline"
+	| "moon-svgrepo-com"
 	| "pen-outline"
+	| "settings-svgrepo-com"
 	| "square-share-line-outline"
+	| "sun-svgrepo-com"
+	| "time-outline"
 	| "trash-outline"
 	| "user-outline";

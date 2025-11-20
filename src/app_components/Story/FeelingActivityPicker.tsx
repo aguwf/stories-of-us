@@ -70,7 +70,7 @@ export default function FeelingActivityPicker({
         </div>
       ) : (
         <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
+          <PopoverTrigger asChild={true}>
             <Button
               variant="outline"
               size="sm"

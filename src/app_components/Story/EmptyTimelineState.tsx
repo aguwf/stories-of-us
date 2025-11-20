@@ -13,9 +13,9 @@ export default function EmptyTimelineState({ openCreateModal }: EmptyTimelineSta
         <Image 
           src="/assets/images/empty-timeline.svg" 
           alt="Empty Timeline" 
-          fill
+          fill={true}
           className="object-contain"
-          priority
+          priority={true}
         />
       </div>
       <h2 className="text-3xl font-bold mb-2 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">Your Timeline Awaits</h2>

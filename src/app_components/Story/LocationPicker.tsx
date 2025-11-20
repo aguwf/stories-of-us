@@ -44,7 +44,7 @@ export default function LocationPicker({ location, onLocationChange }: LocationP
         </div>
       ) : (
         <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild>
+          <PopoverTrigger asChild={true}>
             <Button variant="outline" size="sm" className="gap-2 text-muted-foreground">
               <MapPin size={14} />
               Add location

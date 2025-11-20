@@ -224,7 +224,7 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
 					>
 						<div className="flex justify-between items-start">
 							<StoryCardUserInfo
-								userName={item?.user?.name}
+								userName={item?.user?.name || "Unknown User"}
 								userAvatar={item?.user?.avatar || ""}
 								dateInfo={dateInfo}
 							/>
@@ -242,13 +242,13 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
 						/>
 						<ImageVideoGrid items={mediaItems} story={item} className="mt-4" />
 						<StoryCardActions
-							isLiked={isLiked}
+							isLiked={isLiked ?? false}
 							isBookmarked={isBookmarked}
 							onLike={handleLikeStory}
 							onBookmark={handleBookmarkStory}
 						/>
 						<StoryCardStats
-							heartCount={item?.heartCount}
+							heartCount={item?.heartCount || 0}
 							viewCount={0}
 							shareCount={0}
 						/>

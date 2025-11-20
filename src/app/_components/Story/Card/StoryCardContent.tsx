@@ -57,7 +57,7 @@ const StoryCardContent = memo<StoryCardContentProps>(
           <div
             className="mt-4 p-4 text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg prose prose-sm prose-invert max-w-none"
             dangerouslySetInnerHTML={{ __html: safeDescription }}
-            suppressHydrationWarning
+            suppressHydrationWarning={true}
           />
         );
       }
@@ -66,7 +66,7 @@ const StoryCardContent = memo<StoryCardContentProps>(
         <div
           className="mt-2 text-sm text-muted-foreground prose prose-sm max-w-none"
           dangerouslySetInnerHTML={{ __html: safeDescription }}
-          suppressHydrationWarning
+          suppressHydrationWarning={true}
         />
       );
     };

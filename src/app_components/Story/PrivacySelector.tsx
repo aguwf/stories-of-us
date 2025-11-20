@@ -48,7 +48,7 @@ export default function PrivacySelector({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+      <DropdownMenuTrigger asChild={true}>
         <Button variant="outline" size="sm" className="gap-2">
           {selectedOption?.icon}
           {selectedOption?.label}

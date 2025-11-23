@@ -165,7 +165,7 @@ const useStoryModal = ({
       const pollPrompt = pollQuestion || description || "";
 
       const descriptionWithPoll =
-        postFormat === "poll" && cleanedOptions.length
+        postFormat === "poll" && cleanedOptions?.length
           ? `<p>${pollPrompt}</p><ul>${cleanedOptions
               .map(option => `<li>${option}</li>`)
               .join("")}</ul>`
@@ -194,8 +194,8 @@ const useStoryModal = ({
   const handleSubmit = useCallback(async () => {
     const { postFormat, pollOptions = [] } = form.getValues();
     if (postFormat === "poll") {
-      const validOptions = pollOptions.filter(option => option.trim().length > 0);
-      if (validOptions.length < 2) {
+      const validOptions = pollOptions?.filter(option => option.trim().length > 0);
+      if (validOptions && validOptions.length < 2) {
         toast.error("Please provide at least 2 poll options");
         return;
       }

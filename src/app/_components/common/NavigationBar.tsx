@@ -153,7 +153,7 @@ function MainNav() {
 function AuthActions({ locale }: { locale: string }) {
 	const signInUrl = getI18nPath("/sign-in", locale);
 	const signUpUrl = getI18nPath("/sign-up", locale);
-	const dashboardUrl = getI18nPath("/dashboard", locale);
+	// const dashboardUrl = getI18nPath("/dashboard", locale);
 
 	return (
 		<div className="flex items-center gap-2">

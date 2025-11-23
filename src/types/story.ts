@@ -5,13 +5,13 @@ export interface StoryType {
   // Existing fields
   id: number;
   name: string;
-  description: string | null;
+  description?: string | null;
   coverImage: string;
   images: string[];
   userId: string;
-  sort: number | null;
+  sort?: number | null;
   createdAt: Date;
-  updatedAt: Date | null;
+  updatedAt?: Date | null;
 
   // New fields
   location?: string | null;
@@ -19,11 +19,11 @@ export interface StoryType {
   locationLng?: number | null;
   feeling?: string | null;
   activity?: string | null;
-  privacy: "public" | "friends" | "onlyme" | string;
+  privacy: "public" | "friends" | "onlyme";
   backgroundStyle?: string | null;
   mentionedUsers?: string[] | null;
   scheduledPublishTime?: Date | null;
-  postFormat: "standard" | "background" | "poll" | string;
+  postFormat: "standard" | "background" | "poll";
 
   // Virtual fields
   user?: UserType;

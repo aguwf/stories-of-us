@@ -528,7 +528,7 @@ const CreateStoryModal = forwardRef<CreateStoryModalRef, CreateStoryModalProps>(
 							<SubmitButton
 								isUploading={isUploading}
 								type="submit"
-								handleSubmit={handleFormSubmit}
+								handleSubmit={handleFormSubmit as any}
 								selectedStory={selectedStory}
 							/>
 						</DialogFooter>

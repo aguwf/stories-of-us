@@ -3,7 +3,7 @@ import { memo } from "react";
 
 interface StoryCardContentProps {
   title: string;
-  description: string | null;
+  description?: string | null;
   location?: string;
   feeling?: string;
   activity?: string;

@@ -27,7 +27,7 @@ import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { StoryCard } from "./Card";
-import EmptyTimelineState from "@/app_components/Story/EmptyTimelineState";
+import EmptyTimelineState from "@/app/_components/Story/EmptyTimelineState";
 
 interface ListStoryProps {
 	setSelectedStory: (story: StoryType | null) => void;

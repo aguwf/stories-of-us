@@ -16,11 +16,11 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import useStoryModal from "@/hooks/useStoryModal";
 import type { StoryType } from "@/types";
-import FeelingActivityPicker from "@/app_components/Story/FeelingActivityPicker";
-import LocationPicker from "@/app_components/Story/LocationPicker";
-import PrivacySelector from "@/app_components/Story/PrivacySelector";
-import RichTextEditor from "@/app_components/Story/RichTextEditor";
-import type { FormattingAction } from "@/app_components/Story/PostFormattingToolbar";
+import FeelingActivityPicker from "@/app/_components/Story/FeelingActivityPicker";
+import LocationPicker from "@/app/_components/Story/LocationPicker";
+import PrivacySelector from "@/app/_components/Story/PrivacySelector";
+import RichTextEditor from "@/app/_components/Story/RichTextEditor";
+import type { FormattingAction } from "@/app/_components/Story/PostFormattingToolbar";
 import {
 	forwardRef,
 	useCallback,

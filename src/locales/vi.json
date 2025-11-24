@@ -1,0 +1,75 @@
+{
+	"RootLayout": {
+		"home_link": "Trang chủ",
+		"about_link": "Giới thiệu",
+		"guestbook_link": "Sổ lưu bút",
+		"portfolio_link": "Danh mục",
+		"sign_in_link": "Đăng nhập",
+		"sign_up_link": "Đăng ký"
+	},
+	"BaseTemplate": {
+		"description": "Ngôi nhà kể chuyện của chúng tôi",
+		"made_with": "Được làm với"
+	},
+	"Index": {
+		"meta_title": "Stories of Us",
+		"meta_description": "Chào mừng đến với Stories of Us, nơi bạn có thể chia sẻ hành trình cuộc đời và kết nối với mọi người. Khám phá thế giới những câu chuyện, tìm cảm hứng và xây dựng các mối liên kết ý nghĩa.",
+		"title": "Stories of Us",
+		"description": "Chào mừng đến với Stories of Us, nơi bạn có thể chia sẻ hành trình cuộc đời và kết nối với mọi người. Khám phá thế giới những câu chuyện, tìm cảm hứng và xây dựng các mối liên kết ý nghĩa.",
+		"explore_stories": "Khám phá câu chuyện",
+		"share_your_story": "Chia sẻ câu chuyện của bạn",
+		"tools-bar-title": "Dòng thời gian"
+	},
+	"Guestbook": {
+		"meta_title": "Sổ lưu bút",
+		"meta_description": "Ví dụ về thao tác CRUD",
+		"database_powered_by": "Cơ sở dữ liệu bởi",
+		"loading_guestbook": "Đang tải sổ lưu bút..."
+	},
+	"GuestbookForm": {
+		"username": "Tên người dùng",
+		"body": "Nội dung",
+		"save": "Lưu"
+	},
+	"About": {
+		"meta_title": "Giới thiệu",
+		"meta_description": "Mô tả trang giới thiệu",
+		"about_paragraph": "Chào mừng bạn đến trang Giới thiệu! Chúng tôi là những người đam mê tạo ra phần mềm tuyệt vời.",
+		"translation_powered_by": "Dịch thuật được hỗ trợ bởi"
+	},
+	"Portfolio": {
+		"meta_title": "Danh mục",
+		"meta_description": "Chào mừng đến trang danh mục của tôi!",
+		"presentation": "Chào mừng bạn đến trang danh mục! Bạn sẽ tìm thấy tại đây bộ sưu tập được chọn lọc kỹ lưỡng về công việc và thành tựu của tôi. Qua danh mục này, tôi muốn thể hiện chuyên môn, sự sáng tạo và giá trị mà tôi có thể mang lại cho dự án của bạn.",
+		"portfolio_name": "Danh mục {name}",
+		"error_reporting_powered_by": "Báo cáo lỗi bởi",
+		"coverage_powered_by": "Độ phủ mã nguồn bởi"
+	},
+	"PortfolioSlug": {
+		"meta_title": "Danh mục {slug}",
+		"meta_description": "Mô tả danh mục {slug}",
+		"header": "Danh mục {slug}",
+		"content": "Đã tạo bộ tài liệu quảng bá và bộ nhận diện thương hiệu cho một sự kiện doanh nghiệp. Thiết kế chủ đề thống nhất về hình ảnh gồm logo, poster, banner và tài sản số. Kết hợp bản sắc thương hiệu của khách hàng với phong cách hiện đại và đổi mới. Nhận được phản hồi tích cực từ người tham dự, mang lại sự kiện thành công với mức độ gắn kết cao và gia tăng độ nhận diện thương hiệu.",
+		"log_management_powered_by": "Quản lý log bởi"
+	},
+	"SignIn": {
+		"meta_title": "Đăng nhập",
+		"meta_description": "Đăng nhập tài khoản của bạn một cách dễ dàng."
+	},
+	"SignUp": {
+		"meta_title": "Đăng ký",
+		"meta_description": "Tạo tài khoản nhanh chóng với quy trình đăng ký trực quan."
+	},
+	"Dashboard": {
+		"meta_title": "Bảng điều khiển",
+		"hello_message": "Xin chào {email}!"
+	},
+	"UserProfile": {
+		"meta_title": "Hồ sơ người dùng"
+	},
+	"DashboardLayout": {
+		"dashboard_link": "Bảng điều khiển",
+		"user_profile_link": "Quản lý tài khoản",
+		"sign_out": "Đăng xuất"
+	}
+}

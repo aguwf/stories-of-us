@@ -14,10 +14,29 @@ export const useMapRoute = (mapRef: React.RefObject<mapboxgl.Map | null>) => {
 
   // Fetch route from Mapbox Directions API
   const fetchRoute = useCallback(
-    async (start: [number, number], end: [number, number]) => {
+    async (
+      start: [number, number],
+      waypoints: [number, number][],
+      profile:
+        | "driving"
+        | "walking"
+        | "cycling"
+        | "driving-traffic" = "driving",
+      exclude: string[] = [],
+      waypointLabels: string[] = []
+    ) => {
       setIsLoading(true);
       try {
-        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?geometries=geojson&access_token=${env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`;
+        const coordinates = [start, ...waypoints];
+        const coordinatePath = coordinates
+          .map((coord) => `${coord[0]},${coord[1]}`)
+          .join(";");
+
+        let url = `https://api.mapbox.com/directions/v5/mapbox/${profile}/${coordinatePath}?geometries=geojson&steps=true&access_token=${env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN}`;
+
+        if (exclude.length > 0) {
+          url += `&exclude=${exclude.join(",")}`;
+        }
 
         const response = await fetch(url);
         const data = (await response.json()) as DirectionsResponse;
@@ -29,6 +48,28 @@ export const useMapRoute = (mapRef: React.RefObject<mapboxgl.Map | null>) => {
               distance: route.distance,
               duration: route.duration,
               geometry: route.geometry as GeoJSON.LineString,
+              steps:
+                route.legs
+                  ?.flatMap((leg) =>
+                    leg.steps.map((step) => ({
+                      maneuver: {
+                        instruction: step.maneuver.instruction,
+                        location: step.maneuver.location,
+                        type: step.maneuver.type,
+                        modifier: step.maneuver.modifier,
+                      },
+                      distance: step.distance,
+                      duration: step.duration,
+                      name: step.name,
+                    }))
+                  ) || [],
+              waypoints: coordinates.map((coord, index) => ({
+                coordinates: coord as [number, number],
+                name:
+                  index === 0
+                    ? "Start"
+                    : waypointLabels[index - 1] ?? `Stop ${index}`,
+              })),
             };
             setActiveRoute(routeData);
             return routeData;

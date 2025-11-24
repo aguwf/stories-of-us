@@ -5,10 +5,20 @@ import { sanitizeStoreName } from "./mapHelpers";
  * Generate HTML content for store popup
  */
 export const createPopupHTML = (props: PopupProps): string => {
-	const { name, address, notes, coordinates, isFavorite } = props;
-	const sanitizedName = sanitizeStoreName(name);
+  const {
+    name,
+    address,
+    notes,
+    coordinates,
+    isFavorite,
+    openingHours,
+    rating,
+    images,
+  } = props;
+  const sanitizedName = sanitizeStoreName(name);
+  const image = images?.[0];
 
-	return `
+  return `
     <div style="
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
       padding: 0;
@@ -19,15 +29,58 @@ export const createPopupHTML = (props: PopupProps): string => {
         background: linear-gradient(135deg, #B7A3E3 0%, #9575CD 100%);
         padding: 16px;
         border-radius: 12px 12px 0 0;
+        position: relative;
+        overflow: hidden;
       ">
-        <h3 style="
-          margin: 0;
-          color: white;
-          font-size: 18px;
-          font-weight: 600;
-          line-height: 1.4;
-          width: 90%;
-        ">${name}</h3>
+        ${
+          image
+            ? `
+        <div style="
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('${image}');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.2;
+            z-index: 0;
+        "></div>
+        `
+            : ""
+        }
+        <div style="position: relative; z-index: 1;">
+            <h3 style="
+            margin: 0;
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.4;
+            width: 90%;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            ">${name}</h3>
+            ${
+              rating
+                ? `
+            <div style="
+                display: inline-flex;
+                align-items: center;
+                background: rgba(255, 255, 255, 0.2);
+                backdrop-filter: blur(4px);
+                padding: 4px 8px;
+                border-radius: 12px;
+                margin-top: 8px;
+                font-size: 12px;
+                color: white;
+                font-weight: 600;
+            ">
+                <span style="margin-right: 4px;">★</span> ${rating}
+            </div>
+            `
+                : ""
+            }
+        </div>
       </div>
       
       <div style="padding: 12px;">
@@ -48,6 +101,30 @@ export const createPopupHTML = (props: PopupProps): string => {
             line-height: 1.5;
           ">${address}</p>
         </div>
+
+        ${
+          openingHours
+            ? `
+        <div style="
+          display: flex;
+          align-items: start;
+          margin-bottom: 12px;
+          gap: 8px;
+        ">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" style="flex-shrink: 0; margin-top: 2px;">
+             <circle cx="12" cy="12" r="10"></circle>
+             <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+          <p style="
+            margin: 0;
+            color: #333;
+            font-size: 14px;
+            line-height: 1.5;
+          ">${openingHours}</p>
+        </div>
+        `
+            : ""
+        }
         
         <div style="
           display: flex;
@@ -93,7 +170,9 @@ export const createPopupHTML = (props: PopupProps): string => {
             onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(183, 163, 227, 0.3)';"
             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="${isFavorite ? "white" : "none"}" stroke="currentColor" stroke-width="2">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="${
+              isFavorite ? "white" : "none"
+            }" stroke="currentColor" stroke-width="2">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
             </svg>
             ${isFavorite ? "Saved" : "Save"}
@@ -138,10 +217,10 @@ export const createPopupHTML = (props: PopupProps): string => {
  * Generate HTML for route information display
  */
 export const createRouteInfoHTML = (
-	distanceKm: string,
-	durationMin: number
+  distanceKm: string,
+  durationMin: number
 ): string => {
-	return `
+  return `
     <div style="
       margin-top: 12px;
       padding: 12px;

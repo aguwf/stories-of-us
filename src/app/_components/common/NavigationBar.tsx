@@ -49,7 +49,7 @@ const SEARCH_ANIMATION_DURATION = 1;
 const NAV_ITEMS: NavItem[] = [
 	{ name: "Timeline", href: "/timelines", isActive: true },
 	{ name: "All images", href: "/images", isDisabled: true },
-	{ name: "Maps", href: "/maps", isDisabled: true },
+	{ name: "Maps", href: "/maps" },
 	{ name: "Portfolio", href: "/portfolio" },
 ];
 

@@ -132,8 +132,10 @@ export const useStoreLayers = ({
       syncLayers();
     };
 
-    syncLayers();
     map.on("style.load", handleStyleLoad);
+    if (map.isStyleLoaded()) {
+      syncLayers();
+    }
 
     return () => {
       map.off("style.load", handleStyleLoad);

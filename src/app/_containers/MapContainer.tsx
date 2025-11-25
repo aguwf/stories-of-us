@@ -48,6 +48,7 @@ const MapContainer: FunctionComponent = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([]);
   const [showHeatmap, setShowHeatmap] = useState(false);
+  const currentStyleRef = useRef<string>(MAP_STYLES.MAPBOX_STYLE);
 
   // Community / Add Location State
   const [isAddLocationMode, setIsAddLocationMode] = useState(false);
@@ -260,9 +261,11 @@ const MapContainer: FunctionComponent = () => {
   });
 
   useEffect(() => {
-    if (isMapLoaded && mapRef.current) {
-      mapRef.current.setStyle(mapStyle);
-    }
+    if (!isMapLoaded || !mapRef.current) return;
+    if (currentStyleRef.current === mapStyle) return;
+
+    currentStyleRef.current = mapStyle;
+    mapRef.current.setStyle(mapStyle);
   }, [mapStyle, isMapLoaded, mapRef]);
 
   useEffect(
@@ -415,27 +418,15 @@ const MapContainer: FunctionComponent = () => {
 
   return (
     <div className="h-full relative flex">
-      {isDesktop && (
-        <DesktopSidebar
-          isOpen={isSidebarOpen}
-          onClose={() => setIsSidebarOpen(false)}
-          mapControlsProps={mapControlsProps}
-          storeListProps={storeListProps}
-        />
-      )}
-
       <div className="flex-1 relative h-full">
         {isDesktop && (
           <div className="absolute top-4 left-4 z-20 flex flex-wrap items-center gap-3 pr-4">
             <button
               onClick={() => setIsSidebarOpen((prev) => !prev)}
-              className="bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-md shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-2"
+              className="h-10 px-3 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-2"
               aria-label={isSidebarOpen ? "Hide sidebar" : "Show sidebar"}
             >
               <List className="w-5 h-5" />
-              <span className="text-sm font-medium hidden lg:inline">
-                {isSidebarOpen ? "Hide sidebar" : "Show sidebar"}
-              </span>
             </button>
 
             <div className="relative">
@@ -444,14 +435,14 @@ const MapContainer: FunctionComponent = () => {
                 placeholder="Search stores, addresses..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-3 w-64 md:w-72 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 shadow-md"
+                className="h-10 pl-9 pr-3 w-64 md:w-72 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 shadow-md"
               />
             </div>
 
             <button
               type="button"
               onClick={mapControlsProps.onAddLocation}
-              className={`whitespace-nowrap px-3 py-2 rounded-lg font-medium transition-all shadow-md ${
+              className={`h-10 whitespace-nowrap px-3 rounded-lg font-medium transition-all shadow-md text-xs md:text-sm ${
                 isAddLocationMode
                   ? "bg-red-500 text-white hover:bg-red-600"
                   : "bg-primary text-foreground hover:bg-primary/90"
@@ -466,6 +457,15 @@ const MapContainer: FunctionComponent = () => {
           id="map-container"
           ref={mapContainerRef}
         />
+
+        {isDesktop && (
+          <DesktopSidebar
+            isOpen={isSidebarOpen}
+            onClose={() => setIsSidebarOpen(false)}
+            mapControlsProps={mapControlsProps}
+            storeListProps={storeListProps}
+          />
+        )}
 
         {isMobile && <MobileControls mapControlsProps={mapControlsProps} />}
 

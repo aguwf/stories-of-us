@@ -132,3 +132,7 @@
     @apply bg-background text-foreground;
   }
 }
+
+.tiptap {
+  @apply min-h-[120px] outline-none;
+}

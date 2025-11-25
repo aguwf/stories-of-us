@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, MapPin, Tag, Clock, Globe, SmilePlus } from "lucide-react";
+import { ImageIcon, MapPin, Tag, Clock, SmilePlus } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -14,7 +14,6 @@ export type FormattingAction =
   | "location"
   | "tag"
   | "feeling"
-  | "privacy"
   | "schedule";
 
 interface PostFormattingToolbarProps {
@@ -29,13 +28,6 @@ export default function PostFormattingToolbar({
   className = "",
 }: PostFormattingToolbarProps) {
   const tools = [
-    {
-      icon: <ImageIcon size={18} />,
-      action: "add-media" as const,
-      tooltip: "Add Photo/Video",
-      onClick: () => onAction?.("add-media"),
-      isActive: activeActions.includes("add-media"),
-    },
     {
       icon: <MapPin size={18} />,
       action: "location" as const,
@@ -56,13 +48,6 @@ export default function PostFormattingToolbar({
       tooltip: "Feeling/Activity",
       onClick: () => onAction?.("feeling"),
       isActive: activeActions.includes("feeling"),
-    },
-    {
-      icon: <Globe size={18} />,
-      action: "privacy" as const,
-      tooltip: "Privacy",
-      onClick: () => onAction?.("privacy"),
-      isActive: activeActions.includes("privacy"),
     },
     {
       icon: <Clock size={18} />,
@@ -89,6 +74,7 @@ export default function PostFormattingToolbar({
                 size="sm"
                 className="h-8 w-8 p-0"
                 onClick={tool.onClick}
+                type="button"
               >
                 {tool.icon}
               </Button>

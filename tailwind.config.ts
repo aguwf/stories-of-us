@@ -13,7 +13,7 @@ export default {
 				md: "calc(var(--radius) - 2px)",
 				sm: "calc(var(--radius) - 4px)",
 			},
-			colors: {
+				colors: {
 				background: "var(--background)",
 				foreground: "var(--foreground)",
 				card: {
@@ -43,7 +43,7 @@ export default {
 				success: "var(--success)",
 				warning: "var(--warning)",
 				danger: "var(--danger)",
-				purple: "var(--purple)",
+				brandPurple: "var(--purple)",
 				pastel: {
 					blue: "var(--pastel-blue)",
 					green: "var(--pastel-green)",

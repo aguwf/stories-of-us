@@ -23,7 +23,7 @@ export default function EmptyTimelineState({ openCreateModal }: EmptyTimelineSta
         Every journey begins with a single step. Share your first moment, thought or experience 
         and start building your personal timeline today.
       </p>
-      <Button 
+      <Button
         onClick={openCreateModal} 
         className="gap-2 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition-all"
         size="lg"

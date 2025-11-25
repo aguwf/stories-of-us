@@ -72,8 +72,6 @@ const CreateStoryModal = forwardRef<CreateStoryModalRef, CreateStoryModalProps>(
 			useState<(() => void) | null>(null);
 		const [pollQuestion, setPollQuestion] = useState("");
 		const [pollOptions, setPollOptions] = useState<string[]>(["", ""]);
-		const privacyRowRef = useRef<HTMLDivElement>(null);
-		const [isPrivacyHighlighted, setIsPrivacyHighlighted] = useState(false);
 		const cachedDescriptionRef = useRef<string>(form.watch("description") || "");
 
 		const postFormat = form.watch("postFormat");
@@ -139,8 +137,6 @@ const CreateStoryModal = forwardRef<CreateStoryModalRef, CreateStoryModalProps>(
 					preset.push("feeling");
 				if (selectedStory.mentionedUsers?.length) preset.push("tag");
 				if (selectedStory.scheduledPublishTime) preset.push("schedule");
-				if (selectedStory.privacy && selectedStory.privacy !== "public")
-					preset.push("privacy");
 				setManualActions(preset);
 			} else {
 				setManualActions([]);
@@ -169,16 +165,8 @@ const CreateStoryModal = forwardRef<CreateStoryModalRef, CreateStoryModalProps>(
 			if (watchFeeling || watchActivity) next.push("feeling");
 			if (mentionedUsers.length) next.push("tag");
 			if (scheduleAt) next.push("schedule");
-			if (privacyValue !== "public") next.push("privacy");
 			return next;
-		}, [
-			watchLocation,
-			watchFeeling,
-			watchActivity,
-			mentionedUsers,
-			scheduleAt,
-			privacyValue,
-		]);
+		}, [watchLocation, watchFeeling, watchActivity, mentionedUsers, scheduleAt]);
 
 		const activeActions = useMemo(
 			() => Array.from(new Set([...manualActions, ...autoActions])),
@@ -196,13 +184,6 @@ const CreateStoryModal = forwardRef<CreateStoryModalRef, CreateStoryModalProps>(
 		const handleToolbarAction = (action: FormattingAction) => {
 			if (action === "add-media") {
 				openMediaPicker?.();
-				return;
-			}
-
-			if (action === "privacy") {
-				privacyRowRef.current?.scrollIntoView({ behavior: "smooth" });
-				setIsPrivacyHighlighted(true);
-				setTimeout(() => setIsPrivacyHighlighted(false), 1200);
 				return;
 			}
 
@@ -245,7 +226,6 @@ const CreateStoryModal = forwardRef<CreateStoryModalRef, CreateStoryModalProps>(
 
 		const handlePrivacyChange = (value: "public" | "friends" | "onlyme") => {
 			form.setValue("privacy", value);
-			toggleAction("privacy");
 		};
 
 		const handleFormSubmit = (event: FormEvent) => {
@@ -508,12 +488,7 @@ const CreateStoryModal = forwardRef<CreateStoryModalRef, CreateStoryModalProps>(
 							</TabsContent>
 						</Tabs>
 
-						<div
-							ref={privacyRowRef}
-							className={`flex items-center justify-between mt-6 mb-4 rounded-md border p-3 transition ${
-								isPrivacyHighlighted ? "ring-2 ring-offset-2 ring-primary" : ""
-							}`}
-						>
+						<div className="flex items-center justify-between mt-6 mb-4 rounded-md border p-3">
 							<Label className="text-sm font-medium">Who can see your post?</Label>
 							<PrivacySelector value={privacyValue} onChange={handlePrivacyChange} />
 						</div>

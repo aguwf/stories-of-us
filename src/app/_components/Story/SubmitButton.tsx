@@ -25,7 +25,7 @@ const SubmitButton = ({
 			className={cn(
 				selectedStory
 					? "bg-pastel-blue hover:bg-pastel-blue"
-				: "bg-purple hover:bg-purple",
+				: "bg-brandPurple hover:bg-brandPurple",
 				isUploading || isPending ? "loading" : ""
 			)}
 			variant={selectedStory ? "outline" : "default"}

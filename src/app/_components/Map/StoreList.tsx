@@ -10,7 +10,7 @@ interface StoreData {
   distance?: string;
 }
 
-interface StoreListProps {
+export interface StoreListProps {
   stores: StoreData[];
   onSelectStore: (store: StoreData) => void;
   selectedStore: StoreData | null;
@@ -18,6 +18,7 @@ interface StoreListProps {
   toggleFavorite: (name: string) => void;
   onShare: (store: StoreData) => void;
   className?: string;
+  onClose?: () => void;
 }
 
 export const StoreList: FunctionComponent<StoreListProps> = ({
@@ -28,6 +29,7 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
   toggleFavorite,
   onShare,
   className,
+  onClose,
 }) => {
   if (stores.length === 0) {
     return (
@@ -38,16 +40,19 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
           No stores found
         </h3>
-        <p className="text-sm mt-1">
-          Try adjusting your search or filters
-        </p>
+        <p className="text-sm mt-1">Try adjusting your search or filters</p>
       </div>
     );
   }
 
   return (
-    <div className={cn("overflow-y-auto h-full scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-800", className)}>
-      <div className="space-y-2 p-3">
+    <div
+      className={cn(
+        "overflow-y-auto h-full scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-gray-800",
+        className
+      )}
+    >
+      <div className="space-y-2 py-3">
         {stores.map((store) => (
           // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
           <div
@@ -58,21 +63,28 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
                 ? "bg-primary/5 border-primary/50 ring-1 ring-primary/20"
                 : "bg-white border-gray-100 hover:border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600"
             )}
-            onClick={() => onSelectStore(store)}
+            onClick={() => {
+              onSelectStore(store);
+              onClose?.();
+            }}
           >
             <div className="flex justify-between items-start gap-3">
               <div className="flex-1 min-w-0">
-                <h3 className={cn(
-                  "font-semibold text-base line-clamp-1 transition-colors",
-                  selectedStore?.name === store.name
-                    ? "text-primary"
-                    : "text-gray-900 dark:text-gray-100"
-                )}>
+                <h3
+                  className={cn(
+                    "font-semibold text-base line-clamp-1 transition-colors",
+                    selectedStore?.name === store.name
+                      ? "text-primary"
+                      : "text-gray-900 dark:text-gray-100"
+                  )}
+                >
                   {store.name}
                 </h3>
                 <div className="flex items-start mt-1.5 text-sm text-gray-500 dark:text-gray-400">
                   <MapPin className="w-3.5 h-3.5 mt-0.5 mr-1.5 flex-shrink-0 text-gray-400" />
-                  <p className="line-clamp-2 leading-relaxed">{store.address}</p>
+                  <p className="line-clamp-2 leading-relaxed">
+                    {store.address}
+                  </p>
                 </div>
                 {store.distance && (
                   <div className="mt-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
@@ -90,9 +102,15 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
                   }}
                   className={cn(
                     "p-2 rounded-full transition-colors hover:bg-gray-100 dark:hover:bg-gray-700",
-                    isFavorite(store.name) ? "text-yellow-400 opacity-100" : "text-gray-400"
+                    isFavorite(store.name)
+                      ? "text-yellow-400 opacity-100"
+                      : "text-gray-400"
                   )}
-                  title={isFavorite(store.name) ? "Remove from favorites" : "Add to favorites"}
+                  title={
+                    isFavorite(store.name)
+                      ? "Remove from favorites"
+                      : "Add to favorites"
+                  }
                 >
                   <Star
                     className={cn(

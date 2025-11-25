@@ -1,11 +1,23 @@
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { ArrowUpDown, Crosshair, Search, Star } from "lucide-react";
-import type { FunctionComponent } from "react";
+import {
+  ArrowUpDown,
+  ChevronDown,
+  Crosshair,
+  Search,
+  Star,
+} from "lucide-react";
+import { useState, type FunctionComponent } from "react";
 import { MapFilters } from "./MapFilters";
 import { MapStyleSwitcher } from "./MapStyleSwitcher";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@radix-ui/react-collapsible";
+import { StoreList, StoreListProps } from "./StoreList";
 
-interface MapControlsProps {
+export interface MapControlsProps {
   searchQuery: string;
   onSearchChange: (query: string) => void;
   currentStyle: string;
@@ -19,7 +31,8 @@ interface MapControlsProps {
   onRadiusChange: (radius: number) => void;
   isFollowMode: boolean;
   onFollowModeChange: (follow: boolean) => void;
-  
+  onClose: () => void;
+
   // New Filter Props
   selectedTags: string[];
   onTagsChange: (tags: string[]) => void;
@@ -27,12 +40,15 @@ interface MapControlsProps {
   onPriceChange: (prices: number[]) => void;
   showHeatmap: boolean;
   onHeatmapChange: (show: boolean) => void;
-  
+
   // Community Props
   onAddLocation: () => void;
   isAddLocationMode: boolean;
+  storeListProps: StoreListProps;
 
   className?: string;
+  showAddLocation?: boolean;
+  showSearch?: boolean;
 }
 
 export const MapControls: FunctionComponent<MapControlsProps> = ({
@@ -58,7 +74,13 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
   onAddLocation,
   isAddLocationMode,
   className,
+  storeListProps,
+  onClose,
+  showAddLocation = true,
+  showSearch = true,
 }) => {
+  const [openStoreList, setOpenStoreList] = useState(false);
+
   return (
     <div
       className={cn(
@@ -67,71 +89,81 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
       )}
     >
       {/* Add Location Button */}
-      <button
-        type="button"
-        onClick={onAddLocation}
-        className={cn(
-          "w-full py-2 px-4 rounded-lg font-medium transition-all shadow-sm flex items-center justify-center gap-2",
-          isAddLocationMode
-            ? "bg-red-500 text-white hover:bg-red-600"
-            : "bg-primary text-primary-foreground hover:bg-primary/90"
-        )}
-      >
-        {isAddLocationMode ? "Cancel Adding" : "Add New Location"}
-      </button>
+      {showAddLocation && (
+        <button
+          type="button"
+          onClick={onAddLocation}
+          className={cn(
+            "w-full py-2 px-4 rounded-lg font-medium transition-all shadow-sm flex items-center justify-center gap-2",
+            isAddLocationMode
+              ? "bg-red-500 text-white hover:bg-red-600"
+              : "bg-primary text-foreground hover:bg-primary/90"
+          )}
+        >
+          {isAddLocationMode ? "Cancel Adding" : "Add New Location"}
+        </button>
+      )}
 
       {/* Search Section */}
-      <div className="space-y-2">
-        <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Search
-        </label>
-        <div className="relative group">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 group-focus-within:text-primary transition-colors" />
-          <Input
-            placeholder="Search stores, addresses..."
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-9 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary/20 transition-all"
-          />
+      {showSearch && (
+        <div className="space-y-2">
+          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            Search
+          </label>
+          <div className="relative group">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 group-focus-within:text-primary transition-colors" />
+            <Input
+              placeholder="Search stores, addresses..."
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="pl-9 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary/20 transition-all"
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Near Me Section */}
       <div className="space-y-2">
         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex justify-between items-center">
           <span>Near Me</span>
-          <span className="text-xs font-normal text-gray-400">{searchRadius} km</span>
+          <span className="text-xs font-normal text-gray-400">
+            {searchRadius} km
+          </span>
         </label>
-        
-        <div className="space-y-3">
-            {/* Radius Slider */}
-            <div className="flex items-center gap-2">
-                <input 
-                    type="range" 
-                    min="1" 
-                    max="50" 
-                    value={searchRadius} 
-                    onChange={(e) => onRadiusChange(parseInt(e.target.value))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-purple-600"
-                />
-            </div>
 
-            {/* Follow Mode Toggle */}
-            <button
-                type="button"
-                onClick={() => onFollowModeChange(!isFollowMode)}
-                disabled={!hasUserLocation}
-                className={cn(
-                "w-full flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg border transition-all duration-200",
-                isFollowMode
-                    ? "bg-purple-50 border-purple-200 text-purple-700 dark:bg-purple-900/20 dark:border-purple-800 dark:text-purple-400 shadow-sm"
-                    : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800",
-                !hasUserLocation && "opacity-50 cursor-not-allowed"
-                )}
-            >
-                <Crosshair className={cn("h-4 w-4", isFollowMode && "animate-pulse")} />
-                <span>{isFollowMode ? "Following Location" : "Follow Location"}</span>
-            </button>
+        <div className="space-y-3">
+          {/* Radius Slider */}
+          <div className="flex items-center gap-2">
+            <input
+              type="range"
+              min="1"
+              max="50"
+              value={searchRadius}
+              onChange={(e) => onRadiusChange(parseInt(e.target.value))}
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-purple-600"
+            />
+          </div>
+
+          {/* Follow Mode Toggle */}
+          <button
+            type="button"
+            onClick={() => onFollowModeChange(!isFollowMode)}
+            disabled={!hasUserLocation}
+            className={cn(
+              "w-full flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg border transition-all duration-200",
+              isFollowMode
+                ? "bg-purple-50 border-purple-200 text-purple-700 dark:bg-purple-900/20 dark:border-purple-800 dark:text-purple-400 shadow-sm"
+                : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800",
+              !hasUserLocation && "opacity-50 cursor-not-allowed"
+            )}
+          >
+            <Crosshair
+              className={cn("h-4 w-4", isFollowMode && "animate-pulse")}
+            />
+            <span>
+              {isFollowMode ? "Following Location" : "Follow Location"}
+            </span>
+          </button>
         </div>
       </div>
 
@@ -162,7 +194,9 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
 
           <button
             type="button"
-            onClick={() => onSortChange(sortBy === "name" ? "distance" : "name")}
+            onClick={() =>
+              onSortChange(sortBy === "name" ? "distance" : "name")
+            }
             disabled={!hasUserLocation && sortBy === "name"}
             className={cn(
               "flex-1 flex items-center justify-center gap-2 px-3 py-2 text-sm rounded-lg border transition-all duration-200",
@@ -171,7 +205,9 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
                 : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800",
               !hasUserLocation && "opacity-50 cursor-not-allowed"
             )}
-            title={!hasUserLocation ? "Enable location to sort by distance" : ""}
+            title={
+              !hasUserLocation ? "Enable location to sort by distance" : ""
+            }
           >
             <ArrowUpDown className="h-4 w-4" />
             <span>{sortBy === "distance" ? "Distance" : "Name"}</span>
@@ -199,6 +235,25 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
           onStyleChange={onStyleChange}
         />
       </div>
+
+      {/* Collapsible StoreList */}
+      <Collapsible>
+        <CollapsibleTrigger className="w-full">
+          <div className="flex items-center justify-between gap-2">
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer">
+              Store List
+            </label>
+            <ChevronDown className="h-4 w-4" />
+          </div>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <StoreList
+            {...storeListProps}
+            className={cn("flex-1", storeListProps.className)}
+            onClose={onClose}
+          />
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   );
 };

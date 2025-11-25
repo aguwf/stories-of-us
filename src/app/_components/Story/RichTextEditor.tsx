@@ -4,10 +4,9 @@ import React from "react";
 import {
   useEditor,
   EditorContent,
-  BubbleMenu,
-  FloatingMenu,
   type Editor,
 } from "@tiptap/react";
+import { BubbleMenu, FloatingMenu } from "@tiptap/react/menus";
 import StarterKit from "@tiptap/starter-kit";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
@@ -85,7 +84,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         Code
       </ToolbarButton>
 
-      <span className="mx-1 inline-block h-6 w-px bg-border" aria-hidden />
+      <span className="mx-1 inline-block h-6 w-px bg-border" aria-hidden={true} />
 
       <ToolbarButton
         onClick={() => editor.chain().focus().setParagraph().run()}
@@ -112,7 +111,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         H3
       </ToolbarButton>
 
-      <span className="mx-1 inline-block h-6 w-px bg-border" aria-hidden />
+      <span className="mx-1 inline-block h-6 w-px bg-border" aria-hidden={true} />
 
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBulletList().run()}
@@ -139,7 +138,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         Code Block
       </ToolbarButton>
 
-      <span className="mx-1 inline-block h-6 w-px bg-border" aria-hidden />
+      <span className="mx-1 inline-block h-6 w-px bg-border" aria-hidden={true} />
 
       <ToolbarButton
         onClick={() => editor.chain().focus().setHorizontalRule().run()}
@@ -152,7 +151,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         Hard Break
       </ToolbarButton>
 
-      <span className="mx-1 inline-block h-6 w-px bg-border" aria-hidden />
+      <span className="mx-1 inline-block h-6 w-px bg-border" aria-hidden={true} />
 
       <ToolbarButton
         onClick={() => editor.chain().focus().undo().run()}
@@ -224,7 +223,7 @@ export default function RichTextEditor({
     <div
       className={cn(
         "flex flex-col rounded-xl border bg-card text-card-foreground shadow-sm",
-        containerClassName,
+        containerClassName
       )}
     >
       <MenuBar editor={editor} />
@@ -239,7 +238,6 @@ export default function RichTextEditor({
         {editor && (
           <BubbleMenu
             editor={editor}
-            tippyOptions={{ duration: 100 }}
             className="flex items-center gap-1 rounded-md border bg-background px-2 py-1 shadow-md"
           >
             <ToolbarButton
@@ -273,16 +271,19 @@ export default function RichTextEditor({
           <FloatingMenu
             editor={editor}
             className="flex flex-col gap-2 rounded-md border bg-background p-2 shadow-md"
-            tippyOptions={{ duration: 100, placement: "right" }}
           >
             <ToolbarButton
-              onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 1 }).run()
+              }
               isActive={editor.isActive("heading", { level: 1 })}
             >
               H1
             </ToolbarButton>
             <ToolbarButton
-              onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+              onClick={() =>
+                editor.chain().focus().toggleHeading({ level: 2 }).run()
+              }
               isActive={editor.isActive("heading", { level: 2 })}
             >
               H2
@@ -301,7 +302,7 @@ export default function RichTextEditor({
             editor={editor}
             className={cn(
               "tiptap prose prose-sm max-w-none focus:outline-none",
-              className,
+              className
             )}
           />
         </div>

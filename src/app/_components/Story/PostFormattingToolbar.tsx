@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { ImageIcon, MapPin, Tag, Clock, SmilePlus } from "lucide-react";
+import { MapPin, Tag, Clock, SmilePlus } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,

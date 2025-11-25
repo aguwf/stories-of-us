@@ -66,7 +66,7 @@ export default function RootLayout(props: {
 	// Validate that the incoming `locale` parameter is supported
 	if (!isSupportedLocale(props.params.locale)) notFound();
 
-	const locale = props.params.locale as AppLocale;
+	const locale = props.params.locale;
 	const clerkLocale = clerkLocalizations[locale] ?? enUS;
 	const localizePath = (path: string) =>
 		locale === AppConfig.defaultLocale ? path : `/${locale}${path}`;

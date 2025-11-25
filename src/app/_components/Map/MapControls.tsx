@@ -7,7 +7,7 @@ import {
   Search,
   Star,
 } from "lucide-react";
-import { useState, type FunctionComponent } from "react";
+import type { FunctionComponent } from "react";
 import { MapFilters } from "./MapFilters";
 import { MapStyleSwitcher } from "./MapStyleSwitcher";
 import {
@@ -15,7 +15,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@radix-ui/react-collapsible";
-import { StoreList, StoreListProps } from "./StoreList";
+import { StoreList, type StoreListProps } from "./StoreList";
 
 export interface MapControlsProps {
   searchQuery: string;
@@ -32,6 +32,7 @@ export interface MapControlsProps {
   isFollowMode: boolean;
   onFollowModeChange: (follow: boolean) => void;
   onClose: () => void;
+  isMobile?: boolean;
 
   // New Filter Props
   selectedTags: string[];
@@ -49,6 +50,8 @@ export interface MapControlsProps {
   className?: string;
   showAddLocation?: boolean;
   showSearch?: boolean;
+  hideStoreList?: boolean;
+  defaultStoreListOpen?: boolean;
 }
 
 export const MapControls: FunctionComponent<MapControlsProps> = ({
@@ -76,15 +79,19 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
   className,
   storeListProps,
   onClose,
+  isMobile = false,
   showAddLocation = true,
   showSearch = true,
+  hideStoreList = false,
+  defaultStoreListOpen = false,
 }) => {
-  const [openStoreList, setOpenStoreList] = useState(false);
-
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 bg-white/95 dark:bg-gray-800/95 backdrop-blur-md p-4 rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 max-h-[80vh] overflow-y-auto",
+        "flex flex-col bg-white/95 dark:bg-gray-800/95 backdrop-blur-md rounded-xl shadow-lg border border-gray-100 dark:border-gray-700",
+        isMobile
+          ? "gap-3 p-4 max-h-none overflow-visible"
+          : "gap-4 p-4 md:p-5 max-h-[80vh] overflow-y-auto",
         className
       )}
     >
@@ -107,16 +114,21 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
       {/* Search Section */}
       {showSearch && (
         <div className="space-y-2">
-          <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-            Search
-          </label>
+          {!isMobile && (
+            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+              Search
+            </label>
+          )}
           <div className="relative group">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 group-focus-within:text-primary transition-colors" />
             <Input
               placeholder="Search stores, addresses..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-9 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary/20 transition-all"
+              className={cn(
+                "pl-9 bg-gray-50 dark:bg-gray-900 border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-primary/20 transition-all",
+                isMobile && "h-11"
+              )}
             />
           </div>
         </div>
@@ -139,7 +151,7 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
               min="1"
               max="50"
               value={searchRadius}
-              onChange={(e) => onRadiusChange(parseInt(e.target.value))}
+              onChange={(e) => onRadiusChange(Number.parseInt(e.target.value))}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-purple-600"
             />
           </div>
@@ -172,7 +184,7 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
           Filters & Sort
         </label>
-        <div className="flex gap-2">
+        <div className="grid grid-cols-2 gap-2">
           <button
             type="button"
             onClick={() => onShowFavoritesChange(!showFavoritesOnly)}
@@ -237,23 +249,25 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
       </div>
 
       {/* Collapsible StoreList */}
-      <Collapsible>
-        <CollapsibleTrigger className="w-full">
-          <div className="flex items-center justify-between gap-2">
-            <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer">
-              Store List
-            </label>
-            <ChevronDown className="h-4 w-4" />
-          </div>
-        </CollapsibleTrigger>
-        <CollapsibleContent>
-          <StoreList
-            {...storeListProps}
-            className={cn("flex-1", storeListProps.className)}
-            onClose={onClose}
-          />
-        </CollapsibleContent>
-      </Collapsible>
+      {!hideStoreList && (
+        <Collapsible defaultOpen={defaultStoreListOpen}>
+          <CollapsibleTrigger className="w-full">
+            <div className="flex items-center justify-between gap-2">
+              <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer">
+                Store List
+              </label>
+              <ChevronDown className="h-4 w-4" />
+            </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            <StoreList
+              {...storeListProps}
+              className={cn("flex-1", storeListProps.className)}
+              onClose={onClose}
+            />
+          </CollapsibleContent>
+        </Collapsible>
+      )}
     </div>
   );
 };

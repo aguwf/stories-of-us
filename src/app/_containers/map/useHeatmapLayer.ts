@@ -1,5 +1,4 @@
 import { useEffect, type MutableRefObject } from "react";
-import mapboxgl from "mapbox-gl";
 
 interface UseHeatmapLayerParams {
   mapRef: MutableRefObject<mapboxgl.Map | null>;

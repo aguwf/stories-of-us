@@ -70,7 +70,7 @@ export const useFilteredStores = ({
     if (userLocation) {
       filteredStores = filteredStores.filter((store) => {
         if (!store.distance) return true;
-        const dist = parseFloat(store.distance.split(" ")[0] ?? "0");
+        const dist = Number.parseFloat(store.distance.split(" ")[0] ?? "0");
         return dist <= searchRadius;
       });
     }
@@ -106,8 +106,8 @@ export const useFilteredStores = ({
 
     filteredStores.sort((a, b) => {
       if (sortBy === "distance" && userLocation) {
-        const distA = parseFloat(a.distance?.split(" ")[0] ?? "0");
-        const distB = parseFloat(b.distance?.split(" ")[0] ?? "0");
+        const distA = Number.parseFloat(a.distance?.split(" ")[0] ?? "0");
+        const distB = Number.parseFloat(b.distance?.split(" ")[0] ?? "0");
         return distA - distB;
       }
       return a.name.localeCompare(b.name);

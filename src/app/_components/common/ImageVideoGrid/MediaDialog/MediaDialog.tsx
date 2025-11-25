@@ -222,7 +222,7 @@ export const MediaDialog: React.FC<MediaDialogProps> = ({
 									<div className="flex flex-wrap gap-2 pt-2">
 										{metaBadges.map(item => (
 											<span
-												key={`${item.icon}-${item.label as string}`}
+												key={`${item.icon}-${item.label!}`}
 												className="inline-flex items-center gap-1 rounded-full bg-slate-100 text-slate-700 px-3 py-1 text-xs font-medium border"
 											>
 												<Icon name={item.icon as any} className="h-3.5 w-3.5" />

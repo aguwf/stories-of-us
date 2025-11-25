@@ -10,8 +10,6 @@ export interface CommentType {
 	userAvatar: string;
 	content: string;
 	createdAt: Date;
-	reactions: {
-		[key: string]: string[]; // emoji: userId[]
-	};
+	reactions: Record<string, string[]>;
 	replies?: CommentType[];
 }

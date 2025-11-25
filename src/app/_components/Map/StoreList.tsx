@@ -19,6 +19,7 @@ export interface StoreListProps {
   onShare: (store: StoreData) => void;
   className?: string;
   onClose?: () => void;
+  variant?: "default" | "compact";
 }
 
 export const StoreList: FunctionComponent<StoreListProps> = ({
@@ -30,10 +31,18 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
   onShare,
   className,
   onClose,
+  variant = "default",
 }) => {
+  const isCompact = variant === "compact";
+
   if (stores.length === 0) {
     return (
-      <div className={cn("p-8 text-center text-gray-500", className)}>
+      <div
+        className={cn(
+          "p-8 text-center text-gray-500 bg-white dark:bg-gray-900 rounded-xl",
+          className
+        )}
+      >
         <div className="bg-gray-100 dark:bg-gray-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
           <MapPin className="w-8 h-8 text-gray-400" />
         </div>
@@ -52,13 +61,14 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
         className
       )}
     >
-      <div className="space-y-2 py-3">
+      <div className={cn("space-y-2 py-3", isCompact && "space-y-1.5")}>
         {stores.map((store) => (
           // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
           <div
             key={store.name}
             className={cn(
-              "group relative p-4 rounded-xl cursor-pointer transition-all border shadow-sm hover:shadow-md",
+              "group relative rounded-xl cursor-pointer transition-all border shadow-sm hover:shadow-md",
+              isCompact ? "p-3" : "p-4",
               selectedStore?.name === store.name
                 ? "bg-primary/5 border-primary/50 ring-1 ring-primary/20"
                 : "bg-white border-gray-100 hover:border-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:hover:border-gray-600"
@@ -92,8 +102,14 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
                   </div>
                 )}
               </div>
-
-              <div className="flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div
+                className={cn(
+                  "flex flex-col gap-1 transition-opacity",
+                  isCompact
+                    ? "opacity-100"
+                    : "opacity-100 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100"
+                )}
+              >
                 <button
                   type="button"
                   onClick={(e) => {

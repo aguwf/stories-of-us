@@ -84,7 +84,7 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
           name="name"
           value={formData.name}
           onChange={handleChange}
-          required
+          required={true}
           placeholder="Store Name"
         />
       </div>
@@ -96,7 +96,7 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
           name="address"
           value={formData.address}
           onChange={handleChange}
-          required
+          required={true}
           placeholder="Full Address"
         />
       </div>

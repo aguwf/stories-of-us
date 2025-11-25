@@ -49,22 +49,21 @@ export const useMapRoute = (mapRef: React.RefObject<mapboxgl.Map | null>) => {
               duration: route.duration,
               geometry: route.geometry as GeoJSON.LineString,
               steps:
-                route.legs
-                  ?.flatMap((leg) =>
-                    leg.steps.map((step) => ({
-                      maneuver: {
-                        instruction: step.maneuver.instruction,
-                        location: step.maneuver.location,
-                        type: step.maneuver.type,
-                        modifier: step.maneuver.modifier,
-                      },
-                      distance: step.distance,
-                      duration: step.duration,
-                      name: step.name,
-                    }))
-                  ) || [],
+                route.legs?.flatMap((leg) =>
+                  leg.steps.map((step) => ({
+                    maneuver: {
+                      instruction: step.maneuver.instruction,
+                      location: step.maneuver.location,
+                      type: step.maneuver.type,
+                      modifier: step.maneuver.modifier,
+                    },
+                    distance: step.distance,
+                    duration: step.duration,
+                    name: step.name,
+                  }))
+                ) || [],
               waypoints: coordinates.map((coord, index) => ({
-                coordinates: coord as [number, number],
+                coordinates: coord,
                 name:
                   index === 0
                     ? "Start"

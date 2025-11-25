@@ -1,4 +1,3 @@
-import mapboxgl from "mapbox-gl";
 import { useEffect, type MutableRefObject } from "react";
 
 import { MAP_COLORS, MAP_CONFIG } from "@/utils/mapConstants";
@@ -118,8 +117,8 @@ export const useStoreLayers = ({
         "stores-heatmap"
       ) as mapboxgl.GeoJSONSource;
 
-      storesSource?.setData(geojsonData);
-      heatmapSource?.setData(geojsonData);
+      storesSource.setData(geojsonData);
+      heatmapSource.setData(geojsonData);
     };
 
     const syncLayers = () => {

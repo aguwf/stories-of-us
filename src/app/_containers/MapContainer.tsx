@@ -1,7 +1,5 @@
 "use client";
 
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css";
 import {
   type FunctionComponent,
   useCallback,
@@ -11,8 +9,9 @@ import {
 } from "react";
 
 import {
-  MapControlsProps,
+  type MapControlsProps,
   RouteControlPanel,
+  type StoreListProps,
   UserLocationButton,
 } from "@/app/_components/Map";
 import { Input } from "@/components/ui/input";
@@ -24,10 +23,10 @@ import { useMapbox } from "@/hooks/useMapbox";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { MAP_CONFIG, MAP_STYLES } from "@/utils/mapConstants";
 import { formatRouteInfo, sanitizeStoreName } from "@/utils/mapHelpers";
-import { createPopupHTML } from "@/utils/mapPopupHelpers";
 import { DesktopSidebar } from "./map/DesktopSidebar";
 import { MobileControls } from "./map/MobileControls";
 import { StoreSheet } from "./map/StoreSheet";
+import { createInteractivePopup } from "./map/createInteractivePopup";
 import { useFilteredStores } from "./map/useFilteredStores";
 import { useHeatmapLayer } from "./map/useHeatmapLayer";
 import { useMapEvents } from "./map/useMapEvents";
@@ -307,6 +306,13 @@ const MapContainer: FunctionComponent = () => {
     setIsSheetOpen(false);
   };
 
+  const handleShare = (store: StoreData) => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("store", store.name);
+    navigator.clipboard.writeText(url.toString());
+    alert("Link copied to clipboard!");
+  };
+
   const handleStoreSelect = (store: StoreData) => {
     // Fly to store
     if (mapRef.current) {
@@ -319,32 +325,22 @@ const MapContainer: FunctionComponent = () => {
         if (currentPopupRef.current) {
           currentPopupRef.current.remove();
         }
-        const popup = new mapboxgl.Popup({
-          maxWidth: "320px",
-          className: "custom-popup",
-        })
-          .setLngLat(store.coordinates)
-          .setHTML(
-            createPopupHTML({ ...store, isFavorite: isFavorite(store.name) })
-          )
-          .addTo(mapRef.current);
-        currentPopupRef.current = popup;
-
-        // Re-attach listeners for the new popup
-        // Note: We should ideally refactor this listener attachment logic to be reusable
-        // For now, we'll just leave it as is or user can click marker to get full interactivity
+        currentPopupRef.current = createInteractivePopup({
+          map: mapRef.current,
+          storeData: store,
+          isFavorite,
+          toggleFavorite,
+          userLocation,
+          getUserLocation,
+          addStopToRoute,
+          handleClearRoute,
+          onShare: handleShare,
+        });
       } else {
         setSelectedStore(store);
         setIsSheetOpen(true);
       }
     }
-  };
-
-  const handleShare = (store: StoreData) => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("store", store.name);
-    navigator.clipboard.writeText(url.toString());
-    alert("Link copied to clipboard!");
   };
 
   const handleAddLocationSubmit = (data: Partial<StoreData>) => {
@@ -383,6 +379,7 @@ const MapContainer: FunctionComponent = () => {
     isFavorite,
     toggleFavorite,
     onShare: handleShare,
+    variant: isDesktop ? "default" : ("compact" as StoreListProps["variant"]),
   };
 
   const mapControlsProps: MapControlsProps = {

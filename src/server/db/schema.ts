@@ -182,9 +182,7 @@ export const comments = createTable("comment", {
     .notNull()
     .references(() => stories.id),
   content: text("content").notNull(),
-  reactions: text("reactions").$type<{
-    [key: string]: string[]; // emoji: userId[]
-  }>(),
+  reactions: text("reactions").$type<Record<string, string[]>>(),
   replies: integer("replies")
     .array()
     .default(sql`'{}'::integer[]`)

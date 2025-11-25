@@ -1,9 +1,8 @@
-import mapboxgl from "mapbox-gl";
 import { useEffect, type MutableRefObject } from "react";
 import type * as GeoJSON from "geojson";
 
-import { createPopupHTML } from "@/utils/mapPopupHelpers";
 import { sanitizeStoreName } from "@/utils/mapHelpers";
+import { createInteractivePopup } from "./createInteractivePopup";
 import type { StoreData } from "./types";
 
 interface UseMapEventsParams {
@@ -103,86 +102,22 @@ export const useMapEvents = ({
           currentPopupRef.current.remove();
         }
 
-        const popup = new mapboxgl.Popup({
-          maxWidth: "320px",
-          className: "custom-popup",
-        })
-          .setLngLat(coordinates)
-          .setHTML(
-            createPopupHTML({
-              ...storeData,
-              isFavorite: isFavorite(name ?? ""),
-            })
-          )
-          .addTo(map);
-
-        currentPopupRef.current = popup;
-
-        const handleDirectionsClick = async () => {
-          if (!userLocation) {
-            alert("Please enable location services to get directions");
-            getUserLocation();
-            return;
-          }
-
-          addStopToRoute(storeData);
-
-          setTimeout(() => {
-            const clearBtn = document.getElementById("clear-route-btn");
-            if (clearBtn) {
-              clearBtn.addEventListener("click", () => {
-                handleClearRoute();
-                popup.setHTML(
-                  createPopupHTML({
-                    ...storeData,
-                    isFavorite: isFavorite(name ?? ""),
-                  })
-                );
-              });
-            }
-          }, 0);
-        };
-
-        const attachPopupListeners = () => {
-          const sanitizedName = sanitizeStoreName(name ?? "");
-          const favoriteBtn = document.getElementById(
-            `favorite-btn-${sanitizedName}`
-          );
-          const directionsBtn = document.getElementById(
-            `directions-btn-${sanitizedName}`
-          );
-          const shareBtn = document.getElementById(
-            `share-btn-${sanitizedName}`
-          );
-
-          if (favoriteBtn) {
-            favoriteBtn.addEventListener("click", () => {
-              toggleFavorite(name ?? "");
-              popup.setHTML(
-                createPopupHTML({
-                  ...storeData,
-                  isFavorite: isFavorite(name ?? ""),
-                })
-              );
-              setTimeout(attachPopupListeners, 0);
-            });
-          }
-
-          if (directionsBtn) {
-            directionsBtn.addEventListener("click", handleDirectionsClick);
-          }
-
-          if (shareBtn) {
-            shareBtn.addEventListener("click", () => {
-              const url = new URL(window.location.href);
-              url.searchParams.set("store", (name as string) ?? "");
-              navigator.clipboard.writeText(url.toString());
-              alert("Link copied to clipboard!");
-            });
-          }
-        };
-
-        setTimeout(attachPopupListeners, 0);
+        currentPopupRef.current = createInteractivePopup({
+          map,
+          storeData,
+          isFavorite,
+          toggleFavorite,
+          userLocation,
+          getUserLocation,
+          addStopToRoute,
+          handleClearRoute,
+          onShare: (shareStore) => {
+            const url = new URL(window.location.href);
+            url.searchParams.set("store", shareStore.name ?? "");
+            navigator.clipboard.writeText(url.toString());
+            alert("Link copied to clipboard!");
+          },
+        });
       } else {
         if (currentPopupRef.current) {
           currentPopupRef.current.remove();
@@ -196,7 +131,7 @@ export const useMapEvents = ({
       if (isAddLocationMode) {
         const coordinates = [event.lngLat.lng, event.lngLat.lat] as [
           number,
-          number,
+          number
         ];
         setNewLocationCoordinates(coordinates);
         setIsSheetOpen(true);

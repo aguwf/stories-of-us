@@ -1,14 +1,11 @@
-import { X } from "lucide-react";
-import type { ComponentProps, FunctionComponent } from "react";
+import type { FunctionComponent } from "react";
 
 import {
   MapControls,
-  MapControlsProps,
-  StoreList,
-  StoreListProps,
+  type MapControlsProps,
+  type StoreListProps,
 } from "@/app/_components/Map";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
 
 interface DesktopSidebarProps {
   isOpen: boolean;
@@ -40,6 +37,7 @@ export const DesktopSidebar: FunctionComponent<DesktopSidebarProps> = ({
             className="shadow-none p-0 md:p-4"
             showAddLocation={false}
             showSearch={false}
+            defaultStoreListOpen={true}
           />
         </div>
       </SheetContent>

@@ -44,10 +44,13 @@ export const createInteractivePopup = ({
 
   const renderPopup = () => {
     popup.setHTML(
-      createPopupHTML({
-        ...storeData,
-        isFavorite: isFavorite(storeData.name),
-      }, copy)
+      createPopupHTML(
+        {
+          ...storeData,
+          isFavorite: isFavorite(storeData.name),
+        },
+        copy
+      )
     );
     setTimeout(attachPopupListeners, 0);
   };
@@ -70,11 +73,16 @@ export const createInteractivePopup = ({
         });
       }
     }, 0);
+
+    // Close the popup after adding the route
+    popup.remove();
   };
 
   const attachPopupListeners = () => {
     const sanitizedName = sanitizeStoreName(storeData.name);
-    const favoriteBtn = document.getElementById(`favorite-btn-${sanitizedName}`);
+    const favoriteBtn = document.getElementById(
+      `favorite-btn-${sanitizedName}`
+    );
     const directionsBtn = document.getElementById(
       `directions-btn-${sanitizedName}`
     );

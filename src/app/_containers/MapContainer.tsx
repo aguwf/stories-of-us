@@ -396,22 +396,22 @@ const MapContainer: FunctionComponent = () => {
         if (currentPopupRef.current) {
           currentPopupRef.current.remove();
         }
-          currentPopupRef.current = createInteractivePopup({
-            map: mapRef.current,
-            storeData: store,
-            isFavorite,
-            toggleFavorite,
+        currentPopupRef.current = createInteractivePopup({
+          map: mapRef.current,
+          storeData: store,
+          isFavorite,
+          toggleFavorite,
           userLocation,
           getUserLocation,
           addStopToRoute,
           handleClearRoute,
-            onShare: handleShare,
-            copy: popupCopy,
-          });
-        } else {
-          setSelectedStore(store);
-          setIsSheetOpen(true);
-        }
+          onShare: handleShare,
+          copy: popupCopy,
+        });
+      } else {
+        setSelectedStore(store);
+        setIsSheetOpen(true);
+      }
     }
   };
 

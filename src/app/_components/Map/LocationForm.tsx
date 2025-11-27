@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -52,7 +52,7 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
   const [imageInput, setImageInput] = useState("");
 
   useEffect(() => {
-    setFormData((prev) => ({
+    setFormData(() => ({
       ...defaultFormState,
       ...initialData,
       tags: initialData?.tags ?? defaultFormState.tags,
@@ -64,7 +64,9 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
   }, [initialData]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     const numericFields = ["rating", "popularity"];
@@ -120,7 +122,10 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
     setImageInput("");
   };
 
-  const removeItem = (value: string, field: "tags" | "amenities" | "images") => {
+  const removeItem = (
+    value: string,
+    field: "tags" | "amenities" | "images"
+  ) => {
     setFormData((prev) => ({
       ...prev,
       [field]: (prev[field] || []).filter((item) => item !== value),
@@ -145,26 +150,40 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
     onSubmit(payload);
   };
 
-  const quickTags = ["Shopping", "Entertainment", "Cafe", "Wifi", "Parking"] as const;
-  const quickAmenities = ["Wifi", "Parking", "AC", "Restroom", "Food Court"] as const;
+  const quickTags = [
+    "Shopping",
+    "Entertainment",
+    "Cafe",
+    "Wifi",
+    "Parking",
+  ] as const;
+  const quickAmenities = [
+    "Wifi",
+    "Parking",
+    "AC",
+    "Restroom",
+    "Food Court",
+  ] as const;
   const getAmenityKey = (amenity: (typeof quickAmenities)[number]) =>
     amenity === "Food Court" ? "FoodCourt" : amenity;
 
   return (
     <form
       onSubmit={handleSubmit}
-        className={cn(
-          "space-y-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg max-w-2xl w-full",
-          className
-        )}
-      >
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <h3 className="text-lg font-semibold">
-            {initialData ? t("title_edit") : t("title_add")}
-          </h3>
+      className={cn(
+        "space-y-4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg max-w-2xl w-full",
+        className
+      )}
+    >
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+        <h3 className="text-lg font-semibold">
+          {initialData ? t("title_edit") : t("title_add")}
+        </h3>
         {coordinates && (
           <div className="rounded-md bg-gray-50 px-3 py-2 text-xs text-gray-600 dark:bg-gray-900 dark:text-gray-300">
-            <p className="font-medium text-gray-800 dark:text-gray-100">{t("pinned_spot")}</p>
+            <p className="font-medium text-gray-800 dark:text-gray-100">
+              {t("pinned_spot")}
+            </p>
             <p>
               {coordinates[1].toFixed(5)}, {coordinates[0].toFixed(5)}
             </p>
@@ -258,8 +277,8 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
                 {price === 1
                   ? t("budget_low")
                   : price === 4
-                    ? t("budget_high")
-                    : t("budget_mid")}
+                  ? t("budget_high")
+                  : t("budget_mid")}
               </span>
             </button>
           ))}
@@ -278,9 +297,9 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
                 type="button"
                 key={tag}
                 onClick={() => addListItems(tag, "tags")}
-              className={cn(
-                "rounded-full border px-3 py-1 text-xs transition-colors",
-                formData.tags?.includes(tag)
+                className={cn(
+                  "rounded-full border px-3 py-1 text-xs transition-colors",
+                  formData.tags?.includes(tag)
                     ? "bg-blue-600 text-white border-blue-600"
                     : "bg-white text-gray-700 hover:bg-blue-50 border-gray-200 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700"
                 )}
@@ -402,9 +421,7 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
               {t("add")}
             </Button>
           </div>
-          <p className="text-xs text-gray-500">
-            {t("images_help")}
-          </p>
+          <p className="text-xs text-gray-500">{t("images_help")}</p>
           <div className="flex flex-wrap gap-2">
             {formData.images?.map((image) => (
               <span
@@ -449,7 +466,12 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
       </div>
 
       <div className="flex gap-2 pt-4">
-        <Button type="button" variant="outline" onClick={onCancel} className="flex-1">
+        <Button
+          type="button"
+          variant="outline"
+          onClick={onCancel}
+          className="flex-1"
+        >
           {t("cancel")}
         </Button>
         <Button type="submit" className="flex-1">

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import { cn } from "@/lib/utils";
 import { MAP_STYLES } from "@/utils/mapConstants";
 import { Check, Globe, Map as MapIcon, Moon, Sun } from "lucide-react";
@@ -61,7 +61,7 @@ export const MapStyleSwitcher: FunctionComponent<MapStyleSwitcherProps> = ({
             <style.icon className="w-4 h-4" />
           </div>
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            {t(style.label)}
+            {t(style.label as any)}
           </span>
           {currentStyle === style.id && (
             <div className="absolute top-1 right-1">

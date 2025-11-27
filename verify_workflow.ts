@@ -1,7 +1,6 @@
 import { createCaller } from "./src/server/api/root";
 import { db } from "./src/server/db";
 import { users } from "./src/server/db/schema";
-import { eq } from "drizzle-orm";
 
 async function main() {
   // 1. Setup Admin User

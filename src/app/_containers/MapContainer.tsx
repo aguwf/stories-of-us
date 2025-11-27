@@ -33,6 +33,9 @@ import { useMapEvents } from "./map/useMapEvents";
 import { useStoreLayers } from "./map/useStoreLayers";
 import type { StoreData } from "./map/types";
 import { List, Search } from "lucide-react";
+import { api } from "@/trpc/react";
+import { toast } from "sonner";
+import { useMemo } from "react";
 
 const MapContainer: FunctionComponent = () => {
   const currentPopupRef = useRef<mapboxgl.Popup | null>(null);
@@ -54,7 +57,39 @@ const MapContainer: FunctionComponent = () => {
   const [newLocationCoordinates, setNewLocationCoordinates] = useState<
     [number, number] | null
   >(null);
-  const [customStores, setCustomStores] = useState<StoreData[]>([]);
+  // const [customStores, setCustomStores] = useState<StoreData[]>([]); // Removed in favor of backend
+
+  const { data: locationsData, refetch: refetchLocations } =
+    api.location.getAll.useQuery();
+
+  const fetchedStores: StoreData[] = useMemo(() => {
+    return (
+      locationsData?.map((location) => ({
+        name: location.name,
+        address: location.address,
+        notes: location.description ?? "",
+        coordinates: [location.lng, location.lat],
+        images: location.images,
+        tags: [], // Can parse from details if needed
+        price: undefined, // Can parse from details if needed
+        amenities: [], // Can parse from details if needed
+        popularity: 0,
+      })) ?? []
+    );
+  }, [locationsData]);
+
+  const createLocationMutation = api.location.create.useMutation({
+    onSuccess: () => {
+      toast.success("Location submitted for approval!");
+      setIsAddLocationMode(false);
+      setNewLocationCoordinates(null);
+      setIsSheetOpen(false);
+      refetchLocations();
+    },
+    onError: (error) => {
+      toast.error(`Error: ${error.message}`);
+    },
+  });
 
   // Routing state
   const [transportMode, setTransportMode] = useState<
@@ -235,8 +270,9 @@ const MapContainer: FunctionComponent = () => {
     searchRadius,
     selectedTags,
     priceRange,
-    customStores,
+    customStores: [], // No longer using local custom stores
     favoriteStores,
+    stores: fetchedStores,
   });
 
   useStoreLayers({ mapRef, isMapLoaded, filteredStores });
@@ -344,31 +380,15 @@ const MapContainer: FunctionComponent = () => {
   };
 
   const handleAddLocationSubmit = (data: Partial<StoreData>) => {
-    if (newLocationCoordinates && data.name && data.address) {
-      const newStore: StoreData = {
+    if (newLocationCoordinates && data.name) {
+      createLocationMutation.mutate({
         name: data.name,
-        address: data.address,
-        notes: data.notes || "",
-        coordinates: newLocationCoordinates,
-        openingHours: data.openingHours,
-        price: data.price,
-        tags: data.tags,
-        amenities: data.amenities,
-        popularity: 0, // New locations start with 0 popularity
-      };
-
-      setCustomStores([...customStores, newStore]);
-      setIsAddLocationMode(false);
-      setNewLocationCoordinates(null);
-      setIsSheetOpen(false);
-
-      // Fly to new location
-      if (mapRef.current) {
-        mapRef.current.flyTo({
-          center: newLocationCoordinates,
-          zoom: 15,
-        });
-      }
+        description: data.notes,
+        address: data.address ?? "",
+        lat: newLocationCoordinates[1],
+        lng: newLocationCoordinates[0],
+        images: [],
+      });
     }
   };
 

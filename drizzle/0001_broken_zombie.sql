@@ -1,0 +1,2 @@
+ALTER TABLE "stories-of-us_story" ADD COLUMN "status" varchar(20) DEFAULT 'pending' NOT NULL;--> statement-breakpoint
+ALTER TABLE "stories-of-us_user" ADD COLUMN "role" varchar(20) DEFAULT 'user' NOT NULL;

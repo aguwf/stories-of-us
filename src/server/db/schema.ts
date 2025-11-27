@@ -57,6 +57,7 @@ export const stories = createTable("story", {
   postFormat: varchar("post_format", { length: 50, enum: postFormatValues })
     .default("standard")
     .notNull(),
+  status: varchar("status", { length: 20 }).default("pending").notNull(),
 });
 
 export const storiesRelations = relations(stories, ({ one, many }) => ({
@@ -77,6 +78,7 @@ export const users = createTable("user", {
     withTimezone: true,
   }).default(sql`CURRENT_TIMESTAMP`),
   avatar: varchar("avatar", { length: 255 }),
+  role: varchar("role", { length: 20 }).default("user").notNull(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -214,3 +216,34 @@ export const pushSubscriptionsRelations = relations(
     }),
   })
 );
+
+export const locations = createTable("location", {
+  id: serial("id").primaryKey(),
+  name: varchar("name", { length: 256 }).notNull(),
+  address: varchar("address", { length: 256 }).notNull(),
+  description: text("description"),
+  lat: real("lat").notNull(),
+  lng: real("lng").notNull(),
+  images: text("images")
+    .array()
+    .default(sql`'{}'::text[]`)
+    .notNull(),
+  details: text("details"), // Store JSON details as text
+  status: varchar("status", { length: 20 }).default("pending").notNull(),
+  createdBy: varchar("created_by", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    () => new Date()
+  ),
+});
+
+export const locationsRelations = relations(locations, ({ one }) => ({
+  creator: one(users, {
+    fields: [locations.createdBy],
+    references: [users.id],
+  }),
+}));

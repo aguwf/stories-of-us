@@ -1,6 +1,5 @@
 import { useMemo } from "react";
 
-import { BEAR_STORES } from "@/utils/constants";
 import { calculateDistance } from "@/utils/mapHelpers";
 import type { StoreData } from "./types";
 
@@ -15,6 +14,7 @@ interface UseFilteredStoresParams {
   priceRange: number[];
   customStores: StoreData[];
   favoriteStores: Set<string>;
+  stores: StoreData[];
 }
 
 export const useFilteredStores = ({
@@ -28,38 +28,22 @@ export const useFilteredStores = ({
   priceRange,
   customStores,
   favoriteStores,
+  stores,
 }: UseFilteredStoresParams) => {
   return useMemo<StoreData[]>(() => {
-    const allStores = [
-      ...BEAR_STORES,
-      ...customStores.map((store) => ({
-        ...store,
-        latitude: store.coordinates[1],
-        longitude: store.coordinates[0],
-      })),
-    ];
+    const allStores = [...stores, ...customStores];
 
     let filteredStores = allStores.map((store) => {
       const storeData: StoreData = {
-        name: store.name,
-        address: store.address,
-        notes: store.notes,
-        coordinates: [store.longitude, store.latitude],
-        openingHours: store.openingHours,
-        rating: store.rating,
-        images: store.images,
-        tags: store.tags,
-        price: store.price as 1 | 2 | 3 | 4 | undefined,
-        amenities: store.amenities,
-        popularity: store.popularity ?? Math.floor(Math.random() * 100),
+        ...store,
       };
 
       if (userLocation) {
         const dist = calculateDistance(
           userLocation[1],
           userLocation[0],
-          store.latitude,
-          store.longitude
+          store.coordinates[1],
+          store.coordinates[0]
         );
         storeData.distance = `${dist.toFixed(1)} km`;
       }

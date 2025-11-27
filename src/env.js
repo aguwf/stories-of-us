@@ -11,6 +11,7 @@ export const env = createEnv({
 		QSTASH_URL: z.string().url(),
 		QSTASH_TOKEN: z.string().min(1),
 		IMAGEKIT_PRIVATE_KEY: z.string().min(1),
+		VAPID_PRIVATE_KEY: z.string().min(1),
 		NODE_ENV: z
 			.enum(["development", "test", "production"])
 			.default("development"),
@@ -28,6 +29,7 @@ export const env = createEnv({
 		NEXT_PUBLIC_API_NINJAS_API_KEY: z.string(),
 		NEXT_PUBLIC_WEATHER_API_KEY: z.string(),
 		NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN: z.string(),
+		NEXT_PUBLIC_VAPID_PUBLIC_KEY: z.string(),
 	},
 
 	/**
@@ -39,6 +41,7 @@ export const env = createEnv({
 		QSTASH_URL: process.env.QSTASH_URL,
 		QSTASH_TOKEN: process.env.QSTASH_TOKEN,
 		IMAGEKIT_PRIVATE_KEY: process.env.IMAGEKIT_PRIVATE_KEY,
+		VAPID_PRIVATE_KEY: process.env.VAPID_PRIVATE_KEY,
 		NODE_ENV: process.env.NODE_ENV,
 		NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY:
 			process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY,
@@ -48,6 +51,7 @@ export const env = createEnv({
 		NEXT_PUBLIC_WEATHER_API_KEY: process.env.NEXT_PUBLIC_WEATHER_API_KEY,
 		NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN:
 			process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN,
+		NEXT_PUBLIC_VAPID_PUBLIC_KEY: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
 	},
 	/**
 	 * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

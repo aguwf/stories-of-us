@@ -3,7 +3,12 @@ import { useMemo, useState } from "react";
 
 import { MapControls, StoreList } from "@/app/_components/Map";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Crosshair, Plus, Search, SlidersHorizontal, Star } from "lucide-react";
 
@@ -62,7 +67,9 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
           )}
           aria-label="Toggle favorites"
         >
-          <Star className={cn("h-5 w-5", showFavoritesOnly && "fill-current")} />
+          <Star
+            className={cn("h-5 w-5", showFavoritesOnly && "fill-current")}
+          />
         </button>
       </div>
 
@@ -77,7 +84,9 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
               : "bg-white border-gray-200 text-gray-700"
           )}
         >
-          <Crosshair className={cn("h-5 w-5", isFollowMode && "animate-pulse")} />
+          <Crosshair
+            className={cn("h-5 w-5", isFollowMode && "animate-pulse")}
+          />
           <span className="hidden sm:inline">Follow</span>
         </button>
 
@@ -164,7 +173,7 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
               <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 shadow-inner">
                 <StoreList
                   {...mobileStoreListProps}
-                  className={cn("max-h-[38vh] px-3", storeListProps.className)}
+                  className={cn("max-h-[60vh] px-3", storeListProps.className)}
                   onClose={closeSheet}
                 />
               </div>

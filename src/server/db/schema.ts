@@ -193,3 +193,24 @@ export const commentsRelations = relations(comments, ({ one }) => ({
   story: one(stories, { fields: [comments.storyId], references: [stories.id] }),
   user: one(users, { fields: [comments.userId], references: [users.id] }),
 }));
+
+export const pushSubscriptions = createTable("push_subscription", {
+  id: serial("id").primaryKey(),
+  userId: varchar("user_id", { length: 255 }).references(() => users.id),
+  endpoint: text("endpoint").notNull().unique(),
+  p256dh: text("p256dh").notNull(),
+  auth: text("auth").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const pushSubscriptionsRelations = relations(
+  pushSubscriptions,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [pushSubscriptions.userId],
+      references: [users.id],
+    }),
+  })
+);

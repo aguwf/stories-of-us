@@ -4,24 +4,26 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
 import type { RouteData, RouteStop } from "@/types/map.types";
 import { formatRouteInfo } from "@/utils/mapHelpers";
-import { 
-  Bike, 
-  Car, 
-  ChevronDown, 
-  ChevronUp, 
-  Footprints, 
-  MapIcon, 
-  Save, 
-  Share2, 
-  TrafficCone, 
-  X 
+import {
+  Bike,
+  Car,
+  ChevronDown,
+  ChevronUp,
+  Footprints,
+  MapIcon,
+  Save,
+  Share2,
+  TrafficCone,
+  X,
 } from "lucide-react";
 
 interface RouteControlPanelProps {
   route: RouteData;
   onClear: () => void;
   transportMode: "driving" | "walking" | "cycling" | "driving-traffic";
-  onTransportModeChange: (mode: "driving" | "walking" | "cycling" | "driving-traffic") => void;
+  onTransportModeChange: (
+    mode: "driving" | "walking" | "cycling" | "driving-traffic"
+  ) => void;
   avoidTolls: boolean;
   onAvoidTollsChange: (avoid: boolean) => void;
   plannedStops: RouteStop[];
@@ -62,7 +64,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
   return (
     <div
       className={cn(
-        "bg-white dark:bg-gray-800 rounded-lg shadow-lg z-10 transition-all duration-300 flex flex-col",
+        "bg-white dark:bg-gray-800 rounded-lg shadow-lg z-20 transition-all duration-300 flex flex-col",
         isMobile
           ? "fixed bottom-0 left-0 right-0 max-h-[80vh] rounded-b-none"
           : "absolute top-4 right-4 w-80 max-h-[calc(100vh-2rem)]"
@@ -131,7 +133,8 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
           </div>
 
           {/* Avoid Tolls Checkbox */}
-          {(transportMode === "driving" || transportMode === "driving-traffic") && (
+          {(transportMode === "driving" ||
+            transportMode === "driving-traffic") && (
             <label className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
               <input
                 type="checkbox"
@@ -230,14 +233,20 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
                 className="flex items-center justify-between w-full text-sm font-medium text-gray-700 dark:text-gray-300 p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-md transition-colors"
               >
                 <span>Turn-by-turn Directions</span>
-                {showSteps ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                {showSteps ? (
+                  <ChevronUp className="w-4 h-4" />
+                ) : (
+                  <ChevronDown className="w-4 h-4" />
+                )}
               </button>
-              
+
               {showSteps && (
                 <div className="mt-2 space-y-3 pl-2 border-l-2 border-gray-200 dark:border-gray-700">
                   {route.steps.map((step, index) => (
                     <div key={index} className="text-sm">
-                      <p className="text-gray-800 dark:text-gray-200">{step.maneuver.instruction}</p>
+                      <p className="text-gray-800 dark:text-gray-200">
+                        {step.maneuver.instruction}
+                      </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">
                         {(step.distance / 1000).toFixed(1)} km
                       </p>

@@ -1,5 +1,4 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
 import {
 	DropdownMenu,
@@ -11,10 +10,12 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { Icon } from "./Icon";
+import { useTranslations } from "next-intl";
 
 const Toolbar = ({ showSearch }: { showSearch: boolean }) => {
 	const router = useRouter();
-	const [selectedKeys, setSelectedKeys] = useState<string>("Sort by");
+	const t = useTranslations("Toolbar");
+	const [selectedKeys, setSelectedKeys] = useState<string>(t("sort_by"));
 
 	const handleChangeOrder = (key: string) => {
 		setSelectedKeys(key);
@@ -38,10 +39,10 @@ const Toolbar = ({ showSearch }: { showSearch: boolean }) => {
 					</DropdownMenuTrigger>
 					<DropdownMenuContent>
 						<DropdownMenuItem onClick={() => handleChangeOrder("newest")}>
-							Newest
+							{t("newest")}
 						</DropdownMenuItem>
 						<DropdownMenuItem onClick={() => handleChangeOrder("oldest")}>
-							Oldest
+							{t("oldest")}
 						</DropdownMenuItem>
 					</DropdownMenuContent>
 				</DropdownMenu>

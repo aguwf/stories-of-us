@@ -2,6 +2,7 @@ import { useEffect, type MutableRefObject } from "react";
 import type * as GeoJSON from "geojson";
 
 import { sanitizeStoreName } from "@/utils/mapHelpers";
+import { type PopupCopy } from "@/utils/mapPopupHelpers";
 import { createInteractivePopup } from "./createInteractivePopup";
 import type { StoreData } from "./types";
 
@@ -21,6 +22,10 @@ interface UseMapEventsParams {
   isAddLocationMode: boolean;
   setNewLocationCoordinates: (coords: [number, number] | null) => void;
   currentPopupRef: React.MutableRefObject<mapboxgl.Popup | null>;
+  copy: {
+    enableLocation: string;
+    linkCopied: string;
+  } & PopupCopy;
 }
 
 export const useMapEvents = ({
@@ -39,6 +44,7 @@ export const useMapEvents = ({
   isAddLocationMode,
   setNewLocationCoordinates,
   currentPopupRef,
+  copy,
 }: UseMapEventsParams) => {
   useEffect(() => {
     if (!isMapLoaded || !mapRef.current) return;
@@ -95,6 +101,10 @@ export const useMapEvents = ({
         openingHours: store?.openingHours,
         rating: store?.rating,
         images: store?.images,
+        tags: store?.tags,
+        price: store?.price,
+        amenities: store?.amenities,
+        popularity: store?.popularity,
       };
 
       if (isDesktop) {
@@ -115,8 +125,9 @@ export const useMapEvents = ({
             const url = new URL(window.location.href);
             url.searchParams.set("store", shareStore.name ?? "");
             navigator.clipboard.writeText(url.toString());
-            alert("Link copied to clipboard!");
+            alert(copy.linkCopied);
           },
+          copy,
         });
       } else {
         if (currentPopupRef.current) {
@@ -179,5 +190,6 @@ export const useMapEvents = ({
     isAddLocationMode,
     setNewLocationCoordinates,
     currentPopupRef,
+    copy,
   ]);
 };

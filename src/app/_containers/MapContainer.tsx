@@ -15,6 +15,7 @@ import {
   UserLocationButton,
 } from "@/app/_components/Map";
 import { Input } from "@/components/ui/input";
+import { useAuth, useClerk } from "@clerk/nextjs";
 import { useFavoriteStores } from "@/hooks/useFavoriteStores";
 import { useGeolocation } from "@/hooks/useGeolocation";
 import { useSavedRoutes, type ShareableRoute } from "@/hooks/useSavedRoutes";
@@ -36,6 +37,8 @@ import { List, Search } from "lucide-react";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
 import { useMemo } from "react";
+import type { StoreLocation } from "@/types/map.types";
+import { useTranslations } from "next-intl";
 
 const MapContainer: FunctionComponent = () => {
   const currentPopupRef = useRef<mapboxgl.Popup | null>(null);
@@ -46,6 +49,8 @@ const MapContainer: FunctionComponent = () => {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [sortBy, setSortBy] = useState<"name" | "distance">("name");
+  const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
+  const { openSignIn } = useClerk();
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([]);
@@ -64,30 +69,44 @@ const MapContainer: FunctionComponent = () => {
 
   const fetchedStores: StoreData[] = useMemo(() => {
     return (
-      locationsData?.map((location) => ({
-        name: location.name,
-        address: location.address,
-        notes: location.description ?? "",
-        coordinates: [location.lng, location.lat],
-        images: location.images,
-        tags: [], // Can parse from details if needed
-        price: undefined, // Can parse from details if needed
-        amenities: [], // Can parse from details if needed
-        popularity: 0,
-      })) ?? []
+      locationsData?.map((location) => {
+        let details: Partial<StoreLocation> = {};
+
+        if (location.details) {
+          try {
+            details = JSON.parse(location.details) as Partial<StoreLocation>;
+          } catch (error) {
+            console.error("Failed to parse location details", error);
+          }
+        }
+
+        return {
+          name: location.name,
+          address: location.address,
+          notes: location.description ?? "",
+          coordinates: [location.lng, location.lat] as [number, number],
+          images: location.images,
+          openingHours: details.openingHours,
+          rating: details.rating,
+          tags: details.tags ?? [],
+          price: details.price,
+          amenities: details.amenities ?? [],
+          popularity: details.popularity ?? 0,
+        };
+      }) ?? []
     );
   }, [locationsData]);
 
   const createLocationMutation = api.location.create.useMutation({
     onSuccess: () => {
-      toast.success("Location submitted for approval!");
+      toast.success(t("toast_submitted"));
       setIsAddLocationMode(false);
       setNewLocationCoordinates(null);
       setIsSheetOpen(false);
       refetchLocations();
     },
     onError: (error) => {
-      toast.error(`Error: ${error.message}`);
+      toast.error(t("toast_error", { message: error.message }));
     },
   });
 
@@ -104,6 +123,21 @@ const MapContainer: FunctionComponent = () => {
 
   const isMobile = useMediaQuery("(max-width: 640px)");
   const isDesktop = useMediaQuery("(min-width: 768px)");
+  const t = useTranslations("Map");
+  const popupT = useTranslations("MapPopup");
+  const popupCopy = useMemo(
+    () => ({
+      enableLocation: t("enable_location_prompt"),
+      linkCopied: popupT("link_copied"),
+      savedLabel: popupT("saved"),
+      saveLabel: popupT("save"),
+      directionsLabel: popupT("directions"),
+      distanceLabel: popupT("distance"),
+      timeLabel: popupT("time"),
+      clearRouteLabel: popupT("clear_route"),
+    }),
+    [popupT, t]
+  );
 
   // Custom hooks
   const { mapRef, mapContainerRef, isMapLoaded } = useMapbox(MAP_CONFIG);
@@ -186,14 +220,14 @@ const MapContainer: FunctionComponent = () => {
       if (sharedRoute?.stops?.length) {
         const stops = sharedRoute.stops.map((stop) => ({
           name: stop.name,
-          address: stop.address ?? "Shared location",
+          address: stop.address ?? t("shared_location_label"),
           notes: stop.notes ?? "",
           coordinates: stop.coordinates,
         }));
         setPlannedStops(stops);
       }
     }
-  }, [decodeSharedRoute]);
+  }, [decodeSharedRoute, t]);
 
   const addStopToRoute = useCallback((stop: StoreData) => {
     setPlannedStops((prev) => {
@@ -217,8 +251,8 @@ const MapContainer: FunctionComponent = () => {
         name:
           name ||
           (plannedStops.length > 1
-            ? `Route with ${plannedStops.length} stops`
-            : plannedStops[0]?.name ?? "Saved route"),
+            ? t("route_with_stops", { count: plannedStops.length })
+            : plannedStops[0]?.name ?? t("saved_route_name")),
         stops: plannedStops.map((stop) => ({
           name: stop.name,
           address: stop.address,
@@ -230,35 +264,35 @@ const MapContainer: FunctionComponent = () => {
         durationMin: routeInfo?.durationMin,
       };
     },
-    [activeRoute, plannedStops]
+    [activeRoute, plannedStops, t]
   );
 
   const handleSaveMultiStop = useCallback(
     (name: string, kind?: ShareableRoute["type"]) => {
       const routePayload = buildShareableRoute(name, kind);
       if (!routePayload) {
-        alert("Add at least one stop before saving.");
+        alert(t("alert_add_stop_before_save"));
         return;
       }
       saveRoute(routePayload);
-      alert("Route saved for later.");
+      alert(t("alert_route_saved"));
     },
-    [buildShareableRoute, saveRoute]
+    [buildShareableRoute, saveRoute, t]
   );
 
   const handleShareMultiStop = useCallback(
     (kind?: ShareableRoute["type"]) => {
       const routePayload = buildShareableRoute(undefined, kind);
       if (!routePayload) {
-        alert("Add stops before sharing.");
+        alert(t("alert_add_stop_before_share"));
         return;
       }
       const url = shareRoute(routePayload);
       if (url) {
-        alert("Share link copied to clipboard!");
+        alert(t("alert_link_copied"));
       }
     },
-    [buildShareableRoute, shareRoute]
+    [buildShareableRoute, shareRoute, t]
   );
 
   const filteredStores = useFilteredStores({
@@ -293,6 +327,7 @@ const MapContainer: FunctionComponent = () => {
     isAddLocationMode,
     setNewLocationCoordinates,
     currentPopupRef,
+    copy: popupCopy,
   });
 
   useEffect(() => {
@@ -333,7 +368,7 @@ const MapContainer: FunctionComponent = () => {
     if (!selectedStore) return;
 
     if (!userLocation) {
-      alert("Please enable location services to get directions");
+      alert(t("enable_location_prompt"));
       getUserLocation();
       return;
     }
@@ -346,7 +381,7 @@ const MapContainer: FunctionComponent = () => {
     const url = new URL(window.location.href);
     url.searchParams.set("store", store.name);
     navigator.clipboard.writeText(url.toString());
-    alert("Link copied to clipboard!");
+    alert(t("alert_link_copied"));
   };
 
   const handleStoreSelect = (store: StoreData) => {
@@ -361,33 +396,64 @@ const MapContainer: FunctionComponent = () => {
         if (currentPopupRef.current) {
           currentPopupRef.current.remove();
         }
-        currentPopupRef.current = createInteractivePopup({
-          map: mapRef.current,
-          storeData: store,
-          isFavorite,
-          toggleFavorite,
+          currentPopupRef.current = createInteractivePopup({
+            map: mapRef.current,
+            storeData: store,
+            isFavorite,
+            toggleFavorite,
           userLocation,
           getUserLocation,
           addStopToRoute,
           handleClearRoute,
-          onShare: handleShare,
-        });
-      } else {
-        setSelectedStore(store);
-        setIsSheetOpen(true);
-      }
+            onShare: handleShare,
+            copy: popupCopy,
+          });
+        } else {
+          setSelectedStore(store);
+          setIsSheetOpen(true);
+        }
     }
   };
 
-  const handleAddLocationSubmit = (data: Partial<StoreData>) => {
+  const handleAddLocationSubmit = (data: Partial<StoreLocation>) => {
     if (newLocationCoordinates && data.name) {
+      const images = (data.images ?? []).filter(Boolean);
+
+      const detailPayload = {
+        openingHours: data.openingHours?.trim() || undefined,
+        rating:
+          data.rating !== undefined && data.rating !== null
+            ? Math.min(Math.max(Number(data.rating), 0), 5)
+            : undefined,
+        tags: data.tags?.length ? data.tags : undefined,
+        price: data.price,
+        amenities: data.amenities?.length ? data.amenities : undefined,
+        popularity:
+          data.popularity !== undefined && data.popularity !== null
+            ? Math.min(Math.max(Number(data.popularity), 0), 100)
+            : undefined,
+      };
+
+      const cleanedDetails = Object.fromEntries(
+        Object.entries(detailPayload).filter(([, value]) => {
+          if (Array.isArray(value)) return value.length > 0;
+          return value !== undefined && value !== null && value !== "";
+        })
+      );
+
+      const details =
+        Object.keys(cleanedDetails).length > 0
+          ? JSON.stringify(cleanedDetails)
+          : undefined;
+
       createLocationMutation.mutate({
         name: data.name,
         description: data.notes,
         address: data.address ?? "",
         lat: newLocationCoordinates[1],
         lng: newLocationCoordinates[0],
-        images: [],
+        images,
+        details,
       });
     }
   };
@@ -423,10 +489,22 @@ const MapContainer: FunctionComponent = () => {
     showHeatmap,
     onHeatmapChange: setShowHeatmap,
     onAddLocation: () => {
-      setIsAddLocationMode(!isAddLocationMode);
-      if (!isAddLocationMode) {
-        alert("Click on the map to add a location");
+      if (!isAuthLoaded || !isSignedIn) {
+        toast.error("Please sign in to add a location.");
+        void openSignIn?.({
+          redirectUrl:
+            typeof window !== "undefined" ? window.location.href : undefined,
+        });
+        return;
       }
+
+      setIsAddLocationMode((prev) => {
+        const next = !prev;
+        if (next) {
+          alert("Click on the map to add a location");
+        }
+        return next;
+      });
     },
     isAddLocationMode,
     onClose: () => setIsSidebarOpen(false),
@@ -449,7 +527,7 @@ const MapContainer: FunctionComponent = () => {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
-                placeholder="Search stores, addresses..."
+                placeholder={t("search_placeholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="h-10 pl-9 pr-3 w-64 md:w-72 bg-white dark:bg-gray-900 border-gray-200 dark:border-gray-700 shadow-md"
@@ -496,7 +574,7 @@ const MapContainer: FunctionComponent = () => {
             onAvoidTollsChange={setAvoidTolls}
             plannedStops={plannedStops}
             onRemoveStop={removeStopFromRoute}
-            onSaveRoute={() => handleSaveMultiStop("My Route")}
+            onSaveRoute={() => handleSaveMultiStop(t("my_route_name"))}
             onShareRoute={() => handleShareMultiStop()}
           />
         )}

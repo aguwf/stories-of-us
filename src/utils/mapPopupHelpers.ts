@@ -1,10 +1,22 @@
 import type { PopupProps } from "@/types/map.types";
 import { sanitizeStoreName } from "./mapHelpers";
 
+export interface PopupCopy {
+  savedLabel: string;
+  saveLabel: string;
+  directionsLabel: string;
+  distanceLabel: string;
+  timeLabel: string;
+  clearRouteLabel: string;
+}
+
 /**
  * Generate HTML content for store popup
  */
-export const createPopupHTML = (props: PopupProps): string => {
+export const createPopupHTML = (
+  props: PopupProps,
+  copy: PopupCopy
+): string => {
   const {
     name,
     address,
@@ -175,7 +187,7 @@ export const createPopupHTML = (props: PopupProps): string => {
             }" stroke="currentColor" stroke-width="2">
               <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
             </svg>
-            ${isFavorite ? "Saved" : "Save"}
+            ${isFavorite ? copy.savedLabel : copy.saveLabel}
           </button>
           
           <button 
@@ -205,7 +217,7 @@ export const createPopupHTML = (props: PopupProps): string => {
               <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
               <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path>
             </svg>
-            Directions
+            ${copy.directionsLabel}
           </button>
         </div>
       </div>
@@ -218,7 +230,8 @@ export const createPopupHTML = (props: PopupProps): string => {
  */
 export const createRouteInfoHTML = (
   distanceKm: string,
-  durationMin: number
+  durationMin: number,
+  copy: Pick<PopupCopy, "distanceLabel" | "timeLabel" | "clearRouteLabel">
 ): string => {
   return `
     <div style="
@@ -235,10 +248,10 @@ export const createRouteInfoHTML = (
         gap: 16px;
       ">
         <span style="color: #666; font-size: 13px;">
-          <strong>Distance:</strong> ${distanceKm} km
+          <strong>${copy.distanceLabel}</strong> ${distanceKm} km
         </span>
         <span style="color: #666; font-size: 13px;">
-          <strong>Time:</strong> ${durationMin} min
+          <strong>${copy.timeLabel}</strong> ${durationMin} min
         </span>
       </div>
       <button 
@@ -258,7 +271,7 @@ export const createRouteInfoHTML = (
         onmouseover="this.style.background='#B7A3E3'; this.style.color='white';"
         onmouseout="this.style.background='white'; this.style.color='#B7A3E3';"
       >
-        Clear Route
+        ${copy.clearRouteLabel}
       </button>
     </div>
   `;

@@ -69,7 +69,7 @@ export default function RootLayout(props: {
 	const locale = props.params.locale;
 	const clerkLocale = clerkLocalizations[locale] ?? enUS;
 	const localizePath = (path: string) =>
-		locale === AppConfig.defaultLocale ? path : `/${locale}${path}`;
+		`/${locale}${path}`;
 
 	// Using internationalization in Client Components
 	const messages = useMessages();

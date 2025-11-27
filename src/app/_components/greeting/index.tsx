@@ -8,6 +8,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { Icon } from "../common/Icon";
+import { useTranslations } from "next-intl";
 
 type WeatherData = {
 	current: {
@@ -26,23 +27,24 @@ const Greeting = ({
 	showSearch: boolean;
 	setShowSearch: (show: boolean) => void;
 }) => {
-	const [weather, setWeather] = useState<WeatherData | null>(null);
-	const [error, setError] = useState<string | null>(null);
-	const [greeting, setGreeting] = useState<string | undefined>(undefined);
-	const [loading, setLoading] = useState<boolean>(true);
+  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [greeting, setGreeting] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(true);
+  const t = useTranslations("Greeting");
 
 	useEffect(() => {
 		const fetchWeather = async () => {
 			setLoading(true);
-			try {
-				const weatherData = await getWeather();
-				setWeather(weatherData);
-			} catch (err) {
-				setError("Failed to fetch weather data. Please try again later.");
-			} finally {
-				setLoading(false);
-			}
-		};
+      try {
+        const weatherData = await getWeather();
+        setWeather(weatherData);
+      } catch (err) {
+        setError(t("error"));
+      } finally {
+        setLoading(false);
+      }
+    };
 		fetchWeather();
 	}, []);
 
@@ -76,15 +78,15 @@ const Greeting = ({
 			</div>
 			<motion.div
 				animate={{
-					opacity: showSearch ? 1 : 0,
-					height: showSearch ? "auto" : 0,
-				}}
-				transition={{ duration: 0.5, ease: "easeInOut" }}
-			>
-				<Input placeholder="Search" className="w-full mt-4 rounded-xl h-10" />
-			</motion.div>
-		</section>
-	);
+          opacity: showSearch ? 1 : 0,
+          height: showSearch ? "auto" : 0,
+        }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+      >
+        <Input placeholder={t("search_placeholder")} className="w-full mt-4 rounded-xl h-10" />
+      </motion.div>
+    </section>
+  );
 };
 
 export default Greeting;

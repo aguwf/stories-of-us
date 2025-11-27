@@ -54,8 +54,8 @@ const config = {
 	redirects: async () => {
 		return [
 			{
-				source: "/",
-				destination: "/timelines",
+				source: "/:locale(en|fr|vi)",
+				destination: "/:locale/timelines",
 				permanent: true,
 			},
 		];

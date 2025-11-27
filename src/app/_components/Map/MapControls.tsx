@@ -1,3 +1,4 @@
+'use client';
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
@@ -16,6 +17,7 @@ import {
   CollapsibleTrigger,
 } from "@radix-ui/react-collapsible";
 import { StoreList, type StoreListProps } from "./StoreList";
+import { useTranslations } from "next-intl";
 
 export interface MapControlsProps {
   searchQuery: string;
@@ -85,6 +87,8 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
   hideStoreList = false,
   defaultStoreListOpen = false,
 }) => {
+  const t = useTranslations("Map");
+
   return (
     <div
       className={cn(
@@ -107,7 +111,7 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
               : "bg-primary text-foreground hover:bg-primary/90"
           )}
         >
-          {isAddLocationMode ? "Cancel Adding" : "Add New Location"}
+          {isAddLocationMode ? t("cancel_adding") : t("add_location")}
         </button>
       )}
 
@@ -116,13 +120,13 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
         <div className="space-y-2">
           {!isMobile && (
             <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-              Search
+              {t("search_label")}
             </label>
           )}
           <div className="relative group">
             <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400 group-focus-within:text-primary transition-colors" />
             <Input
-              placeholder="Search stores, addresses..."
+              placeholder={t("search_placeholder")}
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
               className={cn(
@@ -137,9 +141,9 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
       {/* Near Me Section */}
       <div className="space-y-2">
         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider flex justify-between items-center">
-          <span>Near Me</span>
+          <span>{t("near_me")}</span>
           <span className="text-xs font-normal text-gray-400">
-            {searchRadius} km
+            {t("distance_unit", { value: searchRadius })}
           </span>
         </label>
 
@@ -173,7 +177,7 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
               className={cn("h-4 w-4", isFollowMode && "animate-pulse")}
             />
             <span>
-              {isFollowMode ? "Following Location" : "Follow Location"}
+              {isFollowMode ? t("following_location") : t("follow_location")}
             </span>
           </button>
         </div>
@@ -182,7 +186,7 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
       {/* Filters Section */}
       <div className="space-y-2">
         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Filters & Sort
+          {t("filters_and_sort")}
         </label>
         <div className="grid grid-cols-2 gap-2">
           <button
@@ -201,7 +205,7 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
                 showFavoritesOnly && "fill-current scale-110"
               )}
             />
-            <span>Favorites</span>
+            <span>{t("favorites")}</span>
           </button>
 
           <button
@@ -218,11 +222,13 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
               !hasUserLocation && "opacity-50 cursor-not-allowed"
             )}
             title={
-              !hasUserLocation ? "Enable location to sort by distance" : ""
+              !hasUserLocation ? t("sort_tooltip") : ""
             }
           >
             <ArrowUpDown className="h-4 w-4" />
-            <span>{sortBy === "distance" ? "Distance" : "Name"}</span>
+            <span>
+              {sortBy === "distance" ? t("sort_distance") : t("sort_name")}
+            </span>
           </button>
         </div>
       </div>
@@ -240,7 +246,7 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
       {/* Map Style Section */}
       <div className="space-y-2">
         <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-          Map Style
+          {t("map_style")}
         </label>
         <MapStyleSwitcher
           currentStyle={currentStyle}
@@ -254,7 +260,7 @@ export const MapControls: FunctionComponent<MapControlsProps> = ({
           <CollapsibleTrigger className="w-full">
             <div className="flex items-center justify-between gap-2">
               <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider cursor-pointer">
-                Store List
+                {t("store_list")}
               </label>
               <ChevronDown className="h-4 w-4" />
             </div>

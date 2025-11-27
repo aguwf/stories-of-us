@@ -3,7 +3,7 @@ import type { LocalePrefixMode } from "next-intl/routing";
 export const locales = ["en", "fr", "vi"] as const;
 export type AppLocale = (typeof locales)[number];
 
-const localePrefix: LocalePrefixMode = "as-needed";
+const localePrefix: LocalePrefixMode = "always";
 
 export const localeLabels: Record<AppLocale, string> = {
 	en: "English",

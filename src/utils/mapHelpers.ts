@@ -29,6 +29,7 @@ export const createStoresGeoJSON = (
       name: store.name,
       address: store.address,
       notes: store.notes,
+      popularity: store.popularity ?? 0,
     },
   })),
 });

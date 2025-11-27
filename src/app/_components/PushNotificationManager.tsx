@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Bell, BellOff } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 function urlBase64ToUint8Array(base64String: string) {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -25,6 +26,7 @@ export function PushNotificationManager() {
   const [subscription, setSubscription] = useState<PushSubscription | null>(
     null
   );
+  const t = useTranslations("Notifications");
 
   useEffect(() => {
     if ("serviceWorker" in navigator && "PushManager" in window) {
@@ -59,10 +61,10 @@ export function PushNotificationManager() {
         body: JSON.stringify(sub),
       });
 
-      toast.success("Subscribed to notifications!");
+      toast.success(t("subscribe_success"));
     } catch (error) {
       console.error("Error subscribing to push", error);
-      toast.error("Failed to subscribe to notifications.");
+      toast.error(t("subscribe_error"));
     }
   }
 
@@ -70,7 +72,7 @@ export function PushNotificationManager() {
     try {
       await subscription?.unsubscribe();
       setSubscription(null);
-      toast.info("Unsubscribed from notifications.");
+      toast.info(t("unsubscribe"));
     } catch (error) {
       console.error("Error unsubscribing from push", error);
     }
@@ -87,7 +89,7 @@ export function PushNotificationManager() {
           variant="outline"
           size="icon"
           onClick={unsubscribeFromPush}
-          title="Disable Notifications"
+          title={t("disable")}
           className="rounded-full shadow-lg bg-background/80 backdrop-blur-sm"
         >
           <BellOff className="h-5 w-5" />
@@ -97,7 +99,7 @@ export function PushNotificationManager() {
           variant="default"
           size="icon"
           onClick={subscribeToPush}
-          title="Enable Notifications"
+          title={t("enable")}
           className="rounded-full shadow-lg"
         >
           <Bell className="h-5 w-5" />

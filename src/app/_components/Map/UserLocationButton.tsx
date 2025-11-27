@@ -1,4 +1,6 @@
+'use client';
 import type { FunctionComponent } from "react";
+import { useTranslations } from "next-intl";
 
 interface UserLocationButtonProps {
 	onClick: () => void;
@@ -9,6 +11,8 @@ export const UserLocationButton: FunctionComponent<UserLocationButtonProps> = ({
 	onClick,
 	isVisible,
 }) => {
+	const t = useTranslations("Map");
+
 	if (!isVisible) return null;
 
 	return (
@@ -16,8 +20,8 @@ export const UserLocationButton: FunctionComponent<UserLocationButtonProps> = ({
 			type="button"
 			onClick={onClick}
 			className="absolute bottom-4 right-4 bg-white hover:bg-gray-50 rounded-full shadow-lg p-3 z-10 transition-all hover:scale-105"
-			aria-label="Get my location"
-			title="Get my location"
+			aria-label={t("get_my_location")}
+			title={t("get_my_location")}
 		>
 			{/** biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
 			<svg

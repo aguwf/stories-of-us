@@ -1,7 +1,9 @@
+'use client';
 import { cn } from "@/lib/utils";
 import { MAP_STYLES } from "@/utils/mapConstants";
 import { Check, Globe, Map as MapIcon, Moon, Sun } from "lucide-react";
 import type { FunctionComponent } from "react";
+import { useTranslations } from "next-intl";
 
 interface MapStyleSwitcherProps {
   currentStyle: string;
@@ -11,25 +13,25 @@ interface MapStyleSwitcherProps {
 const STYLES = [
   {
     id: MAP_STYLES.MAPBOX_STYLE,
-    label: "Streets",
+    label: "streets",
     icon: MapIcon,
     color: "bg-blue-100 text-blue-600",
   },
   {
     id: MAP_STYLES.SATELLITE,
-    label: "Satellite",
+    label: "satellite",
     icon: Globe,
     color: "bg-green-100 text-green-600",
   },
   {
     id: MAP_STYLES.LIGHT,
-    label: "Light",
+    label: "light",
     icon: Sun,
     color: "bg-orange-100 text-orange-600",
   },
   {
     id: MAP_STYLES.DARK,
-    label: "Dark",
+    label: "dark",
     icon: Moon,
     color: "bg-slate-800 text-slate-200",
   },
@@ -39,6 +41,8 @@ export const MapStyleSwitcher: FunctionComponent<MapStyleSwitcherProps> = ({
   currentStyle,
   onStyleChange,
 }) => {
+  const t = useTranslations("MapStyles");
+
   return (
     <div className="grid grid-cols-2 gap-2">
       {STYLES.map((style) => (
@@ -57,7 +61,7 @@ export const MapStyleSwitcher: FunctionComponent<MapStyleSwitcherProps> = ({
             <style.icon className="w-4 h-4" />
           </div>
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            {style.label}
+            {t(style.label)}
           </span>
           {currentStyle === style.id && (
             <div className="absolute top-1 right-1">

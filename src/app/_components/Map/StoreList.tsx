@@ -1,6 +1,8 @@
+'use client';
 import { cn } from "@/lib/utils";
 import { MapPin, Share2, Star } from "lucide-react";
 import type { FunctionComponent } from "react";
+import { useTranslations } from "next-intl";
 
 interface StoreData {
   name: string;
@@ -34,6 +36,7 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
   variant = "default",
 }) => {
   const isCompact = variant === "compact";
+  const t = useTranslations("StoreList");
 
   if (stores.length === 0) {
     return (
@@ -47,9 +50,9 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
           <MapPin className="w-8 h-8 text-gray-400" />
         </div>
         <h3 className="text-lg font-medium text-gray-900 dark:text-gray-100">
-          No stores found
+          {t("empty_title")}
         </h3>
-        <p className="text-sm mt-1">Try adjusting your search or filters</p>
+        <p className="text-sm mt-1">{t("empty_body")}</p>
       </div>
     );
   }
@@ -98,7 +101,7 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
                 </div>
                 {store.distance && (
                   <div className="mt-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
-                    {store.distance} away
+                    {store.distance} {t("distance_suffix")}
                   </div>
                 )}
               </div>
@@ -124,8 +127,8 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
                   )}
                   title={
                     isFavorite(store.name)
-                      ? "Remove from favorites"
-                      : "Add to favorites"
+                      ? t("remove_favorite")
+                      : t("add_favorite")
                   }
                 >
                   <Star
@@ -142,7 +145,7 @@ export const StoreList: FunctionComponent<StoreListProps> = ({
                     onShare(store);
                   }}
                   className="p-2 rounded-full text-gray-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
-                  title="Share store"
+                  title={t("share_store")}
                 >
                   <Share2 className="w-4 h-4" />
                 </button>

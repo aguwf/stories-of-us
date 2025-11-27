@@ -1,7 +1,7 @@
 import mapboxgl from "mapbox-gl";
 
 import { sanitizeStoreName } from "@/utils/mapHelpers";
-import { createPopupHTML } from "@/utils/mapPopupHelpers";
+import { createPopupHTML, type PopupCopy } from "@/utils/mapPopupHelpers";
 import type { StoreData } from "./types";
 
 interface CreateInteractivePopupOptions {
@@ -14,6 +14,10 @@ interface CreateInteractivePopupOptions {
   addStopToRoute: (stop: StoreData) => void;
   handleClearRoute: () => void;
   onShare?: (store: StoreData) => void;
+  copy: {
+    enableLocation: string;
+    linkCopied: string;
+  } & PopupCopy;
 }
 
 /**
@@ -29,6 +33,7 @@ export const createInteractivePopup = ({
   addStopToRoute,
   handleClearRoute,
   onShare,
+  copy,
 }: CreateInteractivePopupOptions) => {
   const popup = new mapboxgl.Popup({
     maxWidth: "320px",
@@ -42,14 +47,14 @@ export const createInteractivePopup = ({
       createPopupHTML({
         ...storeData,
         isFavorite: isFavorite(storeData.name),
-      })
+      }, copy)
     );
     setTimeout(attachPopupListeners, 0);
   };
 
   const handleDirectionsClick = () => {
     if (!userLocation) {
-      alert("Please enable location services to get directions");
+      alert(copy.enableLocation);
       getUserLocation();
       return;
     }
@@ -96,7 +101,7 @@ export const createInteractivePopup = ({
         const url = new URL(window.location.href);
         url.searchParams.set("store", storeData.name);
         navigator.clipboard.writeText(url.toString());
-        alert("Link copied to clipboard!");
+        alert(copy.linkCopied);
       });
     }
   };

@@ -1,7 +1,9 @@
+'use client';
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import { DollarSign, Flame, Tag } from "lucide-react";
 import type { FunctionComponent } from "react";
+import { useTranslations } from "next-intl";
 
 interface MapFiltersProps {
   selectedTags: string[];
@@ -22,7 +24,7 @@ const AVAILABLE_TAGS = [
   "Wifi",
   "Parking",
   "Pet Friendly",
-];
+] as const;
 
 export const MapFilters: FunctionComponent<MapFiltersProps> = ({
   selectedTags,
@@ -33,6 +35,10 @@ export const MapFilters: FunctionComponent<MapFiltersProps> = ({
   onHeatmapChange,
   className,
 }) => {
+  const t = useTranslations("MapFilters");
+  const getTagKey = (tag: (typeof AVAILABLE_TAGS)[number]) =>
+    tag === "Pet Friendly" ? "PetFriendly" : tag;
+
   const toggleTag = (tag: string) => {
     if (selectedTags.includes(tag)) {
       onTagsChange(selectedTags.filter((t) => t !== tag));
@@ -56,7 +62,7 @@ export const MapFilters: FunctionComponent<MapFiltersProps> = ({
         <div className="flex items-center gap-2">
           <Flame className={cn("h-4 w-4", showHeatmap ? "text-orange-500" : "text-gray-400")} />
           <Label htmlFor="heatmap-mode" className="text-sm font-medium">
-            Heatmap Mode
+            {t("heatmap")}
           </Label>
         </div>
         <label className="relative inline-flex items-center cursor-pointer">
@@ -75,7 +81,7 @@ export const MapFilters: FunctionComponent<MapFiltersProps> = ({
       <div className="space-y-2">
         <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
           <DollarSign className="h-3 w-3" />
-          <span>Price</span>
+          <span>{t("price")}</span>
         </div>
         <div className="flex gap-2">
           {[1, 2, 3, 4].map((price) => (
@@ -100,7 +106,7 @@ export const MapFilters: FunctionComponent<MapFiltersProps> = ({
       <div className="space-y-2">
         <div className="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
           <Tag className="h-3 w-3" />
-          <span>Tags & Amenities</span>
+          <span>{t("tags")}</span>
         </div>
         <div className="flex flex-wrap gap-2">
           {AVAILABLE_TAGS.map((tag) => (
@@ -115,7 +121,7 @@ export const MapFilters: FunctionComponent<MapFiltersProps> = ({
                   : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50 dark:bg-gray-900 dark:border-gray-700 dark:text-gray-300"
               )}
             >
-              {tag}
+              {t(`options.${getTagKey(tag)}`)}
             </button>
           ))}
         </div>

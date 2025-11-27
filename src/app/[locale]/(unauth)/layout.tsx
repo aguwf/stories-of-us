@@ -1,8 +1,8 @@
 import { useTranslations } from "next-intl";
-import Link from "next/link";
 
 import LocaleSwitcher from "@/app/_components/LocaleSwitcher";
 import { BaseTemplate } from "@/templates/BaseTemplate";
+import { Link } from "@/lib/i18nNavigation";
 
 export default function Layout(props: { children: React.ReactNode }) {
 	const t = useTranslations("RootLayout");

@@ -1,3 +1,4 @@
+'use client';
 import { type FunctionComponent, useState } from "react";
 
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -16,6 +17,7 @@ import {
   TrafficCone,
   X,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface RouteControlPanelProps {
   route: RouteData;
@@ -44,6 +46,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
   onSaveRoute,
   onShareRoute,
 }) => {
+  const t = useTranslations("RoutePanel");
   const { distanceKm, durationMin } = formatRouteInfo(
     route.distance,
     route.duration
@@ -55,10 +58,10 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
   const toggleExpand = () => setIsExpanded(!isExpanded);
 
   const modes = [
-    { id: "driving", icon: Car, label: "Drive" },
-    { id: "driving-traffic", icon: TrafficCone, label: "Traffic" },
-    { id: "cycling", icon: Bike, label: "Bike" },
-    { id: "walking", icon: Footprints, label: "Walk" },
+    { id: "driving", icon: Car, label: t("mode_drive") },
+    { id: "driving-traffic", icon: TrafficCone, label: t("mode_traffic") },
+    { id: "cycling", icon: Bike, label: t("mode_bike") },
+    { id: "walking", icon: Footprints, label: t("mode_walk") },
   ] as const;
 
   return (
@@ -75,7 +78,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
         <div className="flex items-center">
           <MapIcon className="w-5 h-5 text-purple-600 dark:text-purple-400 mr-2" />
           <h3 className="font-semibold text-gray-800 dark:text-gray-200">
-            Route Information
+            {t("title")}
           </h3>
         </div>
         <div className="flex items-center space-x-1">
@@ -84,7 +87,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
               type="button"
               onClick={toggleExpand}
               className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-              aria-label={isExpanded ? "Collapse panel" : "Expand panel"}
+              aria-label={isExpanded ? t("collapse") : t("expand")}
             >
               {isExpanded ? (
                 <ChevronDown className="w-5 h-5 text-gray-500" />
@@ -97,7 +100,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
             type="button"
             onClick={onClear}
             className="p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-            aria-label="Close route info"
+            aria-label={t("close")}
           >
             <X className="w-5 h-5 text-gray-500" />
           </button>
@@ -142,7 +145,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
                 onChange={(e) => onAvoidTollsChange(e.target.checked)}
                 className="rounded border-gray-300 text-purple-600 focus:ring-purple-500"
               />
-              <span>Avoid Tolls</span>
+              <span>{t("avoid_tolls")}</span>
             </label>
           )}
 
@@ -150,7 +153,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
           <div className="grid grid-cols-2 gap-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
             <div className="text-center p-2 bg-white dark:bg-gray-700 rounded-md shadow-sm">
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                Distance
+                {t("distance")}
               </p>
               <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
                 {distanceKm} km
@@ -159,7 +162,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
 
             <div className="text-center p-2 bg-white dark:bg-gray-700 rounded-md shadow-sm">
               <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">
-                Duration
+                {t("duration")}
               </p>
               <p className="text-lg font-semibold text-gray-800 dark:text-gray-200">
                 {durationMin} min
@@ -171,27 +174,27 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
           <div className="grid grid-cols-2 gap-2">
             <button
               type="button"
-              onClick={onShareRoute}
-              className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md py-2 px-3 transition-colors text-sm"
-            >
-              <Share2 className="w-4 h-4 mr-2" />
-              Share
-            </button>
-            <button
-              type="button"
-              onClick={onSaveRoute}
-              className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md py-2 px-3 transition-colors text-sm"
-            >
-              <Save className="w-4 h-4 mr-2" />
-              Save
-            </button>
-          </div>
+            onClick={onShareRoute}
+            className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md py-2 px-3 transition-colors text-sm"
+          >
+            <Share2 className="w-4 h-4 mr-2" />
+            {t("share")}
+          </button>
+          <button
+            type="button"
+            onClick={onSaveRoute}
+            className="flex items-center justify-center bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 rounded-md py-2 px-3 transition-colors text-sm"
+          >
+            <Save className="w-4 h-4 mr-2" />
+            {t("save")}
+          </button>
+        </div>
 
           {/* Planned stops list */}
           {plannedStops.length > 0 && (
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">
-                <span>Stops</span>
+                <span>{t("stops")}</span>
                 <span>{plannedStops.length}</span>
               </div>
               <div className="space-y-2">
@@ -214,7 +217,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
                       type="button"
                       onClick={() => onRemoveStop(stop.name)}
                       className="ml-2 p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-500"
-                      aria-label={`Remove ${stop.name}`}
+                      aria-label={t("remove_stop", { name: stop.name })}
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -232,7 +235,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
                 onClick={() => setShowSteps(!showSteps)}
                 className="flex items-center justify-between w-full text-sm font-medium text-gray-700 dark:text-gray-300 p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-md transition-colors"
               >
-                <span>Turn-by-turn Directions</span>
+                <span>{t("turn_by_turn")}</span>
                 {showSteps ? (
                   <ChevronUp className="w-4 h-4" />
                 ) : (
@@ -266,7 +269,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
             className="w-full bg-purple-100 hover:bg-purple-200 dark:bg-purple-900/30 dark:hover:bg-purple-900/50 text-purple-700 dark:text-purple-300 font-medium py-2.5 px-4 rounded-md transition-colors flex items-center justify-center"
           >
             <X className="w-4 h-4 mr-2" />
-            Clear Route
+            {t("clear_route")}
           </button>
         </div>
       </div>

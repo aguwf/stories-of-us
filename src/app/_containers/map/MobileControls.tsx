@@ -1,5 +1,7 @@
+'use client';
 import type { ComponentProps, FunctionComponent } from "react";
 import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { MapControls, StoreList } from "@/app/_components/Map";
 import { Input } from "@/components/ui/input";
@@ -19,6 +21,8 @@ interface MobileControlsProps {
 export const MobileControls: FunctionComponent<MobileControlsProps> = ({
   mapControlsProps,
 }) => {
+  const t = useTranslations("MobileControls");
+  const mapT = useTranslations("Map");
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const {
@@ -52,7 +56,7 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
           <Input
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search stores or addresses"
+            placeholder={t("search_placeholder")}
             className="h-11 pl-9 rounded-full bg-white shadow-md border border-gray-200 focus-visible:ring-2 focus-visible:ring-primary/30"
           />
         </div>
@@ -65,7 +69,7 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
               ? "bg-yellow-100 border-yellow-300 text-yellow-700"
               : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50"
           )}
-          aria-label="Toggle favorites"
+          aria-label={t("toggle_favorites")}
         >
           <Star
             className={cn("h-5 w-5", showFavoritesOnly && "fill-current")}
@@ -87,7 +91,7 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
           <Crosshair
             className={cn("h-5 w-5", isFollowMode && "animate-pulse")}
           />
-          <span className="hidden sm:inline">Follow</span>
+          <span className="hidden sm:inline">{t("follow")}</span>
         </button>
 
         <button
@@ -96,7 +100,7 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
           className="flex items-center justify-center gap-2 px-3 py-3 rounded-2xl text-sm font-semibold shadow-lg border border-gray-200 bg-white text-gray-800"
         >
           <SlidersHorizontal className="h-5 w-5" />
-          <span className="hidden sm:inline">Explore</span>
+          <span className="hidden sm:inline">{t("explore")}</span>
         </button>
 
         <button
@@ -114,7 +118,7 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
         >
           <Plus className="h-5 w-5" />
           <span className="hidden sm:inline">
-            {isAddLocationMode ? "Cancel" : "Add"}
+            {isAddLocationMode ? mapT("cancel_adding") : mapT("add_location")}
           </span>
         </button>
       </div>
@@ -124,12 +128,12 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
           side="bottom"
           className="rounded-t-3xl border-t border-gray-200 dark:border-gray-800 p-0 pb-4 h-[82vh] max-h-[82vh] overflow-hidden"
         >
-          <SheetHeader className="px-6 pt-4 pb-3 border-b border-gray-100 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur">
-            <div className="mx-auto h-1 w-12 rounded-full bg-gray-200 dark:bg-gray-700" />
-            <SheetTitle className="text-center">Filters & Stores</SheetTitle>
-          </SheetHeader>
-          <div className="h-full overflow-y-auto px-6 pt-4 pb-8 space-y-5">
-            <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 shadow-sm p-4">
+        <SheetHeader className="px-6 pt-4 pb-3 border-b border-gray-100 dark:border-gray-800 bg-white/90 dark:bg-gray-900/90 backdrop-blur">
+          <div className="mx-auto h-1 w-12 rounded-full bg-gray-200 dark:bg-gray-700" />
+          <SheetTitle className="text-center">{t("sheet_title")}</SheetTitle>
+        </SheetHeader>
+        <div className="h-full overflow-y-auto px-6 pt-4 pb-8 space-y-5">
+          <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 shadow-sm p-4">
               <MapControls
                 {...mapControlsProps}
                 onClose={closeSheet}
@@ -145,10 +149,10 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-xs uppercase tracking-wide text-gray-500">
-                    Stores
+                    {mapT("store_list")}
                   </p>
                   <p className="text-base font-semibold text-gray-900 dark:text-gray-50">
-                    Nearby & curated
+                    {t("explore")}
                   </p>
                 </div>
                 <button
@@ -160,14 +164,14 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
                       ? "bg-yellow-50 border-yellow-200 text-yellow-700"
                       : "bg-white border-gray-200 text-gray-600 hover:bg-gray-50"
                   )}
-                >
-                  <Star
-                    className={cn(
-                      "h-4 w-4",
-                      showFavoritesOnly && "fill-current text-yellow-500"
-                    )}
-                  />
-                  Favorites
+                  >
+                    <Star
+                      className={cn(
+                        "h-4 w-4",
+                        showFavoritesOnly && "fill-current text-yellow-500"
+                      )}
+                    />
+                  {mapT("favorites")}
                 </button>
               </div>
               <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white/80 dark:bg-gray-900/80 shadow-inner">

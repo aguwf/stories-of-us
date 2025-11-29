@@ -19,6 +19,7 @@ interface UseMapEventsParams {
   handleClearRoute: () => void;
   setSelectedStore: (store: StoreData | null) => void;
   setIsSheetOpen: (open: boolean) => void;
+  onSuggestEdit: (store: StoreData) => void;
   isAddLocationMode: boolean;
   setNewLocationCoordinates: (coords: [number, number] | null) => void;
   currentPopupRef: React.MutableRefObject<mapboxgl.Popup | null>;
@@ -41,6 +42,7 @@ export const useMapEvents = ({
   handleClearRoute,
   setSelectedStore,
   setIsSheetOpen,
+  onSuggestEdit,
   isAddLocationMode,
   setNewLocationCoordinates,
   currentPopupRef,
@@ -127,6 +129,7 @@ export const useMapEvents = ({
             navigator.clipboard.writeText(url.toString());
             alert(copy.linkCopied);
           },
+          onSuggestEdit,
           copy,
         });
       } else {

@@ -10,10 +10,27 @@ import { useEffect, useState, type FunctionComponent } from "react";
 
 interface LocationFormProps {
   initialData?: Partial<StoreLocation>;
-  onSubmit: (data: Partial<StoreLocation>) => void;
+  onSubmit: (data: Partial<StoreLocation> & { reason?: string }) => void;
   onCancel: () => void;
   coordinates?: [number, number] | null;
   className?: string;
+  onCheckDuplicates?: (input: {
+    name: string;
+    lat: number;
+    lng: number;
+    excludeId?: number;
+  }) => void | Promise<void>;
+  duplicateMatches?: Array<{
+    id: number;
+    name: string;
+    address: string;
+    lat: number;
+    lng: number;
+    status: string;
+  }>;
+  isCheckingDuplicates?: boolean;
+  excludeId?: number;
+  showReasonField?: boolean;
 }
 
 export const LocationForm: FunctionComponent<LocationFormProps> = ({
@@ -22,6 +39,11 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
   onCancel,
   coordinates,
   className,
+  onCheckDuplicates,
+  duplicateMatches,
+  isCheckingDuplicates,
+  excludeId,
+  showReasonField,
 }) => {
   const t = useTranslations("LocationForm");
   const defaultFormState: Partial<StoreLocation> = {
@@ -50,6 +72,7 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
   const [tagInput, setTagInput] = useState("");
   const [amenityInput, setAmenityInput] = useState("");
   const [imageInput, setImageInput] = useState("");
+  const [reason, setReason] = useState("");
 
   useEffect(() => {
     setFormData(() => ({
@@ -147,7 +170,7 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
       images: formData.images?.filter(Boolean),
     };
 
-    onSubmit(payload);
+    onSubmit({ ...payload, reason: reason.trim() || undefined });
   };
 
   const quickTags = [
@@ -187,6 +210,25 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
             <p>
               {coordinates[1].toFixed(5)}, {coordinates[0].toFixed(5)}
             </p>
+            {onCheckDuplicates && (
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                className="mt-2 h-auto px-0 text-xs text-primary underline-offset-4 hover:underline"
+                isLoading={isCheckingDuplicates}
+                onClick={() =>
+                  onCheckDuplicates({
+                    name: formData.name ?? "",
+                    lat: coordinates[1],
+                    lng: coordinates[0],
+                    excludeId,
+                  })
+                }
+              >
+                {t("check_duplicates") || "Check duplicates"}
+              </Button>
+            )}
           </div>
         )}
       </div>
@@ -216,6 +258,44 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
           />
         </div>
       </div>
+
+      {duplicateMatches && duplicateMatches.length > 0 && (
+        <div className="rounded-md border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900 dark:border-amber-900/60 dark:bg-amber-900/20 dark:text-amber-100">
+          <p className="font-semibold">
+            {t("duplicate_warning_title") || "Possible duplicates nearby"}
+          </p>
+          <ul className="mt-2 space-y-1">
+            {duplicateMatches.map((dup) => (
+              <li key={dup.id} className="flex items-start gap-2">
+                <span className="mt-1 h-1.5 w-1.5 rounded-full bg-amber-500" />
+                <div>
+                  <p className="font-medium">
+                    #{dup.id} — {dup.name}
+                  </p>
+                  <p className="text-amber-800 dark:text-amber-100/80">
+                    {dup.address} ({dup.lat.toFixed(5)}, {dup.lng.toFixed(5)}) ·{" "}
+                    {dup.status}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {showReasonField && (
+        <div className="space-y-2">
+          <Label htmlFor="reason">{t("change_reason") || "Reason / context"}</Label>
+          <Textarea
+            id="reason"
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder={
+              t("change_reason_placeholder") || "What needs to change or why?"
+            }
+          />
+        </div>
+      )}
 
       <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">

@@ -11,7 +11,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import type { LocationDetails } from "@/types/map.types";
+import type { LocationDetails, LocationInputPayload } from "@/types/map.types";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -246,6 +246,47 @@ export const locations = createTable("location", {
 export const locationsRelations = relations(locations, ({ one }) => ({
   creator: one(users, {
     fields: [locations.createdBy],
+    references: [users.id],
+  }),
+}));
+
+const locationSubmissionTypes = ["new", "edit"] as const;
+const locationSubmissionStatus = ["pending", "approved", "rejected"] as const;
+
+export const locationEdits = createTable("location_edit", {
+  id: serial("id").primaryKey(),
+  locationId: integer("location_id").references(() => locations.id),
+  type: varchar("type", { length: 20, enum: locationSubmissionTypes }).notNull(),
+  payload: jsonb("payload").$type<LocationInputPayload>().notNull(),
+  status: varchar("status", { length: 20, enum: locationSubmissionStatus })
+    .default("pending")
+    .notNull(),
+  reason: text("reason"),
+  duplicateOf: integer("duplicate_of").references(() => locations.id),
+  createdBy: varchar("created_by", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  decisionBy: varchar("decision_by", { length: 255 }).references(() => users.id),
+  decisionNote: text("decision_note"),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+    () => new Date()
+  ),
+});
+
+export const locationEditsRelations = relations(locationEdits, ({ one }) => ({
+  location: one(locations, {
+    fields: [locationEdits.locationId],
+    references: [locations.id],
+  }),
+  creator: one(users, {
+    fields: [locationEdits.createdBy],
+    references: [users.id],
+  }),
+  decisionMaker: one(users, {
+    fields: [locationEdits.decisionBy],
     references: [users.id],
   }),
 }));

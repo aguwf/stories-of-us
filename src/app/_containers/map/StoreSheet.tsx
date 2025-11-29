@@ -2,6 +2,7 @@
 import { Clock, Heart, Navigation2, Share2, Star } from "lucide-react";
 import type { FunctionComponent } from "react";
 import { useTranslations } from "next-intl";
+import type { RouterOutputs } from "@/trpc/react";
 
 import {
   Dialog,
@@ -17,6 +18,17 @@ import { LocationForm } from "../../_components/Map/LocationForm";
 import type { StoreLocation } from "@/types/map.types";
 import type { StoreData } from "./types";
 
+type DuplicateMatch = {
+  id: number;
+  name: string;
+  address: string;
+  lat: number;
+  lng: number;
+  status: string;
+};
+
+type Submission = RouterOutputs["location"]["getSubmissions"][number];
+
 interface StoreSheetProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
@@ -28,6 +40,20 @@ interface StoreSheetProps {
   isFavorite: (name: string) => boolean;
   onDirections: () => void;
   onShare: (store: StoreData) => void;
+  onStartEdit: (store: StoreData) => void;
+  editingLocation: StoreData | null;
+  onSubmitEdit: (data: Partial<StoreLocation> & { reason?: string }) => void;
+  onCancelEdit: () => void;
+  duplicateMatches?: DuplicateMatch[];
+  onCheckDuplicates?: (input: {
+    name: string;
+    lat: number;
+    lng: number;
+    excludeId?: number;
+  }) => void | Promise<void>;
+  isCheckingDuplicates?: boolean;
+  submissionsForSelection?: Submission[];
+  submissionsLoading?: boolean;
 }
 
 export const StoreSheet: FunctionComponent<StoreSheetProps> = ({
@@ -41,6 +67,15 @@ export const StoreSheet: FunctionComponent<StoreSheetProps> = ({
   isFavorite,
   onDirections,
   onShare,
+  onStartEdit,
+  editingLocation,
+  onSubmitEdit,
+  onCancelEdit,
+  duplicateMatches,
+  onCheckDuplicates,
+  isCheckingDuplicates,
+  submissionsForSelection,
+  submissionsLoading,
 }) => {
   const t = useTranslations("StoreSheet");
   const mapT = useTranslations("Map");
@@ -48,23 +83,57 @@ export const StoreSheet: FunctionComponent<StoreSheetProps> = ({
   const handleDialogChange = (open: boolean) => {
     if (!open) {
       onCancelLocation();
+      onCancelEdit();
     }
     onOpenChange(open);
   };
 
-  if (newLocationCoordinates) {
+  const isFormMode = !!newLocationCoordinates || !!editingLocation;
+  const formCoordinates =
+    editingLocation?.coordinates ?? newLocationCoordinates ?? null;
+
+  const initialEditData: Partial<StoreLocation> | undefined =
+    editingLocation && formCoordinates
+      ? {
+          name: editingLocation.name,
+          address: editingLocation.address,
+          notes: editingLocation.notes,
+          openingHours: editingLocation.openingHours,
+          price: editingLocation.price,
+          tags: editingLocation.tags,
+          amenities: editingLocation.amenities,
+          popularity: editingLocation.popularity,
+          images: editingLocation.images,
+          rating: editingLocation.rating,
+        }
+      : undefined;
+
+  if (isFormMode) {
     return (
       <Dialog open={isOpen} onOpenChange={handleDialogChange}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-auto">
           <DialogHeader className="text-left">
-            <DialogTitle>{t("add_title")}</DialogTitle>
-            <DialogDescription>{t("add_description")}</DialogDescription>
+            <DialogTitle>
+              {editingLocation ? t("edit_title") || "Suggest an edit" : t("add_title")}
+            </DialogTitle>
+            <DialogDescription>
+              {editingLocation
+                ? t("edit_description") ||
+                  "Submit your suggested changes for review"
+                : t("add_description")}
+            </DialogDescription>
           </DialogHeader>
           <LocationForm
-            onSubmit={onSubmitLocation}
-            onCancel={onCancelLocation}
-            coordinates={newLocationCoordinates}
+            onSubmit={editingLocation ? onSubmitEdit : onSubmitLocation}
+            onCancel={editingLocation ? onCancelEdit : onCancelLocation}
+            coordinates={formCoordinates}
+            initialData={initialEditData}
             className="shadow-none bg-transparent p-0 max-w-full"
+            onCheckDuplicates={onCheckDuplicates}
+            duplicateMatches={duplicateMatches}
+            isCheckingDuplicates={isCheckingDuplicates}
+            excludeId={editingLocation?.id}
+            showReasonField={!!editingLocation}
           />
         </DialogContent>
       </Dialog>
@@ -157,13 +226,62 @@ export const StoreSheet: FunctionComponent<StoreSheetProps> = ({
                     <Navigation2 className="w-4 h-4" />
                     {mapT("directions")}
                   </button>
+                <button
+                  onClick={() => onShare(selectedStore)}
+                  className="flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white py-2.5 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                >
+                  <Share2 className="w-4 h-4" />
+                  {mapT("share")}
+                </button>
+              </div>
+
+                <div className="flex flex-wrap gap-2 pt-2">
                   <button
-                    onClick={() => onShare(selectedStore)}
-                    className="flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white py-2.5 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                    onClick={() => onStartEdit(selectedStore)}
+                    className="inline-flex items-center justify-center gap-2 rounded-lg border border-dashed border-primary/60 px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10"
                   >
-                    <Share2 className="w-4 h-4" />
-                    {mapT("share")}
+                    {t("suggest_edit") || "Suggest edit"}
                   </button>
+                </div>
+
+                <div className="mt-4 space-y-2 rounded-md bg-muted/40 p-3 text-sm">
+                  <p className="font-semibold">
+                    {t("submission_history_title") || "Your submissions"}
+                  </p>
+                  {submissionsLoading ? (
+                    <p className="text-muted-foreground">{t("loading")}</p>
+                  ) : submissionsForSelection && submissionsForSelection.length > 0 ? (
+                    <ul className="space-y-2">
+                      {submissionsForSelection.map((submission) => (
+                        <li
+                          key={submission.id}
+                          className="flex items-start justify-between rounded border bg-white/60 px-3 py-2 text-xs dark:bg-gray-900/40"
+                        >
+                          <div>
+                            <p className="font-medium">
+                              #{submission.id} · {submission.status}
+                            </p>
+                            <p className="text-muted-foreground">
+                              {new Date(submission.createdAt).toLocaleString()}
+                            </p>
+                            {submission.decisionNote && (
+                              <p className="text-muted-foreground">
+                                {t("moderator_note") || "Moderator note"}:{" "}
+                                {submission.decisionNote}
+                              </p>
+                            )}
+                          </div>
+                          <span className="rounded-full bg-primary/10 px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-primary">
+                            {submission.type}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p className="text-muted-foreground">
+                      {t("no_submissions") || "No submissions for this place yet."}
+                    </p>
+                  )}
                 </div>
               </div>
             </>

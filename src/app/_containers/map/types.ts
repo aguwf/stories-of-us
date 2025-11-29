@@ -1,6 +1,7 @@
 import type { Review, ReviewSummary } from "@/types/map.types";
 
 export interface StoreData {
+  id?: number;
   name: string;
   address: string;
   notes: string;
@@ -17,4 +18,5 @@ export interface StoreData {
   reviewSummary?: ReviewSummary;
   reviewPhotos?: string[];
   userReview?: Review;
+  updatedAt?: string | Date | null;
 }

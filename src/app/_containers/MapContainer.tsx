@@ -32,6 +32,7 @@ import { useFilteredStores } from "./map/useFilteredStores";
 import { useHeatmapLayer } from "./map/useHeatmapLayer";
 import { useMapEvents } from "./map/useMapEvents";
 import { useStoreLayers } from "./map/useStoreLayers";
+import { useSmartAlerts } from "./map/useSmartAlerts";
 import type { StoreData } from "./map/types";
 import { List, Search } from "lucide-react";
 import { api } from "@/trpc/react";
@@ -40,7 +41,17 @@ import { useMemo } from "react";
 import type { StoreLocation } from "@/types/map.types";
 import { useTranslations } from "next-intl";
 
+type DuplicateMatch = {
+  id: number;
+  name: string;
+  address: string;
+  lat: number;
+  lng: number;
+  status: string;
+};
+
 const MapContainer: FunctionComponent = () => {
+  const t = useTranslations("Map");
   const currentPopupRef = useRef<mapboxgl.Popup | null>(null);
   const [selectedStore, setSelectedStore] = useState<StoreData | null>(null);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -51,6 +62,7 @@ const MapContainer: FunctionComponent = () => {
   const [sortBy, setSortBy] = useState<"name" | "distance">("name");
   const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
   const { openSignIn } = useClerk();
+  const utils = api.useUtils();
   const parseLocationDetails = useCallback(
     (rawDetails: unknown): Partial<StoreLocation> => {
       if (!rawDetails) return {};
@@ -76,6 +88,16 @@ const MapContainer: FunctionComponent = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([]);
   const [showHeatmap, setShowHeatmap] = useState(false);
+  const [smartAlertsEnabled, setSmartAlertsEnabled] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    const stored = localStorage.getItem("stories-of-us:smart-alerts");
+    return stored ? stored === "true" : false;
+  });
+  const [followAlertsEnabled, setFollowAlertsEnabled] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    const stored = localStorage.getItem("stories-of-us:follow-alerts");
+    return stored ? stored === "true" : false;
+  });
   const currentStyleRef = useRef<string>(MAP_STYLES.MAPBOX_STYLE);
 
   // Community / Add Location State
@@ -83,10 +105,34 @@ const MapContainer: FunctionComponent = () => {
   const [newLocationCoordinates, setNewLocationCoordinates] = useState<
     [number, number] | null
   >(null);
+  const [editingLocation, setEditingLocation] = useState<StoreData | null>(
+    null
+  );
+  const [duplicateMatches, setDuplicateMatches] = useState<DuplicateMatch[]>(
+    []
+  );
+  const [isCheckingDuplicates, setIsCheckingDuplicates] = useState(false);
   // const [customStores, setCustomStores] = useState<StoreData[]>([]); // Removed in favor of backend
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem("stories-of-us:smart-alerts", String(smartAlertsEnabled));
+  }, [smartAlertsEnabled]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    localStorage.setItem("stories-of-us:follow-alerts", String(followAlertsEnabled));
+  }, [followAlertsEnabled]);
 
   const { data: locationsData, refetch: refetchLocations } =
     api.location.getAll.useQuery();
+  const {
+    data: submissions,
+    refetch: refetchSubmissions,
+    isFetching: submissionsLoading,
+  } = api.location.getSubmissions.useQuery(undefined, {
+    enabled: isSignedIn,
+  });
 
   const fetchedStores: StoreData[] = useMemo(() => {
     return (
@@ -110,6 +156,7 @@ const MapContainer: FunctionComponent = () => {
             : undefined);
 
         return {
+          id: location.id,
           name: location.name,
           address: location.address,
           notes: location.description ?? "",
@@ -125,6 +172,7 @@ const MapContainer: FunctionComponent = () => {
           reviewSummary,
           reviewPhotos,
           userReview: details.userReview,
+          updatedAt: location.updatedAt ?? location.createdAt ?? null,
         };
       }) ?? []
     );
@@ -143,6 +191,51 @@ const MapContainer: FunctionComponent = () => {
     },
   });
 
+  const submitEditMutation = api.location.submitEdit.useMutation({
+    onSuccess: (data) => {
+      toast.success(t("toast_submitted"));
+      setEditingLocation(null);
+      setIsSheetOpen(false);
+      void refetchSubmissions();
+      if (data?.duplicates?.length) {
+        setDuplicateMatches(data.duplicates as DuplicateMatch[]);
+      } else {
+        setDuplicateMatches([]);
+      }
+    },
+    onError: (error) => {
+      toast.error(t("toast_error", { message: error.message }));
+    },
+  });
+
+  const checkDuplicates = useCallback(
+    async (input: {
+      name: string;
+      lat: number;
+      lng: number;
+      excludeId?: number;
+    }) => {
+      setIsCheckingDuplicates(true);
+      try {
+        const result = await utils.location.checkDuplicates.fetch(input);
+        setDuplicateMatches(result ?? []);
+        if (result.length) {
+          toast.warning(t("duplicate_warning"));
+        }
+        return result;
+      } catch (error) {
+        console.error(error);
+        toast.error(
+          t("toast_error", { message: "Failed to check duplicates" })
+        );
+        return [];
+      } finally {
+        setIsCheckingDuplicates(false);
+      }
+    },
+    [utils.location.checkDuplicates]
+  );
+
   // Routing state
   const [transportMode, setTransportMode] = useState<
     "driving" | "walking" | "cycling" | "driving-traffic"
@@ -156,7 +249,6 @@ const MapContainer: FunctionComponent = () => {
 
   const isMobile = useMediaQuery("(max-width: 640px)");
   const isDesktop = useMediaQuery("(min-width: 768px)");
-  const t = useTranslations("Map");
   const popupT = useTranslations("MapPopup");
   const popupCopy = useMemo(
     () => ({
@@ -168,6 +260,7 @@ const MapContainer: FunctionComponent = () => {
       distanceLabel: popupT("distance"),
       timeLabel: popupT("time"),
       clearRouteLabel: popupT("clear_route"),
+      editLabel: popupT("suggest_edit") || "Suggest edit",
     }),
     [popupT, t]
   );
@@ -357,10 +450,36 @@ const MapContainer: FunctionComponent = () => {
     handleClearRoute,
     setSelectedStore,
     setIsSheetOpen,
+    onSuggestEdit: (store) => {
+      if (!isSignedIn) {
+        toast.error(t("toast_error", { message: "Please sign in first." }));
+        void openSignIn?.({
+          redirectUrl:
+            typeof window !== "undefined" ? window.location.href : undefined,
+        });
+        return;
+      }
+      setEditingLocation(store);
+      setSelectedStore(store);
+      setNewLocationCoordinates(null);
+      setIsAddLocationMode(false);
+      setDuplicateMatches([]);
+      setIsSheetOpen(true);
+    },
     isAddLocationMode,
     setNewLocationCoordinates,
     currentPopupRef,
     copy: popupCopy,
+  });
+
+  useSmartAlerts({
+    userLocation,
+    favoriteStores,
+    stores: fetchedStores,
+    selectedTags,
+    searchRadiusKm: searchRadius,
+    smartAlertsEnabled,
+    followAlertsEnabled,
   });
 
   useEffect(() => {
@@ -418,6 +537,9 @@ const MapContainer: FunctionComponent = () => {
   };
 
   const handleStoreSelect = (store: StoreData) => {
+    setEditingLocation(null);
+    setDuplicateMatches([]);
+    setSelectedStore(store);
     // Fly to store
     if (mapRef.current) {
       mapRef.current.flyTo({
@@ -439,6 +561,22 @@ const MapContainer: FunctionComponent = () => {
           addStopToRoute,
           handleClearRoute,
           onShare: handleShare,
+          onSuggestEdit: (targetStore) => {
+            if (!isSignedIn) {
+              toast.error(t("toast_error", { message: "Please sign in first." }));
+              void openSignIn?.({
+                redirectUrl:
+                  typeof window !== "undefined" ? window.location.href : undefined,
+              });
+              return;
+            }
+            setEditingLocation(targetStore);
+            setSelectedStore(targetStore);
+            setNewLocationCoordinates(null);
+            setIsAddLocationMode(false);
+            setDuplicateMatches([]);
+            setIsSheetOpen(true);
+          },
           copy: popupCopy,
         });
       } else {
@@ -448,7 +586,7 @@ const MapContainer: FunctionComponent = () => {
     }
   };
 
-  const handleAddLocationSubmit = (data: Partial<StoreLocation>) => {
+  const handleAddLocationSubmit = async (data: Partial<StoreLocation>) => {
     if (newLocationCoordinates && data.name) {
       const images = (data.images ?? []).filter(Boolean);
 
@@ -477,6 +615,12 @@ const MapContainer: FunctionComponent = () => {
       const details =
         Object.keys(cleanedDetails).length > 0 ? cleanedDetails : undefined;
 
+      await checkDuplicates({
+        name: data.name,
+        lat: newLocationCoordinates[1],
+        lng: newLocationCoordinates[0],
+      });
+
       createLocationMutation.mutate({
         name: data.name,
         description: data.notes,
@@ -487,6 +631,60 @@ const MapContainer: FunctionComponent = () => {
         details,
       });
     }
+  };
+
+  const handleSubmitEdit = async (
+    data: Partial<StoreLocation> & { reason?: string }
+  ) => {
+    if (!editingLocation?.id || !editingLocation.coordinates) return;
+    const images = (data.images ?? []).filter(Boolean);
+
+    const detailPayload = {
+      openingHours: data.openingHours?.trim() || undefined,
+      rating:
+        data.rating !== undefined && data.rating !== null
+          ? Math.min(Math.max(Number(data.rating), 0), 5)
+          : undefined,
+      tags: data.tags?.length ? data.tags : undefined,
+      price: data.price,
+      amenities: data.amenities?.length ? data.amenities : undefined,
+      popularity:
+        data.popularity !== undefined && data.popularity !== null
+          ? Math.min(Math.max(Number(data.popularity), 0), 100)
+          : undefined,
+    };
+
+    const cleanedDetails = Object.fromEntries(
+      Object.entries(detailPayload).filter(([, value]) => {
+        if (Array.isArray(value)) return value.length > 0;
+        return value !== undefined && value !== null && value !== "";
+      })
+    );
+
+    const details = Object.keys(cleanedDetails).length
+      ? cleanedDetails
+      : undefined;
+
+    await checkDuplicates({
+      name: data.name ?? editingLocation.name,
+      lat: editingLocation.coordinates[1],
+      lng: editingLocation.coordinates[0],
+      excludeId: editingLocation.id,
+    });
+
+    submitEditMutation.mutate({
+      locationId: editingLocation.id,
+      payload: {
+        name: data.name ?? editingLocation.name,
+        description: data.notes ?? editingLocation.notes,
+        address: data.address ?? editingLocation.address,
+        lat: editingLocation.coordinates[1],
+        lng: editingLocation.coordinates[0],
+        images,
+        details,
+      },
+      reason: data.reason,
+    });
   };
 
   const storeListProps = {
@@ -519,6 +717,10 @@ const MapContainer: FunctionComponent = () => {
     onPriceChange: setPriceRange,
     showHeatmap,
     onHeatmapChange: setShowHeatmap,
+    smartAlertsEnabled,
+    onSmartAlertsChange: setSmartAlertsEnabled,
+    followAlertsEnabled,
+    onFollowAlertsChange: setFollowAlertsEnabled,
     onAddLocation: () => {
       if (!isAuthLoaded || !isSignedIn) {
         toast.error("Please sign in to add a location.");
@@ -529,6 +731,8 @@ const MapContainer: FunctionComponent = () => {
         return;
       }
 
+      setEditingLocation(null);
+      setDuplicateMatches([]);
       setIsAddLocationMode((prev) => {
         const next = !prev;
         if (next) {
@@ -621,12 +825,52 @@ const MapContainer: FunctionComponent = () => {
         onCancelLocation={() => {
           setIsSheetOpen(false);
           setNewLocationCoordinates(null);
+          setEditingLocation(null);
         }}
         selectedStore={selectedStore}
         onToggleFavorite={toggleFavorite}
         isFavorite={isFavorite}
         onDirections={handleDirectionsFromSheet}
         onShare={handleShare}
+        onStartEdit={(store) => {
+          if (!isSignedIn) {
+            toast.error(t("toast_error", { message: "Please sign in first." }));
+            void openSignIn?.({
+              redirectUrl:
+                typeof window !== "undefined"
+                  ? window.location.href
+                  : undefined,
+            });
+            return;
+          }
+          setEditingLocation(store);
+          setNewLocationCoordinates(null);
+          setIsAddLocationMode(false);
+          setDuplicateMatches([]);
+          setIsSheetOpen(true);
+        }}
+        editingLocation={editingLocation}
+        onSubmitEdit={handleSubmitEdit}
+        onCancelEdit={() => {
+          setEditingLocation(null);
+          setDuplicateMatches([]);
+          setIsSheetOpen(false);
+          setSelectedStore(null);
+        }}
+        duplicateMatches={duplicateMatches}
+        onCheckDuplicates={(input) =>
+          checkDuplicates({
+            ...input,
+            excludeId: input.excludeId ?? editingLocation?.id ?? undefined,
+          })
+        }
+        isCheckingDuplicates={isCheckingDuplicates}
+        submissionsForSelection={
+          submissions?.filter(
+            (submission) => submission.locationId === selectedStore?.id
+          ) ?? []
+        }
+        submissionsLoading={submissionsLoading}
       />
     </div>
   );

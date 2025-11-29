@@ -8,6 +8,7 @@ export interface PopupCopy {
   distanceLabel: string;
   timeLabel: string;
   clearRouteLabel: string;
+  editLabel?: string;
 }
 
 /**
@@ -220,6 +221,27 @@ export const createPopupHTML = (
             ${copy.directionsLabel}
           </button>
         </div>
+
+        <button
+          id="edit-btn-${sanitizedName}"
+          style="
+            margin-top: 10px;
+            width: 100%;
+            padding: 10px 16px;
+            background: white;
+            color: #6b21a8;
+            border: 1px dashed #c084fc;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+          "
+          onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0 4px 8px rgba(193, 114, 255, 0.3)';"
+          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='none';"
+        >
+          ${copy.editLabel ?? "Suggest edit"}
+        </button>
       </div>
     </div>
   `;

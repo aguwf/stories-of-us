@@ -81,6 +81,16 @@ export interface LocationDetails {
   userReview?: Review;
 }
 
+export interface LocationInputPayload {
+  name: string;
+  address: string;
+  description?: string | null;
+  lat: number;
+  lng: number;
+  images?: string[];
+  details?: LocationDetails | string | null;
+}
+
 export interface StoreLocation {
   name: string;
   address: string;

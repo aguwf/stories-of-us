@@ -14,6 +14,7 @@ interface CreateInteractivePopupOptions {
   addStopToRoute: (stop: StoreData) => void;
   handleClearRoute: () => void;
   onShare?: (store: StoreData) => void;
+  onSuggestEdit?: (store: StoreData) => void;
   copy: {
     enableLocation: string;
     linkCopied: string;
@@ -33,6 +34,7 @@ export const createInteractivePopup = ({
   addStopToRoute,
   handleClearRoute,
   onShare,
+  onSuggestEdit,
   copy,
 }: CreateInteractivePopupOptions) => {
   const popup = new mapboxgl.Popup({
@@ -87,6 +89,7 @@ export const createInteractivePopup = ({
       `directions-btn-${sanitizedName}`
     );
     const shareBtn = document.getElementById(`share-btn-${sanitizedName}`);
+    const editBtn = document.getElementById(`edit-btn-${sanitizedName}`);
 
     if (favoriteBtn) {
       favoriteBtn.addEventListener("click", () => {
@@ -110,6 +113,13 @@ export const createInteractivePopup = ({
         url.searchParams.set("store", storeData.name);
         navigator.clipboard.writeText(url.toString());
         alert(copy.linkCopied);
+      });
+    }
+
+    if (editBtn && onSuggestEdit) {
+      editBtn.addEventListener("click", () => {
+        onSuggestEdit(storeData);
+        popup.remove();
       });
     }
   };

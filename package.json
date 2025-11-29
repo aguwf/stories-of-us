@@ -21,7 +21,8 @@
 		"dev": "next dev",
 		"prebuild": "rimraf .next",
 		"predev": "rimraf .next",
-		"start": "next start"
+		"start": "next start",
+		"test": "bun test"
 	},
 	"dependencies": {
 		"@clerk/localizations": "^2.5.4",

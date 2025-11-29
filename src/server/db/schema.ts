@@ -2,6 +2,7 @@ import { relations, sql } from "drizzle-orm";
 import {
   index,
   integer,
+  jsonb,
   pgTableCreator,
   primaryKey,
   real,
@@ -10,6 +11,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
+import type { LocationDetails } from "@/types/map.types";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -228,7 +230,7 @@ export const locations = createTable("location", {
     .array()
     .default(sql`'{}'::text[]`)
     .notNull(),
-  details: text("details"), // Store JSON details as text
+  details: jsonb("details").$type<LocationDetails | null>(),
   status: varchar("status", { length: 20 }).default("pending").notNull(),
   createdBy: varchar("created_by", { length: 255 })
     .notNull()

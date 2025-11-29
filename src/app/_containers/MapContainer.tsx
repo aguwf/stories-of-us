@@ -51,6 +51,27 @@ const MapContainer: FunctionComponent = () => {
   const [sortBy, setSortBy] = useState<"name" | "distance">("name");
   const { isLoaded: isAuthLoaded, isSignedIn } = useAuth();
   const { openSignIn } = useClerk();
+  const parseLocationDetails = useCallback(
+    (rawDetails: unknown): Partial<StoreLocation> => {
+      if (!rawDetails) return {};
+
+      if (typeof rawDetails === "string") {
+        try {
+          return JSON.parse(rawDetails) as Partial<StoreLocation>;
+        } catch (error) {
+          console.error("Failed to parse location details", error);
+          return {};
+        }
+      }
+
+      if (typeof rawDetails === "object") {
+        return rawDetails as Partial<StoreLocation>;
+      }
+
+      return {};
+    },
+    []
+  );
 
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([]);
@@ -70,15 +91,23 @@ const MapContainer: FunctionComponent = () => {
   const fetchedStores: StoreData[] = useMemo(() => {
     return (
       locationsData?.map((location) => {
-        let details: Partial<StoreLocation> = {};
-
-        if (location.details) {
-          try {
-            details = JSON.parse(location.details) as Partial<StoreLocation>;
-          } catch (error) {
-            console.error("Failed to parse location details", error);
-          }
-        }
+        const details = parseLocationDetails(location.details);
+        const reviews = details.reviews ?? [];
+        const reviewPhotos =
+          details.reviewPhotos ??
+          reviews.flatMap((review) => review.photos ?? []) ??
+          [];
+        const reviewSummary =
+          details.reviewSummary ??
+          (reviews.length
+            ? {
+                avgRating:
+                  reviews.reduce((sum, review) => sum + review.rating, 0) /
+                  reviews.length,
+                reviewCount: reviews.length,
+                photoCount: reviewPhotos.length,
+              }
+            : undefined);
 
         return {
           name: location.name,
@@ -87,15 +116,19 @@ const MapContainer: FunctionComponent = () => {
           coordinates: [location.lng, location.lat] as [number, number],
           images: location.images,
           openingHours: details.openingHours,
-          rating: details.rating,
+          rating: details.rating ?? reviewSummary?.avgRating,
           tags: details.tags ?? [],
           price: details.price,
           amenities: details.amenities ?? [],
           popularity: details.popularity ?? 0,
+          reviews,
+          reviewSummary,
+          reviewPhotos,
+          userReview: details.userReview,
         };
       }) ?? []
     );
-  }, [locationsData]);
+  }, [locationsData, parseLocationDetails]);
 
   const createLocationMutation = api.location.create.useMutation({
     onSuccess: () => {
@@ -442,9 +475,7 @@ const MapContainer: FunctionComponent = () => {
       );
 
       const details =
-        Object.keys(cleanedDetails).length > 0
-          ? JSON.stringify(cleanedDetails)
-          : undefined;
+        Object.keys(cleanedDetails).length > 0 ? cleanedDetails : undefined;
 
       createLocationMutation.mutate({
         name: data.name,

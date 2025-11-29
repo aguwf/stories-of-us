@@ -57,7 +57,28 @@ export interface Review {
   userName: string;
   rating: number;
   comment: string;
-  date: string;
+  photos?: string[];
+  createdAt: string;
+}
+
+export interface ReviewSummary {
+  avgRating: number | null;
+  reviewCount: number;
+  photoCount: number;
+}
+
+export interface LocationDetails {
+  openingHours?: string;
+  images?: string[];
+  rating?: number;
+  tags?: string[];
+  price?: 1 | 2 | 3 | 4;
+  amenities?: string[];
+  popularity?: number;
+  moderationStatus?: "pending" | "approved" | "rejected";
+  reviews?: Review[];
+  reviewSummary?: ReviewSummary;
+  userReview?: Review;
 }
 
 export interface StoreLocation {
@@ -69,14 +90,15 @@ export interface StoreLocation {
   openingHours?: string;
   images?: string[];
   rating?: number;
-
-  // New fields
   tags?: string[];
   price?: 1 | 2 | 3 | 4; // 1: $, 2: $$, 3: $$$, 4: $$$$
   amenities?: string[];
   popularity?: number; // 0-100 for heatmap
   moderationStatus?: "pending" | "approved" | "rejected";
   reviews?: Review[];
+  reviewSummary?: ReviewSummary;
+  userReview?: Review;
+  reviewPhotos?: string[];
 }
 
 export interface MapConfig {
@@ -95,6 +117,9 @@ export interface PopupProps {
   openingHours?: string;
   images?: string[];
   rating?: number;
+  reviewSummary?: ReviewSummary;
+  userReview?: Review;
+  reviewPhotos?: string[];
 }
 
 export interface RouteInfo {

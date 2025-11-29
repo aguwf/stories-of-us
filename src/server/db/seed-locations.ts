@@ -52,14 +52,14 @@ const buildSeedPayload = (createdBy: string) =>
     lat: store.latitude,
     lng: store.longitude,
     images: store.images ?? [],
-    details: JSON.stringify({
+    details: {
       openingHours: store.openingHours,
       rating: store.rating,
       tags: store.tags,
       price: store.price,
       amenities: store.amenities,
       popularity: store.popularity,
-    }),
+    },
     status: "approved" as const,
     createdBy,
   }));
@@ -72,9 +72,7 @@ const main = async () => {
   });
 
   const existingKeys = new Set(
-    existingLocations.map(
-      (location) => `${location.name}::${location.address}`
-    )
+    existingLocations.map((location) => `${location.name}::${location.address}`)
   );
 
   const seedLocations = buildSeedPayload(createdBy).filter(

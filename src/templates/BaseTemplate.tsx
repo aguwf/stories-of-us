@@ -11,8 +11,8 @@ const BaseTemplate = (props: {
   const t = useTranslations("BaseTemplate");
 
   return (
-    <div className="w-full bg-cover bg-no-repeat px-1 text-gray-700 antialiased">
-      <header className="border-gray-300 border-b mx-auto max-w-screen-sm">
+    <div className="w-full bg-cover bg-no-repeat text-secondary antialiased">
+      <header className="border-gray-300 border-b mx-auto w-full">
         <div className="flex justify-between">
           <NavigationBar />
         </div>
@@ -20,7 +20,7 @@ const BaseTemplate = (props: {
 
       <main className="min-h-[580px]">{props.children}</main>
 
-      <footer className="border-gray-300 border-t py-2 text-center text-sm mx-auto max-w-screen-sm">
+      <footer className="border-gray-300 border-t py-2 text-center text-sm mx-auto w-full">
         © Copyright {new Date().getFullYear()} {AppConfig.name}.
         {` ${t("made_with")} `}
         <a

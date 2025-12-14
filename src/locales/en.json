@@ -1,304 +1,334 @@
 {
-	"RootLayout": {
-		"home_link": "Home",
-		"about_link": "About",
-		"guestbook_link": "Guestbook",
-		"portfolio_link": "Portfolio",
-		"sign_in_link": "Sign in",
-		"sign_up_link": "Sign up"
-	},
-	"BaseTemplate": {
-		"description": "Home story of us",
-		"made_with": "Made with"
-	},
-	"Index": {
-		"meta_title": "Stories of Us",
-		"meta_description": "Welcome to Stories of Us, a platform where you can share your life's journey and connect with others. Explore a world of stories, find inspiration, and build meaningful connections.",
-		"title": "Stories of Us",
-		"description": "Welcome to Stories of Us, a platform where you can share your life's journey and connect with others. Explore a world of stories, find inspiration, and build meaningful connections.",
-		"explore_stories": "Explore Stories",
-		"share_your_story": "Share Your Story",
-		"tools-bar-title": "Timeline"
-	},
-	"Guestbook": {
-		"meta_title": "Guestbook",
-		"meta_description": "An example of CRUD operation",
-		"database_powered_by": "Database powered by",
-		"loading_guestbook": "Loading guestbook..."
-	},
-	"GuestbookForm": {
-		"username": "Username",
-		"body": "Body",
-		"save": "Save"
-	},
-	"About": {
-		"meta_title": "About",
-		"meta_description": "About page description",
-		"about_paragraph": "Welcome to our About page! We are a team of passionate individuals dedicated to creating amazing software.",
-		"translation_powered_by": "Translation powered by"
-	},
-	"Portfolio": {
-		"meta_title": "Portfolio",
-		"meta_description": "Welcome to my portfolio page!",
-		"presentation": "Welcome to my portfolio page! Here you will find a carefully curated collection of my work and accomplishments. Through this portfolio, I'm to showcase my expertise, creativity, and the value I can bring to your projects.",
-		"portfolio_name": "Portfolio {name}",
-		"error_reporting_powered_by": "Error reporting powered by",
-		"coverage_powered_by": "Code coverage powered by"
-	},
-	"PortfolioSlug": {
-		"meta_title": "Portfolio {slug}",
-		"meta_description": "Portfolio {slug} description",
-		"header": "Portfolio {slug}",
-		"content": "Created a set of promotional materials and branding elements for a corporate event. Crafted a visually unified theme, encompassing a logo, posters, banners, and digital assets. Integrated the client's brand identity while infusing it with a contemporary and innovative approach. Garnered favorable responses from event attendees, resulting in a successful event with heightened participant engagement and increased brand visibility.",
-		"log_management_powered_by": "Log management powered by"
-	},
-	"SignIn": {
-		"meta_title": "Sign in",
-		"meta_description": "Seamlessly sign in to your account with our user-friendly login process."
-	},
-	"SignUp": {
-		"meta_title": "Sign up",
-		"meta_description": "Effortlessly create an account through our intuitive sign-up process."
-	},
-	"Dashboard": {
-		"meta_title": "Dashboard",
-		"hello_message": "Hello {email}!"
-	},
-	"UserProfile": {
-		"meta_title": "User Profile"
-	},
-	"DashboardLayout": {
-		"dashboard_link": "Dashboard",
-		"user_profile_link": "Manage your account",
-		"sign_out": "Sign out"
-	},
-	"Map": {
-		"add_location": "Add New Location",
-		"cancel_adding": "Cancel Adding",
-		"search_label": "Search",
-		"search_placeholder": "Search stores, addresses...",
-		"near_me": "Near Me",
-		"distance_unit": "{value} km",
-		"follow_location": "Follow Location",
-		"following_location": "Following Location",
-		"smart_alerts": "Smart alerts",
-		"nearby_alerts": "Nearby saved spots",
-		"nearby_alerts_hint": "Send a push when you're close to a favorite.",
-		"follow_alerts": "Follow updates",
-		"follow_alerts_hint": "Alert me when a favorite place changes.",
-		"filters_and_sort": "Filters & Sort",
-		"favorites": "Favorites",
-		"sort_distance": "Distance",
-		"sort_name": "Name",
-		"sort_tooltip": "Enable location to sort by distance",
-		"map_style": "Map Style",
-		"store_list": "Store List",
-		"directions": "Directions",
-		"share": "Share",
-		"add_location_prompt": "Click on the map to add a location",
-		"signin_required": "Please sign in to add a location.",
-		"enable_location_prompt": "Please enable location services to get directions",
-		"get_my_location": "Get my location",
-		"alert_add_stop_before_save": "Add at least one stop before saving.",
-		"alert_route_saved": "Route saved for later.",
-		"alert_add_stop_before_share": "Add stops before sharing.",
-		"alert_link_copied": "Link copied to clipboard!",
-		"toast_submitted": "Location submitted for approval!",
-		"toast_error": "Error: {message}",
-		"saved_route_name": "Saved route",
-		"route_with_stops": "Route with {count} stops",
-		"shared_location_label": "Shared location",
-		"my_route_name": "My Route"
-	},
-	"MapFilters": {
-		"heatmap": "Heatmap Mode",
-		"price": "Price",
-		"tags": "Tags & Amenities",
-		"options": {
-			"Cafe": "Cafe",
-			"Restaurant": "Restaurant",
-			"Park": "Park",
-			"Museum": "Museum",
-			"Shopping": "Shopping",
-			"Wifi": "Wifi",
-			"Parking": "Parking",
-			"PetFriendly": "Pet Friendly"
-		}
-	},
-	"MapStyles": {
-		"streets": "Streets",
-		"satellite": "Satellite",
-		"light": "Light",
-		"dark": "Dark"
-	},
-	"StoreList": {
-		"empty_title": "No stores found",
-		"empty_body": "Try adjusting your search or filters",
-		"distance_suffix": "away",
-		"remove_favorite": "Remove from favorites",
-		"add_favorite": "Add to favorites",
-		"share_store": "Share store"
-	},
-	"StoreSheet": {
-		"add_title": "Add a new location",
-		"add_description": "You pinned a spot on the map. Fill in the details so others can find it.",
-		"rating_suffix": "/ 5.0"
-	},
-	"LocationForm": {
-		"title_add": "Add New Location",
-		"title_edit": "Edit Location",
-		"pinned_spot": "Pinned spot",
-		"name": "Name",
-		"name_placeholder": "Store Name",
-		"address": "Address",
-		"address_placeholder": "123 Main St, City",
-		"opening_hours": "Opening hours",
-		"opening_hours_placeholder": "e.g. 09:00 - 22:00",
-		"opening_hours_help": "Use a simple range or add notes like \"Weekends only\".",
-		"rating": "Rating",
-		"rating_placeholder": "4.6",
-		"rating_help": "0-5 scale. Leave blank if unknown.",
-		"notes": "Description / notes",
-		"notes_placeholder": "What makes this place useful or special?",
-		"budget": "Budget",
-		"budget_low": "cheap",
-		"budget_mid": "mid",
-		"budget_high": "premium",
-		"tags": "Tags",
-		"tags_quick_fill": "Click to quick-fill",
-		"tags_placeholder": "Add tags (comma or Enter to add)",
-		"tags_help": "Paste multiple tags separated by commas or new lines.",
-		"add": "Add",
-		"amenities": "Amenities",
-		"amenities_help": "Select all that apply",
-		"amenities_placeholder": "Add amenities (comma or Enter to add)",
-		"images": "Image URLs",
-		"images_placeholder": "Paste an image URL",
-		"images_help": "Paste one or many (comma/new-line separated). First image becomes the cover.",
-		"popularity": "Popularity / heatmap weight",
-		"popularity_label": "{value} / 100",
-		"cancel": "Cancel",
-		"save_changes": "Save Changes",
-		"add_location": "Add Location",
-		"quick_tags": {
-			"Shopping": "Shopping",
-			"Entertainment": "Entertainment",
-			"Cafe": "Cafe",
-			"Wifi": "Wifi",
-			"Parking": "Parking"
-		},
-		"quick_amenities": {
-			"Wifi": "Wifi",
-			"Parking": "Parking",
-			"AC": "AC",
-			"Restroom": "Restroom",
-			"FoodCourt": "Food Court"
-		}
-	},
-	"RoutePanel": {
-		"title": "Route Information",
-		"collapse": "Collapse panel",
-		"expand": "Expand panel",
-		"close": "Close route info",
-		"mode_drive": "Drive",
-		"mode_traffic": "Traffic",
-		"mode_bike": "Bike",
-		"mode_walk": "Walk",
-		"avoid_tolls": "Avoid Tolls",
-		"distance": "Distance",
-		"duration": "Duration",
-		"share": "Share",
-		"save": "Save",
-		"stops": "Stops",
-		"remove_stop": "Remove {name}",
-		"turn_by_turn": "Turn-by-turn Directions",
-		"clear_route": "Clear Route"
-	},
-	"MobileControls": {
-		"search_placeholder": "Search stores or addresses",
-		"toggle_favorites": "Toggle favorites",
-		"follow": "Follow",
-		"explore": "Explore",
-		"add": "Add",
-		"cancel": "Cancel",
-		"sheet_title": "Filters & Stores",
-		"filtered": "Filtered",
-		"total": "Total",
-		"favorites_only": "Favorites only"
-	},
-	"DesktopSidebar": {
-		"stores_title": "Stores"
-	},
-	"MapPopup": {
-		"enable_location": "Please enable location services to get directions",
-		"link_copied": "Link copied to clipboard!",
-		"saved": "Saved",
-		"save": "Save",
-		"directions": "Directions",
-		"distance": "Distance:",
-		"time": "Time:",
-		"clear_route": "Clear Route"
-	},
-	"Notifications": {
-		"subscribe_success": "Subscribed to notifications!",
-		"subscribe_error": "Failed to subscribe to notifications.",
-		"unsubscribe": "Unsubscribed from notifications.",
-		"enable": "Enable Notifications",
-		"disable": "Disable Notifications"
-	},
-	"Greeting": {
-		"error": "Failed to fetch weather data. Please try again later.",
-		"search_placeholder": "Search"
-	},
-	"Toolbar": {
-		"sort_by": "Sort by",
-		"newest": "Newest",
-		"oldest": "Oldest"
-	},
-	"AdminDashboard": {
-		"toast_approved": "Location approved",
-		"toast_rejected": "Location rejected",
-		"sign_in_required": "Please sign in to review submissions.",
-		"admin_required": "You need admin access to moderate locations.",
-		"load_failed": "We could not load the review queue. Try again or contact support.",
-		"unable_to_load": "Unable to load pending locations",
-		"retry": "Retry",
-		"go_to_sign_in": "Go to sign in",
-		"no_pending_title": "No pending locations",
-		"no_pending_body": "Everything submitted from the map has been reviewed. New requests will show up here automatically.",
-		"pending_review": "Pending review",
-		"view_on_map": "View on map",
-		"no_description": "No description provided.",
-		"submitted_by": "Submitted by",
-		"unknown": "Unknown",
-		"no_email": "no email",
-		"approve": "Approve",
-		"reject": "Reject",
-		"review_queue": "Review queue",
-		"location_approvals": "Location approvals",
-		"review_copy": "Vet submissions coming from the public map before they appear to everyone.",
-		"refresh": "Refresh",
-		"pending": "Pending",
-		"pending_help": "Items waiting for review.",
-		"queue_health": "Queue health",
-		"clear": "Clear",
-		"active": "Active",
-		"queue_help": "Avoid stale submissions by processing quickly.",
-		"last_synced": "Last synced",
-		"last_synced_help": "Manual refresh keeps the queue current.",
-		"dialog_approve_title": "Approve location",
-		"dialog_reject_title": "Reject location",
-		"dialog_message": "You are about to {action} {location}. This action updates the public map immediately.",
-		"dialog_empty": "No location selected.",
-		"cancel": "Cancel",
-		"working": "Working...",
-		"confirm": "Confirm",
-		"id_label": "ID: {id}",
-		"submitted_address": "{lat}, {lng}",
-		"status_pending": "Pending",
-		"dialog_action": {
-			"approve": "approve",
-			"reject": "reject"
-		}
-	}
+  "RootLayout": {
+    "home_link": "Home",
+    "about_link": "About",
+    "guestbook_link": "Guestbook",
+    "portfolio_link": "Portfolio",
+    "sign_in_link": "Sign in",
+    "sign_up_link": "Sign up"
+  },
+  "BaseTemplate": {
+    "description": "Home story of us",
+    "made_with": "Made with"
+  },
+  "Index": {
+    "meta_title": "Stories of Us",
+    "meta_description": "Welcome to Stories of Us, a platform where you can share your life's journey and connect with others. Explore a world of stories, find inspiration, and build meaningful connections.",
+    "title": "Stories of Us",
+    "description": "Welcome to Stories of Us, a platform where you can share your life's journey and connect with others. Explore a world of stories, find inspiration, and build meaningful connections.",
+    "explore_stories": "Explore Stories",
+    "share_your_story": "Share Your Story",
+    "tools-bar-title": "Timeline"
+  },
+  "Guestbook": {
+    "meta_title": "Guestbook",
+    "meta_description": "An example of CRUD operation",
+    "database_powered_by": "Database powered by",
+    "loading_guestbook": "Loading guestbook..."
+  },
+  "GuestbookForm": {
+    "username": "Username",
+    "body": "Body",
+    "save": "Save"
+  },
+  "About": {
+    "meta_title": "About",
+    "meta_description": "About page description",
+    "about_paragraph": "Welcome to our About page! We are a team of passionate individuals dedicated to creating amazing software.",
+    "translation_powered_by": "Translation powered by"
+  },
+  "Portfolio": {
+    "meta_title": "Portfolio",
+    "meta_description": "Welcome to my portfolio page!",
+    "presentation": "Welcome to my portfolio page! Here you will find a carefully curated collection of my work and accomplishments. Through this portfolio, I'm to showcase my expertise, creativity, and the value I can bring to your projects.",
+    "portfolio_name": "Portfolio {name}",
+    "error_reporting_powered_by": "Error reporting powered by",
+    "coverage_powered_by": "Code coverage powered by"
+  },
+  "PortfolioSlug": {
+    "meta_title": "Portfolio {slug}",
+    "meta_description": "Portfolio {slug} description",
+    "header": "Portfolio {slug}",
+    "content": "Created a set of promotional materials and branding elements for a corporate event. Crafted a visually unified theme, encompassing a logo, posters, banners, and digital assets. Integrated the client's brand identity while infusing it with a contemporary and innovative approach. Garnered favorable responses from event attendees, resulting in a successful event with heightened participant engagement and increased brand visibility.",
+    "log_management_powered_by": "Log management powered by"
+  },
+  "SignIn": {
+    "meta_title": "Sign in",
+    "meta_description": "Seamlessly sign in to your account with our user-friendly login process.",
+    "title": "Sign in",
+    "identifier_label": "Phone number",
+    "password_label": "Password",
+    "submit_label": "Confirm",
+    "or": "or",
+    "social_title": "Sign in with another account"
+  },
+  "SignUp": {
+    "meta_title": "Sign up",
+    "meta_description": "Effortlessly create an account through our intuitive sign-up process.",
+    "title": "Sign up",
+    "name_label": "Your name",
+    "phone_label": "Phone number",
+    "password_label": "Password",
+    "confirm_password_label": "Confirm password",
+    "submit_label": "Confirm",
+    "or": "or",
+    "social_title": "Sign up with another account"
+  },
+  "Dashboard": {
+    "meta_title": "Dashboard",
+    "hello_message": "Hello {email}!"
+  },
+  "UserProfile": {
+    "meta_title": "User Profile"
+  },
+  "DashboardLayout": {
+    "dashboard_link": "Dashboard",
+    "user_profile_link": "Manage your account",
+    "sign_out": "Sign out"
+  },
+  "Map": {
+    "add_location": "Add New Location",
+    "cancel_adding": "Cancel Adding",
+    "search_label": "Search",
+    "search_placeholder": "Search stores, addresses...",
+    "near_me": "Near Me",
+    "distance_unit": "{value} km",
+    "follow_location": "Follow Location",
+    "following_location": "Following Location",
+    "smart_alerts": "Smart alerts",
+    "nearby_alerts": "Nearby saved spots",
+    "nearby_alerts_hint": "Send a push when you're close to a favorite.",
+    "follow_alerts": "Follow updates",
+    "follow_alerts_hint": "Alert me when a favorite place changes.",
+    "filters_and_sort": "Filters & Sort",
+    "favorites": "Favorites",
+    "sort_distance": "Distance",
+    "sort_name": "Name",
+    "sort_tooltip": "Enable location to sort by distance",
+    "map_style": "Map Style",
+    "store_list": "Store List",
+    "directions": "Directions",
+    "share": "Share",
+    "add_location_prompt": "Click on the map to add a location",
+    "signin_required": "Please sign in to add a location.",
+    "enable_location_prompt": "Please enable location services to get directions",
+    "get_my_location": "Get my location",
+    "alert_add_stop_before_save": "Add at least one stop before saving.",
+    "alert_route_saved": "Route saved for later.",
+    "alert_add_stop_before_share": "Add stops before sharing.",
+    "alert_link_copied": "Link copied to clipboard!",
+    "toast_submitted": "Location submitted for approval!",
+    "toast_error": "Error: {message}",
+    "saved_route_name": "Saved route",
+    "route_with_stops": "Route with {count} stops",
+    "shared_location_label": "Shared location",
+    "my_route_name": "My Route",
+    "duplicate_warning": "Warning: Possible duplicate location(s) found"
+  },
+  "MapFilters": {
+    "heatmap": "Heatmap Mode",
+    "price": "Price",
+    "tags": "Tags & Amenities",
+    "options": {
+      "Cafe": "Cafe",
+      "Restaurant": "Restaurant",
+      "Park": "Park",
+      "Museum": "Museum",
+      "Shopping": "Shopping",
+      "Wifi": "Wifi",
+      "Parking": "Parking",
+      "PetFriendly": "Pet Friendly"
+    }
+  },
+  "MapStyles": {
+    "streets": "Streets",
+    "satellite": "Satellite",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "StoreList": {
+    "empty_title": "No stores found",
+    "empty_body": "Try adjusting your search or filters",
+    "distance_suffix": "away",
+    "remove_favorite": "Remove from favorites",
+    "add_favorite": "Add to favorites",
+    "share_store": "Share store"
+  },
+  "StoreSheet": {
+    "add_title": "Add a new location",
+    "add_description": "You pinned a spot on the map. Fill in the details so others can find it.",
+    "rating_suffix": "/ 5.0"
+  },
+  "LocationForm": {
+    "title_add": "Add New Location",
+    "title_edit": "Edit Location",
+    "pinned_spot": "Pinned spot",
+    "name": "Name",
+    "name_placeholder": "Store Name",
+    "address": "Address",
+    "address_placeholder": "123 Main St, City",
+    "opening_hours": "Opening hours",
+    "opening_hours_placeholder": "e.g. 09:00 - 22:00",
+    "opening_hours_help": "Use a simple range or add notes like \"Weekends only\".",
+    "rating": "Rating",
+    "rating_placeholder": "4.6",
+    "rating_help": "0-5 scale. Leave blank if unknown.",
+    "notes": "Description / notes",
+    "notes_placeholder": "What makes this place useful or special?",
+    "budget": "Budget",
+    "budget_low": "cheap",
+    "budget_mid": "mid",
+    "budget_high": "premium",
+    "tags": "Tags",
+    "tags_quick_fill": "Click to quick-fill",
+    "tags_placeholder": "Add tags (comma or Enter to add)",
+    "tags_help": "Paste multiple tags separated by commas or new lines.",
+    "add": "Add",
+    "amenities": "Amenities",
+    "amenities_help": "Select all that apply",
+    "amenities_placeholder": "Add amenities (comma or Enter to add)",
+    "images": "Image URLs",
+    "images_placeholder": "Paste an image URL",
+    "images_help": "Paste one or many (comma/new-line separated). First image becomes the cover.",
+    "popularity": "Popularity / heatmap weight",
+    "popularity_label": "{value} / 100",
+    "cancel": "Cancel",
+    "save_changes": "Save Changes",
+    "add_location": "Add Location",
+    "quick_tags": {
+      "Shopping": "Shopping",
+      "Entertainment": "Entertainment",
+      "Cafe": "Cafe",
+      "Wifi": "Wifi",
+      "Parking": "Parking"
+    },
+    "quick_amenities": {
+      "Wifi": "Wifi",
+      "Parking": "Parking",
+      "AC": "AC",
+      "Restroom": "Restroom",
+      "FoodCourt": "Food Court"
+    }
+  },
+  "RoutePanel": {
+    "title": "Route Information",
+    "collapse": "Collapse panel",
+    "expand": "Expand panel",
+    "close": "Close route info",
+    "mode_drive": "Drive",
+    "mode_traffic": "Traffic",
+    "mode_bike": "Bike",
+    "mode_walk": "Walk",
+    "avoid_tolls": "Avoid Tolls",
+    "distance": "Distance",
+    "duration": "Duration",
+    "share": "Share",
+    "save": "Save",
+    "stops": "Stops",
+    "remove_stop": "Remove {name}",
+    "turn_by_turn": "Turn-by-turn Directions",
+    "clear_route": "Clear Route"
+  },
+  "MobileControls": {
+    "search_placeholder": "Search stores or addresses",
+    "toggle_favorites": "Toggle favorites",
+    "follow": "Follow",
+    "explore": "Explore",
+    "add": "Add",
+    "cancel": "Cancel",
+    "sheet_title": "Filters & Stores",
+    "filtered": "Filtered",
+    "total": "Total",
+    "favorites_only": "Favorites only"
+  },
+  "DesktopSidebar": {
+    "stores_title": "Stores"
+  },
+  "MapPopup": {
+    "enable_location": "Please enable location services to get directions",
+    "link_copied": "Link copied to clipboard!",
+    "saved": "Saved",
+    "save": "Save",
+    "directions": "Directions",
+    "distance": "Distance:",
+    "time": "Time:",
+    "clear_route": "Clear Route",
+    "suggest_edit": "Suggest edit"
+  },
+  "Notifications": {
+    "subscribe_success": "Subscribed to notifications!",
+    "subscribe_error": "Failed to subscribe to notifications.",
+    "unsubscribe": "Unsubscribed from notifications.",
+    "enable": "Enable Notifications",
+    "disable": "Disable Notifications"
+  },
+  "Greeting": {
+    "error": "Failed to fetch weather data. Please try again later.",
+    "search_placeholder": "Search"
+  },
+  "Toolbar": {
+    "sort_by": "Sort by",
+    "newest": "Newest",
+    "oldest": "Oldest"
+  },
+  "AdminDashboard": {
+    "toast_approved": "Location approved",
+    "toast_rejected": "Location rejected",
+    "sign_in_required": "Please sign in to review submissions.",
+    "admin_required": "You need admin access to moderate locations.",
+    "load_failed": "We could not load the review queue. Try again or contact support.",
+    "unable_to_load": "Unable to load pending locations",
+    "retry": "Retry",
+    "go_to_sign_in": "Go to sign in",
+    "no_pending_title": "No pending locations",
+    "no_pending_body": "Everything submitted from the map has been reviewed. New requests will show up here automatically.",
+    "pending_review": "Pending review",
+    "view_on_map": "View on map",
+    "no_description": "No description provided.",
+    "submitted_by": "Submitted by",
+    "unknown": "Unknown",
+    "no_email": "no email",
+    "approve": "Approve",
+    "reject": "Reject",
+    "review_queue": "Review queue",
+    "location_approvals": "Location approvals",
+    "review_copy": "Vet submissions coming from the public map before they appear to everyone.",
+    "refresh": "Refresh",
+    "pending": "Pending",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "pending_help": "Items waiting for review.",
+    "queue_health": "Queue health",
+    "clear": "Clear",
+    "active": "Active",
+    "queue_help": "Avoid stale submissions by processing quickly.",
+    "last_synced": "Last synced",
+    "last_synced_help": "Manual refresh keeps the queue current.",
+    "dialog_approve_title": "Approve location",
+    "dialog_reject_title": "Reject location",
+    "dialog_message": "You are about to {action} {location}. This action updates the public map immediately.",
+    "dialog_empty": "No location selected.",
+    "submitter_reason": "Submitter note",
+    "submitted_payload": "Submitted payload",
+    "changes": "Changes",
+    "from_label": "From",
+    "to_label": "To",
+    "no_changes_detected": "No changes detected.",
+    "type_label": "Type",
+    "duplicate_of": "Duplicate of",
+    "moderator_note": "Moderator note:",
+    "cancel": "Cancel",
+    "working": "Working...",
+    "confirm": "Confirm",
+    "id_label": "ID: {id}",
+    "submitted_address": "{lat}, {lng}",
+    "status_pending": "Pending",
+    "note_placeholder": "Share any context that might help the submitter.",
+    "mark_duplicate": "Mark as duplicate of",
+    "duplicate_placeholder": "Existing location ID",
+    "dialog_action": {
+      "approve": "approve",
+      "reject": "reject"
+    }
+  }
 }

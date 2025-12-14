@@ -1,6 +1,4 @@
-@layer reset, base, tailwind-base, tokens, recipes, utilities, antd;
-
-@import url(reset.css) layer(reset);
+@layer tailwind-base, antd;
 
 @layer tailwind-base {
   @tailwind base;
@@ -8,46 +6,113 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer reset, base, tokens, recipes, utilities;
+@layer base {
+  :root {
+    /* Main Palette */
+    --primary: #e78454;
+    --primary-light: #fdf0dc;
+    --background: #fff9ee;
+    --secondary: #4f2d27;
+    --secondary-light: #4f2d27d1;
+    --doc-vet: #e8f8f6;
+    --doc-vaccine: #fddcdc;
 
-:root {
-  /* Light Mode */
-  --accent-hover: rgb(220, 20, 60);
-  --accent: rgb(240, 128, 128);
-  --danger: rgb(220, 53, 69);
-  --highlight: rgb(255, 255, 0);
-  --pastel-blue: rgb(107, 172, 214);
-  --pastel-green: rgb(122, 255, 120);
-  --pastel-purple: rgb(216, 191, 216);
-  --pastel-yellow: rgb(255, 255, 125);
-  --primary: rgb(205, 193, 255);
-  --purple: rgb(122, 101, 162);
-  --secondary: rgb(146, 217, 250);
-  --shadow: rgba(0, 0, 0, 0.102);
-  --success: rgb(40, 167, 69);
-  --warning: rgb(255, 193, 7);
+    /* Shadcn / Base UI placeholders - mapped to palette where appropriate or kept neutral */
+    --foreground: #4f2d27; /* Using secondary (dark brown) as foreground text color for consistency */
+    --card: #ffffff;
+    --card-foreground: #4f2d27;
+    --popover: #ffffff;
+    --popover-foreground: #4f2d27;
+
+    --primary-foreground: #fff9ee; /* Text on primary button */
+
+    --secondary-foreground: #fff9ee;
+
+    --muted: #f4f4f5;
+    --muted-foreground: #757575;
+
+    --accent: #fdf0dc; /* Using primary-light as accent */
+    --accent-foreground: #4f2d27;
+
+    --destructive: #ef4444;
+    --destructive-foreground: #fafafa;
+
+    --border: #e5e5e6;
+    --input: #e5e5e6;
+    --ring: #e78454; /* Ring matches primary */
+
+    --radius: 0.75rem;
+
+    /* Legacy/Other (Consider removing if unused, keeping generic for now) */
+    --success: #28a745;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --shadow: rgba(0, 0, 0, 0.1);
+  }
+
+  .dark {
+    /* Dark mode overrides (if needed, currently sticking to light mode palette or generic dark placeholders) */
+    --background: #0a0a0b;
+    --foreground: #fafafa;
+    --card: #0a0a0b;
+    --card-foreground: #fafafa;
+    --popover: #0a0a0b;
+    --popover-foreground: #fafafa;
+    --primary: #e78454;
+    --primary-foreground: #fafafa;
+    --secondary: #27272a;
+    --secondary-foreground: #fafafa;
+    --muted: #27272a;
+    --muted-foreground: #a1a1aa;
+    --accent: #27272a;
+    --accent-foreground: #fafafa;
+    --destructive: #7f1d1d;
+    --destructive-foreground: #fafafa;
+    --border: #27272a;
+    --input: #27272a;
+    --ring: #d4d4d8;
+  }
 }
 
-[data-theme='dark'] {
-  /* Dark Mode */
-  --accent-hover: rgb(220, 20, 60);
-  --accent: rgb(205, 109, 109);
-  --danger: rgb(220, 53, 69);
-  --highlight: rgb(255, 255, 0);
-  --pastel-blue: rgb(77, 156, 182);
-  --pastel-green: rgb(92, 182, 92);
-  --pastel-purple: rgb(173, 151, 173);
-  --pastel-yellow: rgb(216, 216, 99);
-  --primary: rgb(132, 100, 192);
-  --purple: rgb(122, 101, 162);
-  --secondary: rgb(78, 153, 187);
-  --shadow: rgba(255, 255, 255, 0.102);
-  --success: rgb(40, 167, 69);
-  --warning: rgb(255, 193, 7);
+@layer base {
+  * {
+    @apply border-border font-poppins;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 
+@layer components {
+  /* Legacy Custom Classes - Refactor or Remove as needed. Keeping essential UI helpers */
+  .input {
+    @apply w-full mt-1 rounded-xl border border-primary bg-background px-4 py-3 text-secondary focus:outline-none focus:ring-2 focus:ring-primary;
+  }
+
+  .label {
+    @apply mt-1 text-sm text-primary;
+  }
+
+  .primary-btn {
+    @apply w-full rounded-xl bg-primary py-3 text-white font-semibold;
+  }
+
+  .social-btn {
+    @apply w-10 h-10 rounded-full flex items-center justify-center overflow-hidden p-1;
+  }
+
+  .error {
+    @apply text-xs text-red-500 mt-1;
+  }
+
+  .tiptap {
+    @apply min-h-[120px] outline-none;
+  }
+}
+
+/* 3rd party overrides */
 .rtf {
-  z-index: 49!important;
+  z-index: 49 !important;
 }
 
 .rtf--mb {
@@ -55,84 +120,14 @@
   height: 48px;
 }
 
-.rtf.open .rtf--mb>*{
+.rtf.open .rtf--mb > * {
   transform: none !important;
 }
 
 .rtf.open .rtf--ab__c:first-child {
-  transform: translateY(-64px) scale(1)!important;
+  transform: translateY(-64px) scale(1) !important;
 }
 
 .rtf .rtf--ab {
-  margin-right: -1px!important;
-}
-
-@layer base {
-  :root {
-    --background: #FFFFFF;
-    --foreground: #0A0A0B;
-    --card: #FFFFFF;
-    --card-foreground: #0A0A0B;
-    --popover: #FFFFFF;
-    --popover-foreground: #0A0A0B;
-    --primary: #191919;
-    --primary-foreground: #FAFAFA;
-    --secondary: #F4F4F5;
-    --secondary-foreground: #191919;
-    --muted: #F4F4F5;
-    --muted-foreground: #757575;
-    --accent: #F4F4F5;
-    --accent-foreground: #191919;
-    --destructive: #E11D48;
-    --destructive-foreground: #FAFAFA;
-    --border: #E5E5E6;
-    --input: #E5E5E6;
-    --ring: #0A0A0B;
-    --chart-1: #E86F3D;
-    --chart-2: #2A9B94;
-    --chart-3: #2F4147;
-    --chart-4: #E5B63A;
-    --chart-5: #EC7B33;
-    --radius: 0.75rem;
-  }
-  
-  .dark {
-    --background: #0A0A0B;
-    --foreground: #FAFAFA;
-    --card: #0A0A0B;
-    --card-foreground: #FAFAFA;
-    --popover: #0A0A0B;
-    --popover-foreground: #FAFAFA;
-    --primary: #FAFAFA;
-    --primary-foreground: #191919;
-    --secondary: #27272A;
-    --secondary-foreground: #FAFAFA;
-    --muted: #27272A;
-    --muted-foreground: #A1A1AA;
-    --accent: #27272A;
-    --accent-foreground: #FAFAFA;
-    --destructive: #7F1D1D;
-    --destructive-foreground: #FAFAFA;
-    --border: #27272A;
-    --input: #27272A;
-    --ring: #D4D4D8;
-    --chart-1: #1E6FD9;
-    --chart-2: #2D9E76;
-    --chart-3: #D97F1E;
-    --chart-4: #9B3ED9;
-    --chart-5: #D93E7C;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-.tiptap {
-  @apply min-h-[120px] outline-none;
+  margin-right: -1px !important;
 }

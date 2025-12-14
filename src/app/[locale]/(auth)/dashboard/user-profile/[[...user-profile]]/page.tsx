@@ -2,6 +2,7 @@ import { UserProfile } from "@clerk/nextjs";
 import { getTranslations } from "next-intl/server";
 
 import { getI18nPath } from "@/utils/helpers";
+import { buildLocalizedMetadata } from "@/utils/seo";
 
 export async function generateMetadata(props: { params: { locale: string } }) {
 	const t = await getTranslations({
@@ -9,9 +10,11 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 		namespace: "UserProfile",
 	});
 
-	return {
+	return buildLocalizedMetadata({
+		locale: props.params.locale,
+		path: "/dashboard/user-profile",
 		title: t("meta_title"),
-	};
+	});
 }
 
 const UserProfilePage = (props: { params: { locale: string } }) => (

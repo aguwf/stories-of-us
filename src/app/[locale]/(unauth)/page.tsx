@@ -1,4 +1,5 @@
 import StoryTimelineContainer from "@/app/_containers/StoryTimelineContainer";
+import { buildLocalizedMetadata } from "@/utils/seo";
 import { HydrateClient } from "@/trpc/server";
 import { getTranslations } from "next-intl/server";
 
@@ -8,10 +9,12 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 		namespace: "Index",
 	});
 
-	return {
+	return buildLocalizedMetadata({
+		locale: props.params.locale,
+		path: "/",
 		title: t("meta_title"),
 		description: t("meta_description"),
-	};
+	});
 }
 
 export default function Index() {

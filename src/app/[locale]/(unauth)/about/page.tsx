@@ -1,6 +1,7 @@
 import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
+import { buildLocalizedMetadata } from "@/utils/seo";
 
 export async function generateMetadata(props: { params: { locale: string } }) {
 	const t = await getTranslations({
@@ -8,10 +9,12 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 		namespace: "About",
 	});
 
-	return {
+	return buildLocalizedMetadata({
+		locale: props.params.locale,
+		path: "/about",
 		title: t("meta_title"),
 		description: t("meta_description"),
-	};
+	});
 }
 
 export default function About() {

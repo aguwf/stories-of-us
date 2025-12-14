@@ -1,299 +1,329 @@
 {
-	"RootLayout": {
-		"home_link": "Trang chủ",
-		"about_link": "Giới thiệu",
-		"guestbook_link": "Sổ lưu bút",
-		"portfolio_link": "Danh mục",
-		"sign_in_link": "Đăng nhập",
-		"sign_up_link": "Đăng ký"
-	},
-	"BaseTemplate": {
-		"description": "Ngôi nhà kể chuyện của chúng tôi",
-		"made_with": "Được làm với"
-	},
-	"Index": {
-		"meta_title": "Stories of Us",
-		"meta_description": "Chào mừng đến với Stories of Us, nơi bạn có thể chia sẻ hành trình cuộc đời và kết nối với mọi người. Khám phá thế giới những câu chuyện, tìm cảm hứng và xây dựng các mối liên kết ý nghĩa.",
-		"title": "Stories of Us",
-		"description": "Chào mừng đến với Stories of Us, nơi bạn có thể chia sẻ hành trình cuộc đời và kết nối với mọi người. Khám phá thế giới những câu chuyện, tìm cảm hứng và xây dựng các mối liên kết ý nghĩa.",
-		"explore_stories": "Khám phá câu chuyện",
-		"share_your_story": "Chia sẻ câu chuyện của bạn",
-		"tools-bar-title": "Dòng thời gian"
-	},
-	"Guestbook": {
-		"meta_title": "Sổ lưu bút",
-		"meta_description": "Ví dụ về thao tác CRUD",
-		"database_powered_by": "Cơ sở dữ liệu bởi",
-		"loading_guestbook": "Đang tải sổ lưu bút..."
-	},
-	"GuestbookForm": {
-		"username": "Tên người dùng",
-		"body": "Nội dung",
-		"save": "Lưu"
-	},
-	"About": {
-		"meta_title": "Giới thiệu",
-		"meta_description": "Mô tả trang giới thiệu",
-		"about_paragraph": "Chào mừng bạn đến trang Giới thiệu! Chúng tôi là những người đam mê tạo ra phần mềm tuyệt vời.",
-		"translation_powered_by": "Dịch thuật được hỗ trợ bởi"
-	},
-	"Portfolio": {
-		"meta_title": "Danh mục",
-		"meta_description": "Chào mừng đến trang danh mục của tôi!",
-		"presentation": "Chào mừng bạn đến trang danh mục! Bạn sẽ tìm thấy tại đây bộ sưu tập được chọn lọc kỹ lưỡng về công việc và thành tựu của tôi. Qua danh mục này, tôi muốn thể hiện chuyên môn, sự sáng tạo và giá trị mà tôi có thể mang lại cho dự án của bạn.",
-		"portfolio_name": "Danh mục {name}",
-		"error_reporting_powered_by": "Báo cáo lỗi bởi",
-		"coverage_powered_by": "Độ phủ mã nguồn bởi"
-	},
-	"PortfolioSlug": {
-		"meta_title": "Danh mục {slug}",
-		"meta_description": "Mô tả danh mục {slug}",
-		"header": "Danh mục {slug}",
-		"content": "Đã tạo bộ tài liệu quảng bá và bộ nhận diện thương hiệu cho một sự kiện doanh nghiệp. Thiết kế chủ đề thống nhất về hình ảnh gồm logo, poster, banner và tài sản số. Kết hợp bản sắc thương hiệu của khách hàng với phong cách hiện đại và đổi mới. Nhận được phản hồi tích cực từ người tham dự, mang lại sự kiện thành công với mức độ gắn kết cao và gia tăng độ nhận diện thương hiệu.",
-		"log_management_powered_by": "Quản lý log bởi"
-	},
-	"SignIn": {
-		"meta_title": "Đăng nhập",
-		"meta_description": "Đăng nhập tài khoản của bạn một cách dễ dàng."
-	},
-	"SignUp": {
-		"meta_title": "Đăng ký",
-		"meta_description": "Tạo tài khoản nhanh chóng với quy trình đăng ký trực quan."
-	},
-	"Dashboard": {
-		"meta_title": "Bảng điều khiển",
-		"hello_message": "Xin chào {email}!"
-	},
-	"UserProfile": {
-		"meta_title": "Hồ sơ người dùng"
-	},
-	"DashboardLayout": {
-		"dashboard_link": "Bảng điều khiển",
-		"user_profile_link": "Quản lý tài khoản",
-		"sign_out": "Đăng xuất"
-	},
-	"Map": {
-		"add_location": "Thêm địa điểm mới",
-		"cancel_adding": "Hủy thêm",
-		"search_label": "Tìm kiếm",
-		"search_placeholder": "Tìm cửa hàng, địa chỉ...",
-		"near_me": "Gần tôi",
-		"distance_unit": "{value} km",
-		"follow_location": "Theo dõi vị trí",
-		"following_location": "Đang theo dõi",
-		"filters_and_sort": "Lọc và sắp xếp",
-		"favorites": "Yêu thích",
-		"sort_distance": "Khoảng cách",
-		"sort_name": "Tên",
-		"sort_tooltip": "Bật định vị để sắp xếp theo khoảng cách",
-		"map_style": "Kiểu bản đồ",
-		"store_list": "Danh sách địa điểm",
-		"directions": "Chỉ đường",
-		"share": "Chia sẻ",
-		"add_location_prompt": "Nhấp lên bản đồ để thêm địa điểm",
-		"signin_required": "Hãy đăng nhập để thêm địa điểm.",
-		"enable_location_prompt": "Bật định vị để nhận chỉ đường",
-		"get_my_location": "Lấy vị trí của tôi",
-		"alert_add_stop_before_save": "Thêm ít nhất một điểm dừng trước khi lưu.",
-		"alert_route_saved": "Đã lưu lộ trình.",
-		"alert_add_stop_before_share": "Thêm điểm dừng trước khi chia sẻ.",
-		"alert_link_copied": "Đã sao chép liên kết!",
-		"toast_submitted": "Địa điểm đã gửi để duyệt!",
-		"toast_error": "Lỗi: {message}",
-		"saved_route_name": "Lộ trình đã lưu",
-		"route_with_stops": "Lộ trình với {count} điểm dừng",
-		"shared_location_label": "Địa điểm chia sẻ",
-		"my_route_name": "Lộ trình của tôi"
-	},
-	"MapFilters": {
-		"heatmap": "Chế độ nhiệt",
-		"price": "Giá",
-		"tags": "Thẻ và tiện ích",
-		"options": {
-			"Cafe": "Quán cà phê",
-			"Restaurant": "Nhà hàng",
-			"Park": "Công viên",
-			"Museum": "Bảo tàng",
-			"Shopping": "Mua sắm",
-			"Wifi": "Wifi",
-			"Parking": "Bãi đỗ xe",
-			"PetFriendly": "Thân thiện thú cưng"
-		}
-	},
-	"MapStyles": {
-		"streets": "Đường phố",
-		"satellite": "Vệ tinh",
-		"light": "Sáng",
-		"dark": "Tối"
-	},
-	"StoreList": {
-		"empty_title": "Không tìm thấy địa điểm",
-		"empty_body": "Hãy thử điều chỉnh tìm kiếm hoặc bộ lọc",
-		"distance_suffix": "cách",
-		"remove_favorite": "Xóa khỏi yêu thích",
-		"add_favorite": "Thêm vào yêu thích",
-		"share_store": "Chia sẻ địa điểm"
-	},
-	"StoreSheet": {
-		"add_title": "Thêm địa điểm mới",
-		"add_description": "Bạn vừa ghim một điểm trên bản đồ. Điền chi tiết để mọi người có thể tìm thấy.",
-		"rating_suffix": "/ 5,0"
-	},
-	"LocationForm": {
-		"title_add": "Thêm địa điểm",
-		"title_edit": "Chỉnh sửa địa điểm",
-		"pinned_spot": "Điểm đã ghim",
-		"name": "Tên",
-		"name_placeholder": "Tên địa điểm",
-		"address": "Địa chỉ",
-		"address_placeholder": "123 Đường Chính, Thành phố",
-		"opening_hours": "Giờ mở cửa",
-		"opening_hours_placeholder": "vd: 09:00 - 22:00",
-		"opening_hours_help": "Dùng khoảng giờ đơn giản hoặc ghi \"Chỉ cuối tuần\".",
-		"rating": "Đánh giá",
-		"rating_placeholder": "4.6",
-		"rating_help": "Thang 0-5. Để trống nếu chưa biết.",
-		"notes": "Mô tả / ghi chú",
-		"notes_placeholder": "Điều gì khiến nơi này hữu ích hoặc đặc biệt?",
-		"budget": "Ngân sách",
-		"budget_low": "tiết kiệm",
-		"budget_mid": "trung bình",
-		"budget_high": "cao cấp",
-		"tags": "Thẻ",
-		"tags_quick_fill": "Nhấn để điền nhanh",
-		"tags_placeholder": "Thêm thẻ (phẩy hoặc Enter để thêm)",
-		"tags_help": "Dán nhiều thẻ, cách nhau bằng dấu phẩy hoặc xuống dòng.",
-		"add": "Thêm",
-		"amenities": "Tiện ích",
-		"amenities_help": "Chọn tất cả mục phù hợp",
-		"amenities_placeholder": "Thêm tiện ích (phẩy hoặc Enter để thêm)",
-		"images": "URL hình ảnh",
-		"images_placeholder": "Dán URL hình ảnh",
-		"images_help": "Dán một hoặc nhiều (phẩy/ xuống dòng). Ảnh đầu tiên làm ảnh bìa.",
-		"popularity": "Độ phổ biến / trọng số nhiệt",
-		"popularity_label": "{value} / 100",
-		"cancel": "Hủy",
-		"save_changes": "Lưu thay đổi",
-		"add_location": "Thêm địa điểm",
-		"quick_tags": {
-			"Shopping": "Mua sắm",
-			"Entertainment": "Giải trí",
-			"Cafe": "Quán cà phê",
-			"Wifi": "Wifi",
-			"Parking": "Bãi đỗ xe"
-		},
-		"quick_amenities": {
-			"Wifi": "Wifi",
-			"Parking": "Bãi đỗ xe",
-			"AC": "Điều hòa",
-			"Restroom": "Nhà vệ sinh",
-			"FoodCourt": "Khu ẩm thực"
-		}
-	},
-	"RoutePanel": {
-		"title": "Thông tin lộ trình",
-		"collapse": "Thu gọn bảng",
-		"expand": "Mở bảng",
-		"close": "Đóng thông tin lộ trình",
-		"mode_drive": "Lái xe",
-		"mode_traffic": "Kẹt xe",
-		"mode_bike": "Xe đạp",
-		"mode_walk": "Đi bộ",
-		"avoid_tolls": "Tránh thu phí",
-		"distance": "Quãng đường",
-		"duration": "Thời gian",
-		"share": "Chia sẻ",
-		"save": "Lưu",
-		"stops": "Điểm dừng",
-		"remove_stop": "Xóa {name}",
-		"turn_by_turn": "Chỉ dẫn chi tiết",
-		"clear_route": "Xóa lộ trình"
-	},
-	"MobileControls": {
-		"search_placeholder": "Tìm địa điểm hoặc địa chỉ",
-		"toggle_favorites": "Bật/tắt yêu thích",
-		"follow": "Theo dõi",
-		"explore": "Khám phá",
-		"add": "Thêm",
-		"cancel": "Hủy",
-		"sheet_title": "Bộ lọc và địa điểm",
-		"filtered": "Đã lọc",
-		"total": "Tổng",
-		"favorites_only": "Chỉ yêu thích"
-	},
-	"DesktopSidebar": {
-		"stores_title": "Địa điểm"
-	},
-	"MapPopup": {
-		"enable_location": "Bật định vị để nhận chỉ đường",
-		"link_copied": "Đã sao chép liên kết!",
-		"saved": "Đã lưu",
-		"save": "Lưu",
-		"directions": "Chỉ đường",
-		"distance": "Quãng đường:",
-		"time": "Thời gian:",
-		"clear_route": "Xóa lộ trình"
-	},
-	"Notifications": {
-		"subscribe_success": "Đã đăng ký nhận thông báo!",
-		"subscribe_error": "Đăng ký thông báo thất bại.",
-		"unsubscribe": "Đã hủy nhận thông báo.",
-		"enable": "Bật thông báo",
-		"disable": "Tắt thông báo"
-	},
-	"Greeting": {
-		"error": "Không thể tải dữ liệu thời tiết. Vui lòng thử lại sau.",
-		"search_placeholder": "Tìm kiếm"
-	},
-	"Toolbar": {
-		"sort_by": "Sắp xếp",
-		"newest": "Mới nhất",
-		"oldest": "Cũ nhất"
-	},
-	"AdminDashboard": {
-		"toast_approved": "Đã chấp nhận địa điểm",
-		"toast_rejected": "Đã từ chối địa điểm",
-		"sign_in_required": "Vui lòng đăng nhập để duyệt yêu cầu.",
-		"admin_required": "Bạn cần quyền quản trị để kiểm duyệt địa điểm.",
-		"load_failed": "Không thể tải hàng đợi duyệt. Thử lại hoặc liên hệ hỗ trợ.",
-		"unable_to_load": "Không thể tải địa điểm đang chờ",
-		"retry": "Thử lại",
-		"go_to_sign_in": "Đi tới đăng nhập",
-		"no_pending_title": "Không có địa điểm chờ duyệt",
-		"no_pending_body": "Tất cả yêu cầu từ bản đồ đã được duyệt. Yêu cầu mới sẽ tự động hiển thị ở đây.",
-		"pending_review": "Chờ duyệt",
-		"view_on_map": "Xem trên bản đồ",
-		"no_description": "Không có mô tả.",
-		"submitted_by": "Gửi bởi",
-		"unknown": "Không rõ",
-		"no_email": "không có email",
-		"approve": "Chấp nhận",
-		"reject": "Từ chối",
-		"review_queue": "Hàng chờ duyệt",
-		"location_approvals": "Duyệt địa điểm",
-		"review_copy": "Kiểm tra yêu cầu từ bản đồ công cộng trước khi hiển thị cho mọi người.",
-		"refresh": "Làm mới",
-		"pending": "Chờ duyệt",
-		"pending_help": "Các mục đang chờ xử lý.",
-		"queue_health": "Tình trạng hàng chờ",
-		"clear": "Trống",
-		"active": "Đang hoạt động",
-		"queue_help": "Tránh tồn đọng bằng cách xử lý nhanh.",
-		"last_synced": "Lần đồng bộ cuối",
-		"last_synced_help": "Làm mới thủ công để cập nhật hàng chờ.",
-		"dialog_approve_title": "Chấp nhận địa điểm",
-		"dialog_reject_title": "Từ chối địa điểm",
-		"dialog_message": "Bạn sắp {action} {location}. Hành động này sẽ cập nhật bản đồ ngay lập tức.",
-		"dialog_empty": "Chưa chọn địa điểm.",
-		"cancel": "Hủy",
-		"working": "Đang xử lý...",
-		"confirm": "Xác nhận",
-		"id_label": "ID: {id}",
-		"submitted_address": "{lat}, {lng}",
-		"status_pending": "Chờ duyệt",
-		"dialog_action": {
-			"approve": "chấp nhận",
-			"reject": "từ chối"
-		}
-	}
+  "RootLayout": {
+    "home_link": "Trang chủ",
+    "about_link": "Giới thiệu",
+    "guestbook_link": "Sổ lưu bút",
+    "portfolio_link": "Danh mục",
+    "sign_in_link": "Đăng nhập",
+    "sign_up_link": "Đăng ký"
+  },
+  "BaseTemplate": {
+    "description": "Ngôi nhà kể chuyện của chúng tôi",
+    "made_with": "Được làm với"
+  },
+  "Index": {
+    "meta_title": "Stories of Us",
+    "meta_description": "Chào mừng đến với Stories of Us, nơi bạn có thể chia sẻ hành trình cuộc đời và kết nối với mọi người. Khám phá thế giới những câu chuyện, tìm cảm hứng và xây dựng các mối liên kết ý nghĩa.",
+    "title": "Stories of Us",
+    "description": "Chào mừng đến với Stories of Us, nơi bạn có thể chia sẻ hành trình cuộc đời và kết nối với mọi người. Khám phá thế giới những câu chuyện, tìm cảm hứng và xây dựng các mối liên kết ý nghĩa.",
+    "explore_stories": "Khám phá câu chuyện",
+    "share_your_story": "Chia sẻ câu chuyện của bạn",
+    "tools-bar-title": "Dòng thời gian"
+  },
+  "Guestbook": {
+    "meta_title": "Sổ lưu bút",
+    "meta_description": "Ví dụ về thao tác CRUD",
+    "database_powered_by": "Cơ sở dữ liệu bởi",
+    "loading_guestbook": "Đang tải sổ lưu bút..."
+  },
+  "GuestbookForm": {
+    "username": "Tên người dùng",
+    "body": "Nội dung",
+    "save": "Lưu"
+  },
+  "About": {
+    "meta_title": "Giới thiệu",
+    "meta_description": "Mô tả trang giới thiệu",
+    "about_paragraph": "Chào mừng bạn đến trang Giới thiệu! Chúng tôi là những người đam mê tạo ra phần mềm tuyệt vời.",
+    "translation_powered_by": "Dịch thuật được hỗ trợ bởi"
+  },
+  "Portfolio": {
+    "meta_title": "Danh mục",
+    "meta_description": "Chào mừng đến trang danh mục của tôi!",
+    "presentation": "Chào mừng bạn đến trang danh mục! Bạn sẽ tìm thấy tại đây bộ sưu tập được chọn lọc kỹ lưỡng về công việc và thành tựu của tôi. Qua danh mục này, tôi muốn thể hiện chuyên môn, sự sáng tạo và giá trị mà tôi có thể mang lại cho dự án của bạn.",
+    "portfolio_name": "Danh mục {name}",
+    "error_reporting_powered_by": "Báo cáo lỗi bởi",
+    "coverage_powered_by": "Độ phủ mã nguồn bởi"
+  },
+  "PortfolioSlug": {
+    "meta_title": "Danh mục {slug}",
+    "meta_description": "Mô tả danh mục {slug}",
+    "header": "Danh mục {slug}",
+    "content": "Đã tạo bộ tài liệu quảng bá và bộ nhận diện thương hiệu cho một sự kiện doanh nghiệp. Thiết kế chủ đề thống nhất về hình ảnh gồm logo, poster, banner và tài sản số. Kết hợp bản sắc thương hiệu của khách hàng với phong cách hiện đại và đổi mới. Nhận được phản hồi tích cực từ người tham dự, mang lại sự kiện thành công với mức độ gắn kết cao và gia tăng độ nhận diện thương hiệu.",
+    "log_management_powered_by": "Quản lý log bởi"
+  },
+  "SignIn": {
+    "meta_title": "Đăng nhập",
+    "meta_description": "Đăng nhập tài khoản của bạn một cách dễ dàng.",
+    "title": "Đăng nhập",
+    "identifier_label": "Số điện thoại",
+    "password_label": "Mật khẩu",
+    "submit_label": "Xác nhận",
+    "or": "hoặc",
+    "social_title": "Đăng nhập với tài khoản khác"
+  },
+  "SignUp": {
+    "meta_title": "Đăng ký",
+    "meta_description": "Tạo tài khoản nhanh chóng với quy trình đăng ký trực quan.",
+    "title": "Đăng ký",
+    "name_label": "Tên của bạn",
+    "phone_label": "Số điện thoại",
+    "password_label": "Mật khẩu",
+    "confirm_password_label": "Nhập lại mật khẩu",
+    "submit_label": "Xác nhận",
+    "or": "hoặc",
+    "social_title": "Đăng ký với tài khoản khác"
+  },
+  "Dashboard": {
+    "meta_title": "Bảng điều khiển",
+    "hello_message": "Xin chào {email}!"
+  },
+  "UserProfile": {
+    "meta_title": "Hồ sơ người dùng"
+  },
+  "DashboardLayout": {
+    "dashboard_link": "Bảng điều khiển",
+    "user_profile_link": "Quản lý tài khoản",
+    "sign_out": "Đăng xuất"
+  },
+  "Map": {
+    "add_location": "Thêm địa điểm mới",
+    "cancel_adding": "Hủy thêm",
+    "search_label": "Tìm kiếm",
+    "search_placeholder": "Tìm cửa hàng, địa chỉ...",
+    "near_me": "Gần tôi",
+    "distance_unit": "{value} km",
+    "follow_location": "Theo dõi vị trí",
+    "following_location": "Đang theo dõi",
+    "filters_and_sort": "Lọc và sắp xếp",
+    "favorites": "Yêu thích",
+    "sort_distance": "Khoảng cách",
+    "sort_name": "Tên",
+    "sort_tooltip": "Bật định vị để sắp xếp theo khoảng cách",
+    "map_style": "Kiểu bản đồ",
+    "store_list": "Danh sách địa điểm",
+    "directions": "Chỉ đường",
+    "share": "Chia sẻ",
+    "add_location_prompt": "Nhấp lên bản đồ để thêm địa điểm",
+    "signin_required": "Hãy đăng nhập để thêm địa điểm.",
+    "enable_location_prompt": "Bật định vị để nhận chỉ đường",
+    "get_my_location": "Lấy vị trí của tôi",
+    "alert_add_stop_before_save": "Thêm ít nhất một điểm dừng trước khi lưu.",
+    "alert_route_saved": "Đã lưu lộ trình.",
+    "alert_add_stop_before_share": "Thêm điểm dừng trước khi chia sẻ.",
+    "alert_link_copied": "Đã sao chép liên kết!",
+    "toast_submitted": "Địa điểm đã gửi để duyệt!",
+    "toast_error": "Lỗi: {message}",
+    "saved_route_name": "Lộ trình đã lưu",
+    "route_with_stops": "Lộ trình với {count} điểm dừng",
+    "shared_location_label": "Địa điểm chia sẻ",
+    "my_route_name": "Lộ trình của tôi",
+    "duplicate_warning": "Cảnh báo: Có thể trùng lặp địa điểm"
+  },
+  "MapFilters": {
+    "heatmap": "Chế độ nhiệt",
+    "price": "Giá",
+    "tags": "Thẻ và tiện ích",
+    "options": {
+      "Cafe": "Quán cà phê",
+      "Restaurant": "Nhà hàng",
+      "Park": "Công viên",
+      "Museum": "Bảo tàng",
+      "Shopping": "Mua sắm",
+      "Wifi": "Wifi",
+      "Parking": "Bãi đỗ xe",
+      "PetFriendly": "Thân thiện thú cưng"
+    }
+  },
+  "MapStyles": {
+    "streets": "Đường phố",
+    "satellite": "Vệ tinh",
+    "light": "Sáng",
+    "dark": "Tối"
+  },
+  "StoreList": {
+    "empty_title": "Không tìm thấy địa điểm",
+    "empty_body": "Hãy thử điều chỉnh tìm kiếm hoặc bộ lọc",
+    "distance_suffix": "cách",
+    "remove_favorite": "Xóa khỏi yêu thích",
+    "add_favorite": "Thêm vào yêu thích",
+    "share_store": "Chia sẻ địa điểm"
+  },
+  "StoreSheet": {
+    "add_title": "Thêm địa điểm mới",
+    "add_description": "Bạn vừa ghim một điểm trên bản đồ. Điền chi tiết để mọi người có thể tìm thấy.",
+    "rating_suffix": "/ 5,0"
+  },
+  "LocationForm": {
+    "title_add": "Thêm địa điểm",
+    "title_edit": "Chỉnh sửa địa điểm",
+    "pinned_spot": "Điểm đã ghim",
+    "name": "Tên",
+    "name_placeholder": "Tên địa điểm",
+    "address": "Địa chỉ",
+    "address_placeholder": "123 Đường Chính, Thành phố",
+    "opening_hours": "Giờ mở cửa",
+    "opening_hours_placeholder": "vd: 09:00 - 22:00",
+    "opening_hours_help": "Dùng khoảng giờ đơn giản hoặc ghi \"Chỉ cuối tuần\".",
+    "rating": "Đánh giá",
+    "rating_placeholder": "4.6",
+    "rating_help": "Thang 0-5. Để trống nếu chưa biết.",
+    "notes": "Mô tả / ghi chú",
+    "notes_placeholder": "Điều gì khiến nơi này hữu ích hoặc đặc biệt?",
+    "budget": "Ngân sách",
+    "budget_low": "tiết kiệm",
+    "budget_mid": "trung bình",
+    "budget_high": "cao cấp",
+    "tags": "Thẻ",
+    "tags_quick_fill": "Nhấn để điền nhanh",
+    "tags_placeholder": "Thêm thẻ (phẩy hoặc Enter để thêm)",
+    "tags_help": "Dán nhiều thẻ, cách nhau bằng dấu phẩy hoặc xuống dòng.",
+    "add": "Thêm",
+    "amenities": "Tiện ích",
+    "amenities_help": "Chọn tất cả mục phù hợp",
+    "amenities_placeholder": "Thêm tiện ích (phẩy hoặc Enter để thêm)",
+    "images": "URL hình ảnh",
+    "images_placeholder": "Dán URL hình ảnh",
+    "images_help": "Dán một hoặc nhiều (phẩy/ xuống dòng). Ảnh đầu tiên làm ảnh bìa.",
+    "popularity": "Độ phổ biến / trọng số nhiệt",
+    "popularity_label": "{value} / 100",
+    "cancel": "Hủy",
+    "save_changes": "Lưu thay đổi",
+    "add_location": "Thêm địa điểm",
+    "quick_tags": {
+      "Shopping": "Mua sắm",
+      "Entertainment": "Giải trí",
+      "Cafe": "Quán cà phê",
+      "Wifi": "Wifi",
+      "Parking": "Bãi đỗ xe"
+    },
+    "quick_amenities": {
+      "Wifi": "Wifi",
+      "Parking": "Bãi đỗ xe",
+      "AC": "Điều hòa",
+      "Restroom": "Nhà vệ sinh",
+      "FoodCourt": "Khu ẩm thực"
+    }
+  },
+  "RoutePanel": {
+    "title": "Thông tin lộ trình",
+    "collapse": "Thu gọn bảng",
+    "expand": "Mở bảng",
+    "close": "Đóng thông tin lộ trình",
+    "mode_drive": "Lái xe",
+    "mode_traffic": "Kẹt xe",
+    "mode_bike": "Xe đạp",
+    "mode_walk": "Đi bộ",
+    "avoid_tolls": "Tránh thu phí",
+    "distance": "Quãng đường",
+    "duration": "Thời gian",
+    "share": "Chia sẻ",
+    "save": "Lưu",
+    "stops": "Điểm dừng",
+    "remove_stop": "Xóa {name}",
+    "turn_by_turn": "Chỉ dẫn chi tiết",
+    "clear_route": "Xóa lộ trình"
+  },
+  "MobileControls": {
+    "search_placeholder": "Tìm địa điểm hoặc địa chỉ",
+    "toggle_favorites": "Bật/tắt yêu thích",
+    "follow": "Theo dõi",
+    "explore": "Khám phá",
+    "add": "Thêm",
+    "cancel": "Hủy",
+    "sheet_title": "Bộ lọc và địa điểm",
+    "filtered": "Đã lọc",
+    "total": "Tổng",
+    "favorites_only": "Chỉ yêu thích"
+  },
+  "DesktopSidebar": {
+    "stores_title": "Địa điểm"
+  },
+  "MapPopup": {
+    "enable_location": "Bật định vị để nhận chỉ đường",
+    "link_copied": "Đã sao chép liên kết!",
+    "saved": "Đã lưu",
+    "save": "Lưu",
+    "directions": "Chỉ đường",
+    "distance": "Quãng đường:",
+    "time": "Thời gian:",
+    "clear_route": "Xóa lộ trình",
+    "suggest_edit": "Đề xuất chỉnh sửa"
+  },
+  "Notifications": {
+    "subscribe_success": "Đã đăng ký nhận thông báo!",
+    "subscribe_error": "Đăng ký thông báo thất bại.",
+    "unsubscribe": "Đã hủy nhận thông báo.",
+    "enable": "Bật thông báo",
+    "disable": "Tắt thông báo"
+  },
+  "Greeting": {
+    "error": "Không thể tải dữ liệu thời tiết. Vui lòng thử lại sau.",
+    "search_placeholder": "Tìm kiếm"
+  },
+  "Toolbar": {
+    "sort_by": "Sắp xếp",
+    "newest": "Mới nhất",
+    "oldest": "Cũ nhất"
+  },
+  "AdminDashboard": {
+    "toast_approved": "Đã chấp nhận địa điểm",
+    "toast_rejected": "Đã từ chối địa điểm",
+    "sign_in_required": "Vui lòng đăng nhập để duyệt yêu cầu.",
+    "admin_required": "Bạn cần quyền quản trị để kiểm duyệt địa điểm.",
+    "load_failed": "Không thể tải hàng đợi duyệt. Thử lại hoặc liên hệ hỗ trợ.",
+    "unable_to_load": "Không thể tải địa điểm đang chờ",
+    "retry": "Thử lại",
+    "go_to_sign_in": "Đi tới đăng nhập",
+    "no_pending_title": "Không có địa điểm chờ duyệt",
+    "no_pending_body": "Tất cả yêu cầu từ bản đồ đã được duyệt. Yêu cầu mới sẽ tự động hiển thị ở đây.",
+    "pending_review": "Chờ duyệt",
+    "view_on_map": "Xem trên bản đồ",
+    "no_description": "Không có mô tả.",
+    "submitted_by": "Gửi bởi",
+    "unknown": "Không rõ",
+    "no_email": "không có email",
+    "approve": "Chấp nhận",
+    "reject": "Từ chối",
+    "review_queue": "Hàng chờ duyệt",
+    "location_approvals": "Duyệt địa điểm",
+    "review_copy": "Kiểm tra yêu cầu từ bản đồ công cộng trước khi hiển thị cho mọi người.",
+    "refresh": "Làm mới",
+    "pending": "Chờ duyệt",
+    "approved": "Đã duyệt",
+    "rejected": "Đã từ chối",
+    "pending_help": "Các mục đang chờ xử lý.",
+    "queue_health": "Tình trạng hàng chờ",
+    "clear": "Trống",
+    "active": "Đang hoạt động",
+    "queue_help": "Tránh tồn đọng bằng cách xử lý nhanh.",
+    "last_synced": "Lần đồng bộ cuối",
+    "last_synced_help": "Làm mới thủ công để cập nhật hàng chờ.",
+    "dialog_approve_title": "Chấp nhận địa điểm",
+    "dialog_reject_title": "Từ chối địa điểm",
+    "dialog_message": "Bạn sắp {action} {location}. Hành động này sẽ cập nhật bản đồ ngay lập tức.",
+    "dialog_empty": "Chưa chọn địa điểm.",
+    "submitter_reason": "Ghi chú từ người gửi",
+    "submitted_payload": "Dữ liệu gửi lên",
+    "changes": "Thay đổi",
+    "from_label": "Từ",
+    "to_label": "Đến",
+    "no_changes_detected": "Không có thay đổi.",
+    "type_label": "Loại",
+    "duplicate_of": "Bản sao của",
+    "moderator_note": "Ghi chú của người kiểm duyệt:",
+    "cancel": "Hủy",
+    "working": "Đang xử lý...",
+    "confirm": "Xác nhận",
+    "id_label": "ID: {id}",
+    "submitted_address": "{lat}, {lng}",
+    "status_pending": "Chờ duyệt",
+    "note_placeholder": "Thêm thông tin giúp ích cho người gửi.",
+    "mark_duplicate": "Đánh dấu trùng với",
+    "duplicate_placeholder": "ID địa điểm đã tồn tại",
+    "dialog_action": {
+      "approve": "chấp nhận",
+      "reject": "từ chối"
+    }
+  }
 }

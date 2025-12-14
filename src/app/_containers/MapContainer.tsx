@@ -93,11 +93,13 @@ const MapContainer: FunctionComponent = () => {
     const stored = localStorage.getItem("stories-of-us:smart-alerts");
     return stored ? stored === "true" : false;
   });
-  const [followAlertsEnabled, setFollowAlertsEnabled] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    const stored = localStorage.getItem("stories-of-us:follow-alerts");
-    return stored ? stored === "true" : false;
-  });
+  const [followAlertsEnabled, setFollowAlertsEnabled] = useState<boolean>(
+    () => {
+      if (typeof window === "undefined") return false;
+      const stored = localStorage.getItem("stories-of-us:follow-alerts");
+      return stored ? stored === "true" : false;
+    }
+  );
   const currentStyleRef = useRef<string>(MAP_STYLES.MAPBOX_STYLE);
 
   // Community / Add Location State
@@ -116,12 +118,18 @@ const MapContainer: FunctionComponent = () => {
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    localStorage.setItem("stories-of-us:smart-alerts", String(smartAlertsEnabled));
+    localStorage.setItem(
+      "stories-of-us:smart-alerts",
+      String(smartAlertsEnabled)
+    );
   }, [smartAlertsEnabled]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    localStorage.setItem("stories-of-us:follow-alerts", String(followAlertsEnabled));
+    localStorage.setItem(
+      "stories-of-us:follow-alerts",
+      String(followAlertsEnabled)
+    );
   }, [followAlertsEnabled]);
 
   const { data: locationsData, refetch: refetchLocations } =
@@ -163,7 +171,7 @@ const MapContainer: FunctionComponent = () => {
           coordinates: [location.lng, location.lat] as [number, number],
           images: location.images,
           openingHours: details.openingHours,
-          rating: details.rating ?? reviewSummary?.avgRating,
+          rating: details.rating ?? reviewSummary?.avgRating ?? undefined,
           tags: details.tags ?? [],
           price: details.price,
           amenities: details.amenities ?? [],
@@ -563,10 +571,14 @@ const MapContainer: FunctionComponent = () => {
           onShare: handleShare,
           onSuggestEdit: (targetStore) => {
             if (!isSignedIn) {
-              toast.error(t("toast_error", { message: "Please sign in first." }));
+              toast.error(
+                t("toast_error", { message: "Please sign in first." })
+              );
               void openSignIn?.({
                 redirectUrl:
-                  typeof window !== "undefined" ? window.location.href : undefined,
+                  typeof window !== "undefined"
+                    ? window.location.href
+                    : undefined,
               });
               return;
             }
@@ -858,12 +870,12 @@ const MapContainer: FunctionComponent = () => {
           setSelectedStore(null);
         }}
         duplicateMatches={duplicateMatches}
-        onCheckDuplicates={(input) =>
-          checkDuplicates({
+        onCheckDuplicates={async (input) => {
+          await checkDuplicates({
             ...input,
             excludeId: input.excludeId ?? editingLocation?.id ?? undefined,
-          })
-        }
+          });
+        }}
         isCheckingDuplicates={isCheckingDuplicates}
         submissionsForSelection={
           submissions?.filter(

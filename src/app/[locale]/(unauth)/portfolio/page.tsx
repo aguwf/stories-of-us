@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import dynamic from "next/dynamic";
+import { buildLocalizedMetadata } from "@/utils/seo";
 
 const IslandScene = dynamic(
 	() => import("@/app/_components/Scene/IslandScene"),
@@ -14,10 +15,12 @@ export async function generateMetadata(props: { params: { locale: string } }) {
 		namespace: "Portfolio",
 	});
 
-	return {
+	return buildLocalizedMetadata({
+		locale: props.params.locale,
+		path: "/portfolio",
 		title: t("meta_title"),
 		description: t("meta_description"),
-	};
+	});
 }
 
 const Portfolio = () => {

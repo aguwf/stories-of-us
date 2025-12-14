@@ -17,9 +17,10 @@ export const getBaseUrl = () => {
 };
 
 export const getI18nPath = (url: string, locale: string) => {
-	if (locale === AppConfig.defaultLocale) {
-		return url;
-	}
+	const shouldPrefix =
+		AppConfig.localePrefix === "always" ||
+		(AppConfig.localePrefix === "as-needed" &&
+			locale !== AppConfig.defaultLocale);
 
-	return `/${locale}${url}`;
+	return shouldPrefix ? `/${locale}${url}` : url;
 };

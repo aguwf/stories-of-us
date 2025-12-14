@@ -3,7 +3,13 @@ import "@/styles/globals.css";
 
 import { Toaster } from "@/components/ui/sonner";
 import { TRPCReactProvider } from "@/trpc/react";
-import { isSupportedLocale, type AppLocale } from "@/utils/appConfig";
+import {
+  AppConfig,
+  isSupportedLocale,
+  type AppLocale,
+} from "@/utils/appConfig";
+import { getBaseUrl, getI18nPath } from "@/utils/helpers";
+import { defaultSiteDescription } from "@/utils/seo";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { NextIntlClientProvider, useMessages } from "next-intl";
@@ -15,13 +21,63 @@ import { enUS, frFR, viVN } from "@clerk/localizations";
 import type { LocalizationResource } from "@clerk/types";
 import { Analytics } from "@vercel/analytics/next";
 
+const baseUrl = getBaseUrl();
+
 export const metadata: Metadata = {
-  title: "Stories of Us",
-  description: "Create by AGuwf",
+  metadataBase: new URL(baseUrl),
+  applicationName: AppConfig.name,
+  title: {
+    default: AppConfig.name,
+    template: `%s | ${AppConfig.name}`,
+  },
+  description: defaultSiteDescription,
+  keywords: ["stories of us", "timeline", "memories", "journal", "AGuwf"],
+  authors: [{ name: "AGuwf", url: "https://aguwf.com" }],
+  creator: "AGuwf",
+  publisher: "AGuwf",
+  alternates: {
+    canonical: baseUrl,
+    languages: {
+      ...Object.fromEntries(
+        AppConfig.locales.map((locale) => [
+          locale,
+          `${baseUrl}${getI18nPath("/", locale)}`,
+        ])
+      ),
+      "x-default": `${baseUrl}${getI18nPath("/", AppConfig.defaultLocale)}`,
+    },
+  },
+  openGraph: {
+    title: AppConfig.name,
+    description: defaultSiteDescription,
+    url: baseUrl,
+    siteName: AppConfig.name,
+    locale: AppConfig.defaultLocale,
+    type: "website",
+    images: [
+      {
+        url: `${baseUrl}/pickme-logo.png`,
+        width: 1200,
+        height: 630,
+        alt: `${AppConfig.name} cover`,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: AppConfig.name,
+    description: defaultSiteDescription,
+    images: [`${baseUrl}/pickme-logo.png`],
+    creator: "@aguwf",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
   icons: [
     {
       rel: "apple-touch-icon",
-      url: "/apple-touch-icon.png",
+      url: "/pickme-logo.png",
     },
     {
       rel: "icon",
@@ -70,16 +126,18 @@ export default function RootLayout(props: {
   const messages = useMessages();
 
   return (
-    <ClerkProvider
-      localization={clerkLocale}
-      signInUrl={localizePath("/sign-in")}
-      signUpUrl={localizePath("/sign-up")}
-      signInFallbackRedirectUrl={localizePath("/dashboard")}
-      signUpFallbackRedirectUrl={localizePath("/dashboard")}
+    <html
+      lang={locale}
+      suppressHydrationWarning={true}
+      className={poppinsFont.className}
     >
-      <html lang={locale} suppressHydrationWarning={true}>
-        <body
-          className={`min-h-screen bg-background antialiased ${poppinsFont.className}`}
+      <body className={`min-h-screen bg-background antialiased`}>
+        <ClerkProvider
+          localization={clerkLocale as any}
+          signInUrl={localizePath("/sign-in")}
+          signUpUrl={localizePath("/sign-up")}
+          signInFallbackRedirectUrl={localizePath("/dashboard")}
+          signUpFallbackRedirectUrl={localizePath("/dashboard")}
         >
           <TRPCReactProvider>
             <NextIntlClientProvider locale={locale} messages={messages}>
@@ -91,9 +149,9 @@ export default function RootLayout(props: {
             </NextIntlClientProvider>
           </TRPCReactProvider>
           <SpeedInsights />
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   );
 }
 

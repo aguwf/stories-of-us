@@ -181,16 +181,11 @@ export default function AdminDashboard() {
     const details = parseDetails(item.payload.details);
 
     return (
-      <Card
-        key={item.id}
-        className="border-l-4 border-l-primary shadow-sm"
-      >
+      <Card key={item.id} className="border-l-4 border-l-primary shadow-sm">
         <CardHeader className="space-y-2">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
-              <Badge className={statusBadge(item.status)}>
-                {item.status}
-              </Badge>
+              <Badge className={statusBadge(item.status)}>{item.status}</Badge>
               <Badge variant="secondary">{item.type}</Badge>
               <span className="hidden sm:inline">
                 {t("id_label", { id: item.id })}
@@ -241,7 +236,7 @@ export default function AdminDashboard() {
           {item.reason && (
             <div className="rounded-md border border-dashed border-primary/40 bg-primary/5 p-3 text-sm">
               <p className="font-semibold text-primary">
-                {t("submitter_reason") || "Submitter note"}
+                {t("submitter_reason")}
               </p>
               <p className="text-muted-foreground">{item.reason}</p>
             </div>
@@ -249,7 +244,9 @@ export default function AdminDashboard() {
 
           <div className="space-y-2 text-sm">
             <p className="font-semibold text-foreground">
-              {item.type === "new" ? t("submitted_payload") : t("changes")}
+              {item.type === "new"
+                ? t("submitted_payload")
+                : t("changes")}
             </p>
             {item.type === "new" ? (
               <div className="grid gap-2 rounded-md border bg-muted/30 p-3 sm:grid-cols-2">
@@ -289,7 +286,9 @@ export default function AdminDashboard() {
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground">{t("no_changes_detected")}</p>
+              <p className="text-muted-foreground">
+                {t("no_changes_detected")}
+              </p>
             )}
           </div>
 
@@ -439,8 +438,8 @@ export default function AdminDashboard() {
                   {error?.data?.code === "UNAUTHORIZED"
                     ? t("sign_in_required")
                     : error?.data?.code === "FORBIDDEN"
-                      ? t("admin_required")
-                      : t("load_failed")}
+                    ? t("admin_required")
+                    : t("load_failed")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="flex flex-wrap gap-3">
@@ -454,7 +453,9 @@ export default function AdminDashboard() {
                 </Button>
                 {error?.data?.code === "UNAUTHORIZED" && (
                   <Button asChild>
-                    <Link href={`/${locale}/sign-in`}>{t("go_to_sign_in")}</Link>
+                    <Link href={`/${locale}/sign-in`}>
+                      {t("go_to_sign_in")}
+                    </Link>
                   </Button>
                 )}
               </CardContent>
@@ -475,7 +476,10 @@ export default function AdminDashboard() {
         </TabsContent>
       </Tabs>
 
-      <AlertDialog open={!!dialog} onOpenChange={(open) => !open && setDialog(null)}>
+      <AlertDialog
+        open={!!dialog}
+        onOpenChange={(open) => !open && setDialog(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle className="flex items-center gap-2">
@@ -523,11 +527,16 @@ export default function AdminDashboard() {
                 onChange={(e) =>
                   setDialog((prev) =>
                     prev
-                      ? { ...prev, duplicateId: e.target.valueAsNumber || undefined }
+                      ? {
+                          ...prev,
+                          duplicateId: e.target.valueAsNumber || undefined,
+                        }
                       : prev
                   )
                 }
-                placeholder={t("duplicate_placeholder") || "Existing location ID"}
+                placeholder={
+                  t("duplicate_placeholder")
+                }
               />
             </div>
           </div>

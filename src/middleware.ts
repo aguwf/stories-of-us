@@ -69,21 +69,21 @@ export default function middleware(
     request.nextUrl.pathname.includes("/sign-up") ||
     isProtectedRoute(request)
   ) {
-    return clerkMiddleware(
-      (auth: () => { protect: () => void }, req: NextRequest) => {
-        if (isProtectedRoute(req)) auth().protect();
-
-        return intlMiddleware(req);
+    return clerkMiddleware(async (auth, req: NextRequest) => {
+      if (isProtectedRoute(req)) {
+        const { userId, redirectToSignIn } = await auth();
+        if (!userId) {
+          return redirectToSignIn({ returnBackUrl: req.url });
+        }
       }
-    )(request, event);
+
+      return intlMiddleware(req);
+    })(request, event);
   }
 
   return intlMiddleware(request);
 }
 
 export const config = {
-  matcher: [
-    "/((?!_next|_vercel|.*\\..*).*)",
-    "/(api|trpc)(.*)",
-  ],
+  matcher: ["/((?!_next|_vercel|.*\\..*).*)", "/(api|trpc)(.*)"],
 };

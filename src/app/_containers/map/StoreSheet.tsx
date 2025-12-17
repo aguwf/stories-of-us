@@ -17,6 +17,7 @@ import { gradientClasses } from "@/utils/constants";
 import { LocationForm } from "../../_components/Map/LocationForm";
 import type { StoreLocation } from "@/types/map.types";
 import type { StoreData } from "./types";
+import Image from "next/image";
 
 type DuplicateMatch = {
   id: number;
@@ -159,6 +160,7 @@ export const StoreSheet: FunctionComponent<StoreSheetProps> = ({
                   </p>
                 </div>
                 <button
+                  type="button"
                   onClick={() => onToggleFavorite(selectedStore.name)}
                   className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
                 >
@@ -175,10 +177,12 @@ export const StoreSheet: FunctionComponent<StoreSheetProps> = ({
 
               {selectedStore.images && selectedStore.images.length > 0 && (
                 <div className="mb-4 rounded-lg overflow-hidden h-48 w-full relative">
-                  <img
-                    src={selectedStore.images[0]}
+                  <Image
+                    src={selectedStore.images[0] || ""}
                     alt={selectedStore.name}
                     className="object-cover w-full h-full"
+                    fill
+                    sizes="100vw"
                   />
                   <div className={`absolute inset-0 ${gradientClasses.orange}`} />
                 </div>
@@ -220,23 +224,26 @@ export const StoreSheet: FunctionComponent<StoreSheetProps> = ({
 
                 <div className="grid grid-cols-2 gap-3 pt-2">
                   <button
+                    type="button"
                     onClick={onDirections}
                     className="flex items-center justify-center gap-2 bg-blue-600 text-white py-2.5 rounded-lg font-medium hover:bg-blue-700 transition-colors"
                   >
                     <Navigation2 className="w-4 h-4" />
                     {mapT("directions")}
                   </button>
-                <button
-                  onClick={() => onShare(selectedStore)}
-                  className="flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white py-2.5 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
-                >
-                  <Share2 className="w-4 h-4" />
-                  {mapT("share")}
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    onClick={() => onShare(selectedStore)}
+                    className="flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white py-2.5 rounded-lg font-medium hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <Share2 className="w-4 h-4" />
+                    {mapT("share")}
+                  </button>
+                </div>
 
                 <div className="flex flex-wrap gap-2 pt-2">
                   <button
+                    type="button"
                     onClick={() => onStartEdit(selectedStore)}
                     className="inline-flex items-center justify-center gap-2 rounded-lg border border-dashed border-primary/60 px-3 py-2 text-sm font-medium text-primary hover:bg-primary/10"
                   >

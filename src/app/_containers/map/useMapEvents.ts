@@ -2,7 +2,7 @@ import { useEffect, type MutableRefObject } from "react";
 import type * as GeoJSON from "geojson";
 
 import { sanitizeStoreName } from "@/utils/mapHelpers";
-import { type PopupCopy } from "@/utils/mapPopupHelpers";
+import type { PopupCopy } from "@/utils/mapPopupHelpers";
 import { createInteractivePopup } from "./createInteractivePopup";
 import type { StoreData } from "./types";
 
@@ -190,6 +190,7 @@ export const useMapEvents = ({
     handleClearRoute,
     setSelectedStore,
     setIsSheetOpen,
+    onSuggestEdit,
     isAddLocationMode,
     setNewLocationCoordinates,
     currentPopupRef,

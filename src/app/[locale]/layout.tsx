@@ -103,6 +103,8 @@ const poppinsFont = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-poppins",
+  display: "swap",
+  fallback: ["system-ui", "arial"],
 });
 
 const clerkLocalizations: Record<AppLocale, LocalizationResource> = {
@@ -131,9 +133,9 @@ export default function RootLayout(props: {
       suppressHydrationWarning={true}
       className={poppinsFont.className}
     >
-      <body className={`min-h-screen bg-background antialiased`}>
+      <body className={"min-h-screen bg-background antialiased"}>
         <ClerkProvider
-          localization={clerkLocale as any}
+          localization={clerkLocale}
           signInUrl={localizePath("/sign-in")}
           signUpUrl={localizePath("/sign-up")}
           signInFallbackRedirectUrl={localizePath("/dashboard")}

@@ -109,5 +109,6 @@ export const useFilteredStores = ({
     priceRange,
     customStores,
     favoriteStores,
+    stores,
   ]);
 };

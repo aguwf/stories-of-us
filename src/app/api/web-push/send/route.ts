@@ -32,7 +32,8 @@ export async function POST(req: Request) {
 
       return webpush
         .sendNotification(pushSubscription, payload)
-        .catch((err: any) => {
+        .catch((error: unknown) => {
+          const err = error as { statusCode?: number };
           console.error("Error sending notification", err);
           if (err.statusCode === 410) {
             // Subscription has expired or is no longer valid

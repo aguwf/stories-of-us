@@ -41,10 +41,10 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 	const [mainApi, setMainApi] = React.useState<CarouselApi>();
 	const [, setThumbnailApi] = React.useState<CarouselApi>();
 
-	const plugin = React.useRef(
+	const plugin = React.useRef<ReturnType<typeof Fade>>(
 		Fade({
 			active: true,
-		}) as any
+		})
 	);
 
 	useEffect(() => {
@@ -150,7 +150,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 				<CarouselContent>
 					{items.map((item, index) => (
 						<CarouselItem
-							key={index}
+							key={`${item.src}-${index}`}
 							className="flex items-center justify-center"
 						>
 							<div className="w-full max-w-4xl mx-auto">
@@ -179,7 +179,7 @@ const MediaCarousel: React.FC<MediaCarouselProps> = ({
 						{items.map((item, index) => (
 							<CarouselItem
 								className="basis-1/5 md:basis-1/6 lg:basis-1/8 pl-2"
-								key={index}
+								key={`${item.src}-thumb-${index}`}
 								onClick={() => onThumbClick(index)}
 							>
 								{renderCarouselThumb(item)}

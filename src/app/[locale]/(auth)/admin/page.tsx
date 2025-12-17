@@ -83,15 +83,15 @@ const getChangedFields = (item: QueueItem) => {
   const currentDetails = parseDetails(current.details);
   const payloadDetails = parseDetails(payload.details);
 
-  Object.entries(payloadDetails).forEach(([key, value]) => {
+  for (const [key, value] of Object.entries(payloadDetails)) {
     pairs.push([`Details.${key}`, currentDetails?.[key], value]);
-  });
+  }
 
-  pairs.forEach(([field, from, to]) => {
+  for (const [field, from, to] of pairs) {
     if (JSON.stringify(from) !== JSON.stringify(to)) {
       changes.push({ field, from: readable(from), to: readable(to) });
     }
-  });
+  }
 
   return changes;
 };
@@ -153,9 +153,12 @@ export default function AdminDashboard() {
 
   const counts = useMemo(() => {
     const base = { pending: 0, approved: 0, rejected: 0 };
-    queue?.forEach((item) => {
+    if (!queue) return base;
+
+    for (const item of queue) {
       base[item.status] += 1;
-    });
+    }
+
     return base;
   }, [queue]);
 
@@ -452,7 +455,7 @@ export default function AdminDashboard() {
                   {t("retry")}
                 </Button>
                 {error?.data?.code === "UNAUTHORIZED" && (
-                  <Button asChild>
+                  <Button asChild={true}>
                     <Link href={`/${locale}/sign-in`}>
                       {t("go_to_sign_in")}
                     </Link>
@@ -460,7 +463,7 @@ export default function AdminDashboard() {
                 )}
               </CardContent>
             </Card>
-          ) : queue && queue.length ? (
+          ) : queue?.length ? (
             <div className="grid gap-4">{queue.map(renderQueueCard)}</div>
           ) : (
             <Card className="border-dashed bg-muted/30">

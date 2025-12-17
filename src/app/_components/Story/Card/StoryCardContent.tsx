@@ -11,10 +11,11 @@ interface StoryCardContentProps {
   postFormat?: "standard" | "background" | "poll";
 }
 
-const sanitizeHTML = (value: string) =>
+const sanitizeToText = (value: string) =>
   value
     .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
-    .replace(/on\w+="[^"]*"/gi, "");
+    .replace(/on\w+="[^"]*"/gi, "")
+    .replace(/<[^>]+>/g, "");
 
 const StoryCardContent = memo<StoryCardContentProps>(
   ({ title, description, location, feeling, activity, privacy, postFormat }) => {
@@ -50,24 +51,31 @@ const StoryCardContent = memo<StoryCardContentProps>(
     
     const renderDescription = () => {
       if (!description) return null;
-      const safeDescription = sanitizeHTML(description);
+      const safeDescription = sanitizeToText(description).trim();
+
+      if (!safeDescription) return null;
+
+      const renderTextBlock = (className: string) => (
+        <div className={className}>
+          {safeDescription.split("\n").map((line) => {
+            const key = line.trim() || crypto.randomUUID();
+            return (
+              <p key={key} className="mt-1 first:mt-0">
+                {line}
+              </p>
+            );
+          })}
+        </div>
+      );
 
       if (postFormat === "background" && description) {
-        return (
-          <div
-            className="mt-4 p-4 text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg prose prose-sm prose-invert max-w-none"
-            dangerouslySetInnerHTML={{ __html: safeDescription }}
-            suppressHydrationWarning={true}
-          />
+        return renderTextBlock(
+          "mt-4 p-4 text-center bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg prose prose-sm prose-invert max-w-none"
         );
       }
       
-      return (
-        <div
-          className="mt-2 text-sm text-muted-foreground prose prose-sm max-w-none"
-          dangerouslySetInnerHTML={{ __html: safeDescription }}
-          suppressHydrationWarning={true}
-        />
+      return renderTextBlock(
+        "mt-2 text-sm text-muted-foreground prose prose-sm max-w-none"
       );
     };
 
@@ -108,9 +116,9 @@ const StoryCardContent = memo<StoryCardContentProps>(
           <div className="mt-3 rounded-md border bg-muted/40 p-3">
             <p className="font-semibold text-sm">{pollData.question}</p>
             <div className="mt-2 space-y-2">
-              {pollData.options?.map((option, idx) => (
+              {pollData.options?.map((option) => (
                 <div
-                  key={`${option}-${idx}`}
+                  key={option}
                   className="flex items-center gap-2 text-sm text-muted-foreground"
                 >
                   <span className="h-2 w-2 rounded-full bg-primary" />

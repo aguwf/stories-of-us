@@ -6,7 +6,10 @@ export const GoogleIcon = () => {
       viewBox="0 0 16 16"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
+      role="img"
+      aria-label="Google logo"
     >
+      <title>Google logo</title>
       <path
         fill="#4285F4"
         d="M14.9 8.161c0-.476-.039-.954-.121-1.422h-6.64v2.695h3.802a3.24 3.24 0 01-1.407 2.127v1.75h2.269c1.332-1.22 2.097-3.02 2.097-5.15z"

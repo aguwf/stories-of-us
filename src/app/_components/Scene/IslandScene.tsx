@@ -5,12 +5,10 @@ import { PlaneModel } from "@/app/_models/Plane";
 import Sky from "@/app/_models/Sky";
 import { Html } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Suspense, useRef, useState } from "react";
+import { Suspense, useRef, useState, type WheelEvent } from "react";
 
 const IslandScene = () => {
 	const [isRotating, setIsRotating] = useState(false);
-	// @ts-ignore
-	const [currentStage, setCurrentStage] = useState<number | null>(1);
 	const scrollDelta = useRef(0);
 
 	const adjustIslandForScreenSize = () => {
@@ -30,7 +28,7 @@ const IslandScene = () => {
 
 	const [islandScale, islandPosition] = adjustIslandForScreenSize();
 
-	const handleMouseWheel = (event: any) => {
+	const handleMouseWheel = (event: WheelEvent<HTMLDivElement>) => {
 		event.stopPropagation();
 		event.preventDefault();
 		setIsRotating(true);
@@ -73,7 +71,6 @@ const IslandScene = () => {
 					isRotating={isRotating}
 					setIsRotating={setIsRotating}
 					position={islandPosition}
-					setCurrentStage={setCurrentStage}
 					rotation={[0.1, 4.7077, 0]}
 					scale={islandScale}
 					scrollDelta={scrollDelta.current}

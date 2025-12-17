@@ -41,16 +41,16 @@ export default function SignUpPage() {
             <Clerk.Input type="password" className="input" />
           </Clerk.Field>
 
-          <SignUp.Action submit className="primary-btn mt-6">
+          <SignUp.Action submit={true} className="primary-btn mt-6">
             {t("submit_label")}
           </SignUp.Action>
 
           {/* Divider */}
-          <div className="flex items-center my-4">
-            <div className="flex-1 h-[1px] bg-[#E97E4E]"></div>
-            <div className="px-4 text-sm text-[#E97E4E]">{t("or")}</div>
-            <div className="flex-1 h-[1px] bg-[#E97E4E]"></div>
-          </div>
+            <div className="flex items-center my-4">
+              <div className="flex-1 h-[1px] bg-[#E97E4E]" />
+              <div className="px-4 text-sm text-[#E97E4E]">{t("or")}</div>
+              <div className="flex-1 h-[1px] bg-[#E97E4E]" />
+            </div>
 
           <div className="mt-8 text-center text-sm text-[#E97E4E]">
             {t("social_title")}

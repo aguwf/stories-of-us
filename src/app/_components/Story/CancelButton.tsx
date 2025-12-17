@@ -8,8 +8,8 @@ import {
 interface CancelButtonProps {
 	dataName: string;
 	onClose: () => void;
-	confirm: (e: any) => void;
-	cancel: (e: any) => void;
+	confirm: (payload: { onClose: () => void }) => void;
+	cancel: (payload: { onClose: () => void }) => void;
 }
 
 const CancelButton = ({

@@ -55,6 +55,13 @@ export function SignInForm({ locale }: SignInFormProps) {
 			setFormState(prev => ({ ...prev, [key]: value }));
 		};
 
+	const getClerkError = (err: unknown, fallback: string) => {
+		const longMessage = (
+			err as { errors?: Array<{ longMessage?: string }> }
+		)?.errors?.[0]?.longMessage;
+		return longMessage ?? fallback;
+	};
+
 	const handleSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
 		if (!isLoaded) return;
@@ -88,15 +95,14 @@ export function SignInForm({ locale }: SignInFormProps) {
 
 				setError("We couldn’t complete the sign in. Please try again.");
 			} catch (err: unknown) {
-				const message =
-					(err as any)?.errors?.[0]?.longMessage ??
-					"Invalid credentials. Please try again.";
-				setError(message);
+				setError(
+					getClerkError(err, "Invalid credentials. Please try again.")
+				);
 			}
 		});
 	};
 
-	const handleForgotPassword = async () => {
+	const handleForgotPassword = () => {
 		if (!isLoaded) return;
 		if (!formState.identifier) {
 			setError("Enter your email to reset your password.");
@@ -113,10 +119,12 @@ export function SignInForm({ locale }: SignInFormProps) {
 				});
 				setInfo("Check your inbox for reset instructions.");
 			} catch (err: unknown) {
-				const message =
-					(err as any)?.errors?.[0]?.longMessage ??
-					"Unable to start password reset right now.";
-				setError(message);
+				setError(
+					getClerkError(
+						err,
+						"Unable to start password reset right now."
+					)
+				);
 			}
 		});
 	};

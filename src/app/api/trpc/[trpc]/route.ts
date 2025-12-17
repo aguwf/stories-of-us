@@ -13,7 +13,7 @@ import { auth } from "@clerk/nextjs/server";
 const createContext = (req: NextRequest) =>
 	createTRPCContext({
 		headers: req.headers,
-		auth: auth(),
+		auth: auth() as any,
 	});
 
 const handler = (req: NextRequest) =>

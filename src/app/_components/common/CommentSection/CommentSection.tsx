@@ -46,7 +46,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 						<div className="flex justify-between items-center mt-2">
 							<div className="flex items-center gap-2">
 								<EmojiPicker
-									onEmojiSelect={emoji =>
+									onEmojiSelect={(emoji: any) =>
 										setNewComment(prev => prev + emoji.native)
 									}
 								/>

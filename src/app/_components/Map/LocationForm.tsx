@@ -8,6 +8,19 @@ import type { StoreLocation } from "@/types/map.types";
 import { useTranslations } from "next-intl";
 import { useEffect, useState, type FunctionComponent } from "react";
 
+const defaultFormState: Partial<StoreLocation> = {
+  name: "",
+  address: "",
+  notes: "",
+  openingHours: "",
+  price: 2,
+  tags: [],
+  amenities: [],
+  popularity: 50,
+  images: [],
+  rating: undefined,
+};
+
 interface LocationFormProps {
   initialData?: Partial<StoreLocation>;
   onSubmit: (data: Partial<StoreLocation> & { reason?: string }) => void;
@@ -46,18 +59,6 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
   showReasonField,
 }) => {
   const t = useTranslations("LocationForm");
-  const defaultFormState: Partial<StoreLocation> = {
-    name: "",
-    address: "",
-    notes: "",
-    openingHours: "",
-    price: 2,
-    tags: [],
-    amenities: [],
-    popularity: 50,
-    images: [],
-    rating: undefined,
-  };
 
   const [formData, setFormData] = useState<Partial<StoreLocation>>({
     ...defaultFormState,
@@ -121,7 +122,9 @@ export const LocationForm: FunctionComponent<LocationFormProps> = ({
 
     setFormData((prev) => {
       const existing = new Set([...(prev[field] ?? [])]);
-      items.forEach((item) => existing.add(item));
+      for (const item of items) {
+        existing.add(item);
+      }
 
       return {
         ...prev,

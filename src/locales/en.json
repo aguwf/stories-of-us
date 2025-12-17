@@ -157,7 +157,14 @@
   "StoreSheet": {
     "add_title": "Add a new location",
     "add_description": "You pinned a spot on the map. Fill in the details so others can find it.",
-    "rating_suffix": "/ 5.0"
+    "rating_suffix": "/ 5.0",
+    "edit_title": "Edit location",
+    "edit_description": "Submit your suggested changes for review",
+    "suggest_edit": "Suggest edit",
+    "submission_history_title": "Your submissions",
+    "loading": "Loading...",
+    "moderator_note": "Moderator note",
+    "no_submissions": "No submissions for this place yet."
   },
   "LocationForm": {
     "title_add": "Add New Location",
@@ -192,6 +199,10 @@
     "images_help": "Paste one or many (comma/new-line separated). First image becomes the cover.",
     "popularity": "Popularity / heatmap weight",
     "popularity_label": "{value} / 100",
+    "check_duplicates": "Check duplicates",
+    "duplicate_warning_title": "Possible duplicates nearby",
+    "change_reason": "Reason / context",
+    "change_reason_placeholder": "What needs to change or why?",
     "cancel": "Cancel",
     "save_changes": "Save Changes",
     "add_location": "Add Location",

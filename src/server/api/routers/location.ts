@@ -5,7 +5,7 @@ import {
   adminProcedure,
 } from "@/server/api/trpc";
 import { locationEdits, locations, users } from "@/server/db/schema";
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { eq, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { clerkClient } from "@clerk/nextjs/server";
@@ -31,7 +31,7 @@ const LocationDetailsSchema = z
     openingHours: z.string().optional(),
     rating: z.number().min(0).max(5).optional(),
     tags: z.array(z.string()).optional(),
-    price: z.number().int().min(1).max(4).optional(),
+    price: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]).optional(),
     amenities: z.array(z.string()).optional(),
     popularity: z.number().min(0).max(100).optional(),
     reviews: z.array(ReviewDetailsSchema).optional(),
@@ -55,6 +55,7 @@ const LocationValidation = z.object({
 
 type EnsureUserCtx = {
   auth?: { userId: string | null };
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
   db: typeof import("@/server/db").db;
 };
 
@@ -92,7 +93,8 @@ const ensureUserExists = async (ctx: EnsureUserCtx) => {
     return existingUser;
   }
 
-  const clerkUser = await clerkClient.users.getUser(userId);
+  const clerkClientInstance = await clerkClient();
+  const clerkUser = await clerkClientInstance.users.getUser(userId);
   const primaryEmail =
     clerkUser.emailAddresses.find(
       (email) => email.id === clerkUser.primaryEmailAddressId
@@ -166,14 +168,8 @@ const findDuplicates = async (ctx: EnsureUserCtx & { auth?: { userId: string | n
     `
   );
 
-  return rows.rows as Array<{
-    id: number;
-    name: string;
-    address: string;
-    lat: number;
-    lng: number;
-    status: string;
-  }>;
+  // Validate and parse the results with Zod
+  return z.array(DuplicateLocationSchema).parse(rows);
 };
 
 export const LocationSubmissionPayload = LocationValidation;
@@ -190,6 +186,15 @@ const DuplicateCheckSchema = z.object({
   lng: z.number(),
   excludeId: z.number().optional(),
   proximityMeters: z.number().min(1).max(5000).optional(),
+});
+
+const DuplicateLocationSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  address: z.string(),
+  lat: z.number(),
+  lng: z.number(),
+  status: z.string(),
 });
 
 export const locationRouter = createTRPCRouter({
@@ -231,23 +236,23 @@ export const locationRouter = createTRPCRouter({
       });
     }),
 
-  getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.db.query.locations.findMany({
+  getAll: publicProcedure.query(({ ctx }) =>
+    ctx.db.query.locations.findMany({
       where: eq(locations.status, "approved"),
       with: {
         creator: true,
       },
-    });
-  }),
+    })
+  ),
 
-  getPending: adminProcedure.query(async ({ ctx }) => {
-    return ctx.db.query.locations.findMany({
+  getPending: adminProcedure.query(({ ctx }) =>
+    ctx.db.query.locations.findMany({
       where: eq(locations.status, "pending"),
       with: {
         creator: true,
       },
-    });
-  }),
+    })
+  ),
 
   approve: adminProcedure
     .input(z.object({ id: z.number() }))
@@ -269,9 +274,7 @@ export const locationRouter = createTRPCRouter({
 
   checkDuplicates: publicProcedure
     .input(DuplicateCheckSchema)
-    .query(async ({ ctx, input }) => {
-      return findDuplicates(ctx, input);
-    }),
+    .query(({ ctx, input }) => findDuplicates(ctx, input)),
 
   submitEdit: protectedProcedure
     .input(LocationSubmissionInput)
@@ -345,7 +348,7 @@ export const locationRouter = createTRPCRouter({
 
       return ctx.db.query.locationEdits.findMany({
         where:
-          statusFilter && statusFilter.length
+          statusFilter?.length
             ? inArray(locationEdits.status, statusFilter)
             : undefined,
         with: {

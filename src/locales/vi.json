@@ -152,7 +152,14 @@
   "StoreSheet": {
     "add_title": "Thêm địa điểm mới",
     "add_description": "Bạn vừa ghim một điểm trên bản đồ. Điền chi tiết để mọi người có thể tìm thấy.",
-    "rating_suffix": "/ 5,0"
+    "rating_suffix": "/ 5,0",
+    "edit_title": "Chỉnh sửa địa điểm",
+    "edit_description": "Gửi những thay đổi đề xuất của bạn để xem xét",
+    "suggest_edit": "Đề xuất chỉnh sửa",
+    "submission_history_title": "Các yêu cầu của bạn",
+    "loading": "Đang tải...",
+    "moderator_note": "Ghi chú từ người kiểm duyệt",
+    "no_submissions": "Chưa có yêu cầu nào cho địa điểm này."
   },
   "LocationForm": {
     "title_add": "Thêm địa điểm",
@@ -187,6 +194,10 @@
     "images_help": "Dán một hoặc nhiều (phẩy/ xuống dòng). Ảnh đầu tiên làm ảnh bìa.",
     "popularity": "Độ phổ biến / trọng số nhiệt",
     "popularity_label": "{value} / 100",
+    "check_duplicates": "Kiểm tra trùng lặp",
+    "duplicate_warning_title": "Có thể trùng lặp gần đây",
+    "change_reason": "Lý do / bối cảnh",
+    "change_reason_placeholder": "Cần thay đổi gì hoặc vì sao?",
     "cancel": "Hủy",
     "save_changes": "Lưu thay đổi",
     "add_location": "Thêm địa điểm",

@@ -227,7 +227,7 @@ function MobileNav() {
         <div className="my-4 h-[calc(100vh-8rem)] pb-10 pl-6">
           <div className="flex flex-col space-y-3">
             {/* Divider */}
-            <div className="my-6 mr-6 h-px bg-border"></div>
+            <div className="my-6 mr-6 h-px bg-border" />
             {NAV_ITEMS.map((item) => {
               const isActive =
                 pathname === item.href || pathname?.startsWith(`${item.href}/`);
@@ -249,7 +249,7 @@ function MobileNav() {
           </div>
           <div className="pr-6">
             {/* Divider */}
-            <div className="my-6 h-px bg-border"></div>
+            <div className="my-6 h-px bg-border" />
             <AuthActions
               locale={locale}
               onOpenChange={() => setIsOpen(false)}

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies, import/extensions */
 import { fileURLToPath } from "node:url";
 
 import withBundleAnalyzer from "@next/bundle-analyzer";
@@ -47,6 +46,8 @@ const config = {
 	},
 	poweredByHeader: false,
 	reactStrictMode: true,
+	// Disable font optimization to prevent build failures when Google Fonts is unreachable
+	optimizeFonts: false,
 	experimental: {
 		// Related to Pino error with RSC: https://github.com/orgs/vercel/discussions/3150
 		serverComponentsExternalPackages: ["pino"],

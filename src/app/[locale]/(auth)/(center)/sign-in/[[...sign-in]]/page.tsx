@@ -33,16 +33,16 @@ export default function SignInPage() {
             <Clerk.FieldError className="error" />
           </Clerk.Field>
 
-          <SignIn.Action submit className="primary-btn mt-6">
+          <SignIn.Action submit={true} className="primary-btn mt-6">
             {t("submit_label")}
           </SignIn.Action>
 
           {/* Divider */}
-          <div className="flex items-center my-4">
-            <div className="flex-1 h-[1px] bg-[#E97E4E]"></div>
-            <div className="px-4 text-sm text-[#E97E4E]">{t("or")}</div>
-            <div className="flex-1 h-[1px] bg-[#E97E4E]"></div>
-          </div>
+            <div className="flex items-center my-4">
+              <div className="flex-1 h-[1px] bg-[#E97E4E]" />
+              <div className="px-4 text-sm text-[#E97E4E]">{t("or")}</div>
+              <div className="flex-1 h-[1px] bg-[#E97E4E]" />
+            </div>
 
           {/* Social */}
           <div className="mt-8 text-center text-sm text-primary">

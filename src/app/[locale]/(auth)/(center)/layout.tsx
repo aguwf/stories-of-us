@@ -17,7 +17,7 @@ export default async function CenteredLayout(props: {
   }
 
   return (
-    <BaseTemplate leftNav={<></>} rightNav={<></>}>
+    <BaseTemplate leftNav={null} rightNav={null}>
       <div className="flex min-h-[calc(100vh-58px-37px)] items-center justify-center py-8 relative">
         <div className="absolute top-6 left-6 md:hidden">
           <Image src={Paw1} alt="Logo" width={65} height={65} />

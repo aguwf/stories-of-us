@@ -61,7 +61,7 @@ export const MapStyleSwitcher: FunctionComponent<MapStyleSwitcherProps> = ({
             <style.icon className="w-4 h-4" />
           </div>
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-            {t(style.label as any)}
+            {t(style.label as "streets" | "satellite" | "light" | "dark")}
           </span>
           {currentStyle === style.id && (
             <div className="absolute top-1 right-1">

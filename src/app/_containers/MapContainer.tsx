@@ -241,7 +241,7 @@ const MapContainer: FunctionComponent = () => {
         setIsCheckingDuplicates(false);
       }
     },
-    [utils.location.checkDuplicates]
+    [t, utils.location.checkDuplicates]
   );
 
   // Routing state
@@ -333,7 +333,7 @@ const MapContainer: FunctionComponent = () => {
 
   // Auto-sort by distance when radius changes
   useEffect(() => {
-    if (userLocation) {
+    if (userLocation && searchRadius !== undefined) {
       setSortBy("distance");
     }
   }, [searchRadius, userLocation]);
@@ -522,9 +522,9 @@ const MapContainer: FunctionComponent = () => {
         zoom: 15,
       });
     }
-  }, [filteredStores, isMapLoaded, mapRef, searchQuery]);
+  }, [filteredStores, isMapLoaded, mapRef]);
 
-  const handleDirectionsFromSheet = async () => {
+  const handleDirectionsFromSheet = () => {
     if (!selectedStore) return;
 
     if (!userLocation) {
@@ -764,6 +764,7 @@ const MapContainer: FunctionComponent = () => {
         {isDesktop && (
           <div className="absolute top-4 left-4 z-20 flex flex-wrap items-center gap-3 pr-4">
             <button
+              type="button"
               onClick={() => setIsSidebarOpen((prev) => !prev)}
               className="h-10 px-3 bg-white dark:bg-gray-900 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-md shadow-md border border-gray-200 dark:border-gray-700 flex items-center gap-2"
               aria-label={isSidebarOpen ? "Hide sidebar" : "Show sidebar"}

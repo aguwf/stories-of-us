@@ -43,7 +43,7 @@ const ImageVideoGrid: React.FC<ImageVideoGridProps> = ({
 				{items.slice(0, 4).map((item, index) => {
 					return (
 						<MediaDialog
-							key={index}
+							key={item.src}
 							index={index}
 							items={items}
 							story={story}

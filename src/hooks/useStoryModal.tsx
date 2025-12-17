@@ -232,6 +232,7 @@ const useStoryModal = ({
       // Error already handled in uploadNewImages
       console.error("Submission failed:", error);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fileList, createStoryData, selectedStory, createStory, updateStory]);
 
   return {

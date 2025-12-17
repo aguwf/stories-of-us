@@ -6,13 +6,14 @@ import {
 } from "@/server/api/trpc";
 import { hearts, stories, users } from "@/server/db/schema";
 import { StoryValidation } from "@/validations/StoryValidation";
-import { and, count, eq } from "drizzle-orm";
+import { and, asc, count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
 import { TRPCError } from "@trpc/server";
 import { clerkClient } from "@clerk/nextjs/server";
 
 type EnsureUserCtx = {
   auth?: { userId: string | null };
+  // eslint-disable-next-line @typescript-eslint/consistent-type-imports
   db: typeof import("@/server/db").db;
 };
 
@@ -29,7 +30,8 @@ const ensureUserExists = async (ctx: EnsureUserCtx) => {
     return existingUser;
   }
 
-  const clerkUser = await clerkClient.users.getUser(userId);
+  const clerkClientVar = await clerkClient()
+  const clerkUser = await clerkClientVar.users.getUser(userId);
   const primaryEmail =
     clerkUser.emailAddresses.find(
       (email) => email.id === clerkUser.primaryEmailAddressId
@@ -101,17 +103,15 @@ export const storyRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const offset = (input.page - 1) * input.totalItems;
       const limit = input.totalItems;
-      const orderBy = input.sort
-        ? (stories: any, { desc, asc }: any) => [
-            input.orderBy === "asc"
-              ? asc(stories[input.sort])
-              : desc(stories[input.sort]),
-          ]
-        : (stories: any, { desc, asc }: any) => [
-            input.orderBy === "asc"
-              ? asc(stories.createdAt)
-              : desc(stories.createdAt),
-          ];
+      const sortColumn =
+        input.sort === "name"
+          ? stories.name
+          : input.sort === "sort"
+            ? stories.sort
+            : stories.createdAt;
+
+      const orderBy =
+        input.orderBy === "asc" ? asc(sortColumn) : desc(sortColumn);
 
       const [totalCount] = await ctx.db
         .select({ count: count() })
@@ -319,12 +319,12 @@ export const storyRouter = createTRPCRouter({
         .where(eq(stories.id, input.id));
     }),
 
-  getPending: adminProcedure.query(async ({ ctx }) => {
-    return ctx.db.query.stories.findMany({
+  getPending: adminProcedure.query(({ ctx }) =>
+    ctx.db.query.stories.findMany({
       where: eq(stories.status, "pending"),
       with: {
         user: true,
       },
-    });
-  }),
+    })
+  ),
 });

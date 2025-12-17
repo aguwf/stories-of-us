@@ -5,7 +5,7 @@ import { Button } from "./button";
 import { Popover, PopoverContent, PopoverTrigger } from "./popover";
 
 interface EmojiPickerProps {
-	onEmojiSelect: (emoji: any) => void;
+	onEmojiSelect: (emoji: unknown) => void;
 }
 
 export const EmojiPicker: React.FC<EmojiPickerProps> = ({ onEmojiSelect }) => {

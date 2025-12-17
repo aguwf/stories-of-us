@@ -56,7 +56,7 @@ const buildSeedPayload = (createdBy: string) =>
       openingHours: store.openingHours,
       rating: store.rating,
       tags: store.tags,
-      price: store.price,
+      price: store.price as 1 | 2 | 3 | 4,
       amenities: store.amenities,
       popularity: store.popularity,
     },

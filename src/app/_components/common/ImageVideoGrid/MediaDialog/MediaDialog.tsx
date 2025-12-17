@@ -17,7 +17,7 @@ import { useAuth } from "@clerk/nextjs";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import CommentSection from "../../CommentSection/CommentSection";
-import { Icon } from "../../Icon";
+import { Icon, type IconName } from "../../Icon";
 import MediaCarousel from "../MediaCarousel";
 
 const formatDateLabel = (dateValue: Date | string | null) => {
@@ -127,31 +127,35 @@ export const MediaDialog: React.FC<MediaDialogProps> = ({
 	const metaBadges = useMemo(
 		() =>
 			[
-				{ icon: "lock-closed-outline", label: story?.privacy },
-				{ icon: "map-pin-outline", label: story?.location },
-				{ icon: "sparkles-outline", label: story?.feeling },
-			].filter(item => Boolean(item.label)),
+				{ icon: "lock-closed-outline" as IconName, label: story?.privacy },
+				{ icon: "map-pin-outline" as IconName, label: story?.location },
+				{ icon: "sparkles-outline" as IconName, label: story?.feeling },
+			].filter(
+				(item): item is { icon: IconName; label: string } =>
+					Boolean(item.label)
+			),
 		[story?.feeling, story?.location, story?.privacy]
 	);
 
 	const statItems = useMemo(
-		() => [
-			{
-				icon: "heart-outline",
-				label: "Reactions",
-				value: story?.heartCount ?? 0,
-			},
-			{
-				icon: "chat-outline",
-				label: "Comments",
-				value: comments.length,
-			},
-			{
-				icon: "share-outline",
-				label: "Shares",
-				value: 0,
-			},
-		],
+		() =>
+			[
+				{
+					icon: "heart-outline" as IconName,
+					label: "Reactions",
+					value: story?.heartCount ?? 0,
+				},
+				{
+					icon: "chat-outline" as IconName,
+					label: "Comments",
+					value: comments.length,
+				},
+				{
+					icon: "share-outline" as IconName,
+					label: "Shares",
+					value: 0,
+				},
+			] as Array<{ icon: IconName; label: string; value: number }>,
 		[comments.length, story?.heartCount]
 	);
 
@@ -222,10 +226,10 @@ export const MediaDialog: React.FC<MediaDialogProps> = ({
 									<div className="flex flex-wrap gap-2 pt-2">
 										{metaBadges.map(item => (
 											<span
-												key={`${item.icon}-${item.label!}`}
+												key={`${item.icon}-${item.label}`}
 												className="inline-flex items-center gap-1 rounded-full bg-slate-100 text-slate-700 px-3 py-1 text-xs font-medium border"
 											>
-												<Icon name={item.icon as any} className="h-3.5 w-3.5" />
+												<Icon name={item.icon} className="h-3.5 w-3.5" />
 												{item.label}
 											</span>
 										))}
@@ -241,7 +245,7 @@ export const MediaDialog: React.FC<MediaDialogProps> = ({
 												key={stat.label}
 												className="flex items-center gap-2 rounded-lg bg-slate-50 px-3 py-2 text-sm text-slate-700 border"
 											>
-												<Icon name={stat.icon as any} className="h-4 w-4" />
+												<Icon name={stat.icon} className="h-4 w-4" />
 												<span className="font-semibold">{stat.value}</span>
 												<span className="text-xs text-muted-foreground">
 													{stat.label}

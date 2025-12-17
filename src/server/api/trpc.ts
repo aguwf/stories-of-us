@@ -140,8 +140,14 @@ import { users } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 
 export const adminProcedure = protectedProcedure.use(async ({ ctx, next }) => {
+  const userId = ctx.auth?.userId;
+
+  if (!userId) {
+    throw new TRPCError({ code: "UNAUTHORIZED" });
+  }
+
   const user = await ctx.db.query.users.findFirst({
-    where: eq(users.id, ctx.auth!.userId!),
+    where: eq(users.id, userId),
   });
 
   if (user?.role !== "admin") {

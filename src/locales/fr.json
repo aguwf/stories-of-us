@@ -157,7 +157,14 @@
   "StoreSheet": {
     "add_title": "Ajouter un nouveau lieu",
     "add_description": "Vous avez épinglé un point sur la carte. Ajoutez les détails pour que les autres puissent le trouver.",
-    "rating_suffix": "/ 5,0"
+    "rating_suffix": "/ 5,0",
+    "edit_title": "Modifier le lieu",
+    "edit_description": "Soumettez vos changements proposés pour examen",
+    "suggest_edit": "Suggérer une modification",
+    "submission_history_title": "Vos soumissions",
+    "loading": "Chargement...",
+    "moderator_note": "Note du modérateur",
+    "no_submissions": "Aucune soumission pour ce lieu pour l'instant."
   },
   "LocationForm": {
     "title_add": "Ajouter un lieu",
@@ -192,6 +199,10 @@
     "images_help": "Collez une ou plusieurs (séparées par virgule/nouvelle ligne). La première est la couverture.",
     "popularity": "Popularité / intensité",
     "popularity_label": "{value} / 100",
+    "check_duplicates": "Vérifier les doublons",
+    "duplicate_warning_title": "Doubles potentiels à proximité",
+    "change_reason": "Raison / contexte",
+    "change_reason_placeholder": "Qu'est-ce qui doit changer ou pourquoi ?",
     "cancel": "Annuler",
     "save_changes": "Enregistrer",
     "add_location": "Ajouter le lieu",

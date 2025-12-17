@@ -131,29 +131,28 @@ export const useSmartAlerts = ({
     const maxRadiusKm = Math.max(0.25, Math.min(searchRadiusKm, 10));
     const now = Date.now();
 
-    stores
-      .filter((store) => favoriteStores.has(store.name))
-      .forEach((store) => {
-        const [lng, lat] = store.coordinates;
-        const distanceKm = calculateDistance(
-          userLocation[1],
-          userLocation[0],
-          lat,
-          lng
-        );
+    for (const store of stores) {
+      if (!favoriteStores.has(store.name)) continue;
+      const [lng, lat] = store.coordinates;
+      const distanceKm = calculateDistance(
+        userLocation[1],
+        userLocation[0],
+        lat,
+        lng
+      );
 
-        if (distanceKm > maxRadiusKm) return;
+      if (distanceKm > maxRadiusKm) continue;
 
-        const lastPing = nearAlertCooldownRef.current.get(store.name) ?? 0;
-        if (now - lastPing < NEARBY_ALERT_COOLDOWN_MS) return;
+      const lastPing = nearAlertCooldownRef.current.get(store.name) ?? 0;
+      if (now - lastPing < NEARBY_ALERT_COOLDOWN_MS) continue;
 
-        nearAlertCooldownRef.current.set(store.name, now);
-        void showNotification(
-          "You're near a saved spot",
-          `${store.name} is just ${distanceKm.toFixed(1)} km away.`,
-          buildStoreLink(store.name)
-        );
-      });
+      nearAlertCooldownRef.current.set(store.name, now);
+      void showNotification(
+        "You're near a saved spot",
+        `${store.name} is just ${distanceKm.toFixed(1)} km away.`,
+        buildStoreLink(store.name)
+      );
+    }
   }, [
     smartAlertsEnabled,
     userLocation,
@@ -186,18 +185,18 @@ export const useSmartAlerts = ({
     // When tags change, bootstrap without notifying to avoid spamming
     if (tagsKeyRef.current !== tagsKey) {
       tagsKeyRef.current = tagsKey;
-      matching.forEach((store) => {
+      for (const store of matching) {
         if (store.id !== undefined) {
           seenForTags.add(store.id);
         }
-      });
+      }
       tagSeenRef.current[tagsKey] = seenForTags;
       persistTagSeen();
       return;
     }
 
-    matching.forEach((store) => {
-      if (store.id === undefined || seenForTags.has(store.id)) return;
+    for (const store of matching) {
+      if (store.id === undefined || seenForTags.has(store.id)) continue;
       seenForTags.add(store.id);
       tagSeenRef.current[tagsKey] = seenForTags;
       void showNotification(
@@ -205,7 +204,7 @@ export const useSmartAlerts = ({
         `${store.name} matches your interests.`,
         buildStoreLink(store.name)
       );
-    });
+    }
 
     persistTagSeen();
   }, [
@@ -226,18 +225,18 @@ export const useSmartAlerts = ({
     );
 
     if (!hasBootstrappedFavoritesRef.current) {
-      favoriteList.forEach((store) => {
+      for (const store of favoriteList) {
         const key = store.id ?? sanitizeStoreName(store.name);
         favoriteSnapshotRef.current.set(
           key,
           normalizeDateValue((store as { updatedAt?: unknown }).updatedAt)
         );
-      });
+      }
       hasBootstrappedFavoritesRef.current = true;
       return;
     }
 
-    favoriteList.forEach((store) => {
+    for (const store of favoriteList) {
       const key = store.id ?? sanitizeStoreName(store.name);
       const latest = normalizeDateValue(
         (store as { updatedAt?: unknown }).updatedAt
@@ -253,7 +252,7 @@ export const useSmartAlerts = ({
       }
 
       favoriteSnapshotRef.current.set(key, latest ?? previous ?? null);
-    });
+    }
   }, [
     followAlertsEnabled,
     favoriteStores,

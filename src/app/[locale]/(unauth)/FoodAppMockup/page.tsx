@@ -1,4 +1,4 @@
-import * as React from "react";
+import type * as React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -86,7 +86,10 @@ const DiscoverScreen: React.FC = () => {
       {/* Fast order list */}
       <div className="flex items-center justify-between mb-2">
         <p className="text-sm font-semibold">Fast Order</p>
-        <button className="text-[11px] text-slate-400 flex items-center gap-1">
+        <button
+          type="button"
+          className="text-[11px] text-slate-400 flex items-center gap-1"
+        >
           See More
           <span className="text-xs">›</span>
         </button>
@@ -238,8 +241,10 @@ const UltimatePackScreen: React.FC = () => {
       </p>
 
       <div className="flex items-center justify-between text-[11px] text-slate-500 mb-3">
-        <button className="underline underline-offset-2">Give it a Rate</button>
-        <button className="underline underline-offset-2">
+        <button type="button" className="underline underline-offset-2">
+          Give it a Rate
+        </button>
+        <button type="button" className="underline underline-offset-2">
           Write a Comment
         </button>
       </div>
@@ -286,7 +291,13 @@ const TrackingScreen: React.FC = () => {
             <div className="h-10 rounded-md bg-white" />
           </div>
           {/* route line */}
-          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100">
+          <svg
+            className="absolute inset-0 w-full h-full"
+            viewBox="0 0 100 100"
+            role="img"
+            aria-label="Route path"
+          >
+            <title>Route path</title>
             <polyline
               points="12,15 20,35 60,35 70,55 30,70 80,85"
               fill="none"

@@ -120,6 +120,7 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
             {modes.map((mode) => (
               <button
                 key={mode.id}
+                type="button"
                 onClick={() => onTransportModeChange(mode.id)}
                 className={cn(
                   "flex-1 flex flex-col items-center justify-center py-2 rounded-md text-xs font-medium transition-all",
@@ -246,7 +247,10 @@ export const RouteControlPanel: FunctionComponent<RouteControlPanelProps> = ({
               {showSteps && (
                 <div className="mt-2 space-y-3 pl-2 border-l-2 border-gray-200 dark:border-gray-700">
                   {route.steps.map((step, index) => (
-                    <div key={index} className="text-sm">
+                    <div
+                      key={`${step.maneuver.instruction}-${step.maneuver.location.join(",")}-${index}`}
+                      className="text-sm"
+                    >
                       <p className="text-gray-800 dark:text-gray-200">
                         {step.maneuver.instruction}
                       </p>

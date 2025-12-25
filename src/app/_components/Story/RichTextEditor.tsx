@@ -42,6 +42,7 @@ const ToolbarButton = ({
     onClick={onClick}
     disabled={disabled}
     data-active={isActive ? "true" : undefined}
+    aria-pressed={isActive}
     className="rounded-md border px-2 py-1 text-xs font-medium transition-colors data-[active=true]:border-primary/40 data-[active=true]:bg-primary/10 data-[active=true]:text-primary disabled:cursor-not-allowed disabled:opacity-40"
   >
     {children}

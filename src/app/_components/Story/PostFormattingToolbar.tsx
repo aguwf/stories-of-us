@@ -75,6 +75,8 @@ export default function PostFormattingToolbar({
                 className="h-8 w-8 p-0"
                 onClick={tool.onClick}
                 type="button"
+                aria-label={tool.tooltip}
+                aria-pressed={tool.isActive}
               >
                 {tool.icon}
               </Button>

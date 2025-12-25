@@ -336,5 +336,8 @@
       "approve": "chấp nhận",
       "reject": "từ chối"
     }
+  },
+  "Story": {
+    "not_found": "Không tìm thấy câu chuyện"
   }
 }

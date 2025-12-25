@@ -340,6 +340,15 @@
     "dialog_action": {
       "approve": "approve",
       "reject": "reject"
-    }
+    },
+    "story_approvals": "Story approvals",
+    "story_pending_title": "No pending stories",
+    "story_pending_body": "All user stories have been reviewed.",
+    "story_dialog_approve_title": "Approve Story",
+    "story_dialog_reject_title": "Reject Story",
+    "story_dialog_message": "You are about to {action} the story '{storyName}'."
+  },
+  "Story": {
+    "not_found": "Story not found"
   }
 }

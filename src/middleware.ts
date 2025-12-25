@@ -64,24 +64,16 @@ export default function middleware(
     return NextResponse.redirect(url);
   }
 
-  if (
-    request.nextUrl.pathname.includes("/sign-in") ||
-    request.nextUrl.pathname.includes("/sign-up") ||
-    isProtectedRoute(request)
-  ) {
-    return clerkMiddleware(async (auth, req: NextRequest) => {
-      if (isProtectedRoute(req)) {
-        const { userId, redirectToSignIn } = await auth();
-        if (!userId) {
-          return redirectToSignIn({ returnBackUrl: req.url });
-        }
+  return clerkMiddleware(async (auth, req: NextRequest) => {
+    if (isProtectedRoute(req)) {
+      const { userId, redirectToSignIn } = await auth();
+      if (!userId) {
+        return redirectToSignIn({ returnBackUrl: req.url });
       }
+    }
 
-      return intlMiddleware(req);
-    })(request, event);
-  }
-
-  return intlMiddleware(request);
+    return intlMiddleware(req);
+  })(request, event);
 }
 
 export const config = {

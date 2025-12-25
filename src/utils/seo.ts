@@ -12,6 +12,7 @@ type BuildMetadataParams = {
 	path: string;
 	title: string;
 	description?: string;
+	image?: string | null;
 };
 
 const buildLanguageAlternates = (path: string) => {
@@ -31,7 +32,7 @@ export const buildLocalizedMetadata = (
 	const baseUrl = getBaseUrl();
 	const localizedPath = getI18nPath(params.path, params.locale);
 	const absoluteUrl = `${baseUrl}${localizedPath}`;
-	const imageUrl = `${baseUrl}${defaultOgImagePath}`;
+	const imageUrl = params.image ?? `${baseUrl}${defaultOgImagePath}`;
 	const description = params.description ?? defaultSiteDescription;
 
 	return {

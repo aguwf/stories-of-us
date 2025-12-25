@@ -341,5 +341,8 @@
       "approve": "approuver",
       "reject": "rejeter"
     }
+  },
+  "Story": {
+    "not_found": "Histoire non trouvée"
   }
 }

@@ -158,6 +158,10 @@ export const storyRouter = createTRPCRouter({
     .query(async ({ ctx, input }) => {
       const story = await ctx.db.query.stories.findFirst({
         where: eq(stories.id, input.id),
+        with: {
+          user: true,
+          hearts: true,
+        },
       });
 
       if (!story) {
@@ -166,6 +170,68 @@ export const storyRouter = createTRPCRouter({
 
       return {
         ...story,
+        heartCount: story.hearts?.length ?? 0,
+      };
+    }),
+
+  getMyStories: protectedProcedure
+    .input(
+      z.object({
+        page: z.number().optional().default(1),
+        totalItems: z.number().optional().default(10),
+        sort: z.enum(["createdAt", "name", "sort"]).optional().default("createdAt"),
+        orderBy: z.enum(["asc", "desc"]).optional().default("desc"),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const offset = (input.page - 1) * input.totalItems;
+      const limit = input.totalItems;
+      const sortColumn =
+        input.sort === "name"
+          ? stories.name
+          : input.sort === "sort"
+            ? stories.sort
+            : stories.createdAt;
+
+      const orderBy =
+        input.orderBy === "asc" ? asc(sortColumn) : desc(sortColumn);
+
+      const [totalCount] = await ctx.db
+        .select({ count: count() })
+        .from(stories)
+        .where(eq(stories.userId, ctx.auth.userId));
+
+      if (!totalCount || totalCount.count === 0) {
+        return {
+          storyList: [],
+          totalPages: 0,
+          totalCount: 0,
+        };
+      }
+
+      const totalPages = Math.ceil(totalCount.count / limit);
+      const storyList = await ctx.db.query.stories.findMany({
+        where: eq(stories.userId, ctx.auth.userId),
+        orderBy,
+        offset,
+        limit,
+        with: {
+          user: true,
+          hearts: true,
+        },
+      });
+
+      return {
+        storyList: storyList.map((story) => ({
+          ...story,
+          isHearted: story.hearts?.some(
+            (heart) => heart.userId === ctx.auth.userId
+          ),
+          heartCount: story.hearts?.length ?? 0,
+          hearts: undefined,
+        })),
+        totalPages,
+        totalCount: totalCount.count,
       };
     }),
 

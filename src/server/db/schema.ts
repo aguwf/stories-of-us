@@ -65,6 +65,7 @@ export const stories = createTable("story", {
 export const storiesRelations = relations(stories, ({ one, many }) => ({
   user: one(users, { fields: [stories.userId], references: [users.id] }),
   hearts: many(hearts),
+  bookmarks: many(bookmarks),
   comments: many(comments),
 }));
 
@@ -86,6 +87,7 @@ export const users = createTable("user", {
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   stories: many(stories),
+  bookmarks: many(bookmarks),
 }));
 
 export const accounts = createTable(
@@ -175,6 +177,24 @@ export const hearts = createTable("heart", {
 export const heartsRelations = relations(hearts, ({ one }) => ({
   story: one(stories, { fields: [hearts.storyId], references: [stories.id] }),
   user: one(users, { fields: [hearts.userId], references: [users.id] }),
+}));
+
+export const bookmarks = createTable("bookmark", {
+  id: serial("id").primaryKey(),
+  storyId: integer("story_id")
+    .notNull()
+    .references(() => stories.id),
+  userId: varchar("user_id", { length: 255 })
+    .notNull()
+    .references(() => users.id),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+});
+
+export const bookmarksRelations = relations(bookmarks, ({ one }) => ({
+  story: one(stories, { fields: [bookmarks.storyId], references: [stories.id] }),
+  user: one(users, { fields: [bookmarks.userId], references: [users.id] }),
 }));
 
 export const comments = createTable("comment", {

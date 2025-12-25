@@ -4,7 +4,7 @@ import {
   publicProcedure,
   adminProcedure,
 } from "@/server/api/trpc";
-import { hearts, stories, users } from "@/server/db/schema";
+import { bookmarks, hearts, stories, users } from "@/server/db/schema";
 import { StoryValidation } from "@/validations/StoryValidation";
 import { and, asc, count, desc, eq } from "drizzle-orm";
 import { z } from "zod";
@@ -134,6 +134,7 @@ export const storyRouter = createTRPCRouter({
         with: {
           user: true,
           hearts: true,
+          bookmarks: true,
         },
       });
 
@@ -145,8 +146,14 @@ export const storyRouter = createTRPCRouter({
                 (heart) => heart.userId === input.currentUserId
               )
             : false,
+          isBookmarked: input.currentUserId
+            ? story.bookmarks?.some(
+                (bookmark) => bookmark.userId === input.currentUserId
+              )
+            : false,
           heartCount: story.hearts?.length ?? 0,
           hearts: undefined,
+          bookmarks: undefined,
         })),
         totalPages,
         totalCount: totalCount.count,
@@ -270,6 +277,33 @@ export const storyRouter = createTRPCRouter({
       }
 
       await ctx.db.insert(hearts).values({
+        storyId: input.storyId,
+        userId,
+      });
+      return true;
+    }),
+
+  toggleBookmark: protectedProcedure
+    .input(z.object({ storyId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const userId = ctx.auth?.userId;
+      if (!userId) {
+        throw new TRPCError({ code: "UNAUTHORIZED" });
+      }
+
+      await ensureUserExists(ctx);
+
+      const existingBookmark = await ctx.db.query.bookmarks.findFirst({
+        where: (bookmarks) =>
+          and(eq(bookmarks.storyId, input.storyId), eq(bookmarks.userId, userId)),
+      });
+
+      if (existingBookmark) {
+        await ctx.db.delete(bookmarks).where(eq(bookmarks.id, existingBookmark.id));
+        return false;
+      }
+
+      await ctx.db.insert(bookmarks).values({
         storyId: input.storyId,
         userId,
       });

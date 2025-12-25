@@ -8,6 +8,9 @@ import {
   type StoreListProps,
 } from "@/app/_components/Map";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { LayoutList } from "lucide-react";
 
 interface DesktopSidebarProps {
   isOpen: boolean;
@@ -23,6 +26,7 @@ export const DesktopSidebar: FunctionComponent<DesktopSidebarProps> = ({
   storeListProps,
 }) => {
   const t = useTranslations("DesktopSidebar");
+  const router = useRouter();
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -32,6 +36,14 @@ export const DesktopSidebar: FunctionComponent<DesktopSidebarProps> = ({
       >
         <div className="p-4 border-b flex items-center justify-between">
           <h2 className="font-semibold text-lg">{t("stores_title")}</h2>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => router.push("/timeline")}
+            title="Go to Timeline"
+          >
+            <LayoutList className="h-5 w-5" />
+          </Button>
         </div>
         <div className="p-4 border-b">
           <MapControls

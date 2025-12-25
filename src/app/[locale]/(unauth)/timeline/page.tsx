@@ -1,4 +1,4 @@
-import MapContainer from "@/app/_containers/MapContainer";
+import StoryTimelineContainer from "@/app/_containers/StoryTimelineContainer";
 import { buildLocalizedMetadata } from "@/utils/seo";
 import { HydrateClient } from "@/trpc/server";
 import { getTranslations } from "next-intl/server";
@@ -6,21 +6,21 @@ import { getTranslations } from "next-intl/server";
 export async function generateMetadata(props: { params: { locale: string } }) {
 	const t = await getTranslations({
 		locale: props.params.locale,
-		namespace: "Map",
+		namespace: "Timeline",
 	});
 
 	return buildLocalizedMetadata({
 		locale: props.params.locale,
-		path: "/",
+		path: "/timeline",
 		title: t("meta_title"),
 		description: t("meta_description"),
 	});
 }
 
-export default function Index() {
+export default function Timeline() {
 	return (
 		<HydrateClient>
-			<MapContainer />
+			<StoryTimelineContainer />
 		</HydrateClient>
 	);
 }

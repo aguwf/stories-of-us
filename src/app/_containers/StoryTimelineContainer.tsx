@@ -4,7 +4,7 @@ import ListStory from "@/app/_components/Story/ListStory";
 import Toolbar from "@/app/_components/common/Toolbar";
 import CreateStoryModal from "@/app/_components/modals/CreateStoryModal";
 import type { StoryType } from "@/types";
-import { Moon, Plus, Settings, Sun } from "lucide-react";
+import { Moon, Map, Plus, Settings, Sun } from "lucide-react";
 import { useState } from "react";
 import { useRef } from "react";
 import {
@@ -14,9 +14,11 @@ import {
 import Greeting from "../_components/greeting";
 import type { CreateStoryModalRef } from "../_components/modals/CreateStoryModal";
 import { useThemeStore } from "../_store/clientStore";
+import { useRouter } from "next/navigation";
 
 const StoryTimelineContainer = () => {
 	const { theme, setTheme } = useThemeStore();
+	const router = useRouter();
 	const modalRef = useRef<CreateStoryModalRef>(null);
 
 	const [selectedStory, setSelectedStory] = useState<StoryType | null>(null);
@@ -41,6 +43,10 @@ const StoryTimelineContainer = () => {
 				openIcon={<Settings size={16} />}
 				closeIcon={<Settings size={16} />}
 				buttons={[
+					{
+						children: <Map size={16} />,
+						onClick: () => router.push("/"),
+					},
 					{
 						children:
 							theme === "light" ? <Moon size={16} /> : <Sun size={16} />,

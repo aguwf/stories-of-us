@@ -37,11 +37,11 @@ const StoryTimelineContainer = () => {
 				setMaxIndex={setMaxIndex}
 			/>
 			<FloatButton onClick={() => modalRef.current?.openModal()}>
-				<Plus size={16} />
+				<Plus size={16} suppressHydrationWarning />
 			</FloatButton>
 			<FloatButtonGroup
-				openIcon={<Settings size={16} />}
-				closeIcon={<Settings size={16} />}
+				openIcon={<Settings size={16} suppressHydrationWarning />}
+				closeIcon={<Settings size={16} suppressHydrationWarning />}
 				buttons={[
 					{
 						children: <Map size={16} />,
@@ -49,7 +49,11 @@ const StoryTimelineContainer = () => {
 					},
 					{
 						children:
-							theme === "light" ? <Moon size={16} /> : <Sun size={16} />,
+							theme === "light" ? (
+								<Moon size={16} suppressHydrationWarning />
+							) : (
+								<Sun size={16} suppressHydrationWarning />
+							),
 						onClick: () => setTheme(theme === "light" ? "dark" : "light"),
 					},
 				]}

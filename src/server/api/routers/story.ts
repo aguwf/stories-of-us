@@ -115,7 +115,8 @@ export const storyRouter = createTRPCRouter({
 
       const [totalCount] = await ctx.db
         .select({ count: count() })
-        .from(stories);
+        .from(stories)
+        .where(eq(stories.status, "approved"));
 
       if (!totalCount || totalCount.count === 0) {
         return {

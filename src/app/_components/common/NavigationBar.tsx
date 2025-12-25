@@ -12,6 +12,7 @@ import { SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Logo } from "@/app/_assets/logos/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -161,6 +162,8 @@ const MenuItem = ({ item, index }: { item: NavItem; index: number }) => {
   );
 };
 
+
+
 function AuthActions({
   locale,
   onOpenChange,
@@ -168,9 +171,24 @@ function AuthActions({
   locale: string;
   onOpenChange?: () => void;
 }) {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const signInUrl = getI18nPath("/sign-in", locale);
   const signUpUrl = getI18nPath("/sign-up", locale);
   // const dashboardUrl = getI18nPath("/dashboard", locale);
+
+  if (!mounted) {
+    return (
+      <div className="flex gap-2 items-center">
+        <Skeleton className="w-[70px] h-9" />
+        <Skeleton className="w-[80px] h-9" />
+      </div>
+    );
+  }
 
   return (
     <div className="flex gap-2 items-center">
@@ -212,7 +230,7 @@ function MobileNav() {
           variant="ghost"
           className="absolute left-4 top-1/2 px-0 ml-2 text-base -translate-y-1/2 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
         >
-          <MenuIcon />
+          <MenuIcon suppressHydrationWarning />
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>

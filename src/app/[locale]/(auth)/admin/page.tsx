@@ -9,6 +9,10 @@ import {
   RefreshCw,
   ShieldCheck,
   XCircle,
+  FileText,
+  Calendar,
+  User,
+  Image as ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -41,6 +45,7 @@ import { useTranslations } from "next-intl";
 import { api, type RouterOutputs } from "@/trpc/react";
 
 type QueueItem = RouterOutputs["location"]["getQueue"][number];
+type StoryQueueItem = RouterOutputs["story"]["getPending"][number];
 
 const buildMapsLink = (lat: number, lng: number) =>
   `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
@@ -107,9 +112,9 @@ const statusBadge = (status: QueueItem["status"]) => {
   }
 };
 
-export default function AdminDashboard() {
-  const locale = useLocale();
+function LocationReviews() {
   const t = useTranslations("AdminDashboard");
+  const locale = useLocale();
   const utils = api.useUtils();
   const [statusFilter, setStatusFilter] = useState<QueueItem["status"][]>([
     "pending",
@@ -341,27 +346,7 @@ export default function AdminDashboard() {
   };
 
   return (
-    <div className="container mx-auto max-w-6xl space-y-6 py-10">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-        <div className="space-y-2">
-          <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
-            {t("review_queue")}
-          </p>
-          <h1 className="text-3xl font-semibold">{t("location_approvals")}</h1>
-          <p className="text-sm text-muted-foreground">{t("review_copy")}</p>
-        </div>
-        <div className="flex gap-2">
-          <Button
-            variant="outline"
-            onClick={() => refetch()}
-            isLoading={isRefetching}
-          >
-            <RefreshCw className="h-4 w-4" />
-            {t("refresh")}
-          </Button>
-        </div>
-      </div>
-
+    <div className="space-y-6">
       <div className="grid gap-3 sm:grid-cols-3">
         <Card>
           <CardHeader className="pb-2">
@@ -456,9 +441,7 @@ export default function AdminDashboard() {
                 </Button>
                 {error?.data?.code === "UNAUTHORIZED" && (
                   <Button asChild={true}>
-                    <Link href={`/${locale}/sign-in`}>
-                      {t("go_to_sign_in")}
-                    </Link>
+                    <Link href={`/${locale}/sign-in`}>{t("go_to_sign_in")}</Link>
                   </Button>
                 )}
               </CardContent>
@@ -537,9 +520,7 @@ export default function AdminDashboard() {
                       : prev
                   )
                 }
-                placeholder={
-                  t("duplicate_placeholder")
-                }
+                placeholder={t("duplicate_placeholder")}
               />
             </div>
           </div>
@@ -561,6 +542,248 @@ export default function AdminDashboard() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+    </div>
+  );
+}
+
+function StoryReviews() {
+  const t = useTranslations("AdminDashboard");
+  const utils = api.useUtils();
+  const [dialog, setDialog] = useState<{
+    action: "approve" | "reject";
+    item: StoryQueueItem;
+  } | null>(null);
+
+  const {
+    data: stories,
+    isLoading,
+    isRefetching,
+    refetch,
+    isError,
+  } = api.story.getPending.useQuery();
+
+  const approveMutation = api.story.approve.useMutation({
+    onSuccess: async () => {
+      toast.success(t("toast_approved"));
+      await utils.story.getPending.invalidate();
+      setDialog(null);
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const rejectMutation = api.story.reject.useMutation({
+    onSuccess: async () => {
+      toast.success(t("toast_rejected"));
+      await utils.story.getPending.invalidate();
+      setDialog(null);
+    },
+    onError: (err) => toast.error(err.message),
+  });
+
+  const confirmAction = () => {
+    if (!dialog) return;
+    if (dialog.action === "approve") {
+      approveMutation.mutate({ id: dialog.item.id });
+    } else {
+      rejectMutation.mutate({ id: dialog.item.id });
+    }
+  };
+
+  const isPending = approveMutation.isPending || rejectMutation.isPending;
+
+  const renderStoryCard = (item: StoryQueueItem) => {
+    return (
+      <Card key={item.id} className="border-l-4 border-l-blue-500 shadow-sm">
+        <CardHeader className="space-y-2">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-muted-foreground">
+              <Badge variant="outline">{item.status}</Badge>
+              <Badge variant="secondary">{item.postFormat}</Badge>
+            </div>
+          </div>
+          <CardTitle className="text-xl">{item.name}</CardTitle>
+          <CardDescription className="flex items-center gap-2 text-sm text-muted-foreground">
+            <User className="h-4 w-4" />
+            <span>{item.user?.name ?? t("unknown")}</span>
+            <span className="text-muted-foreground/50">•</span>
+            <Calendar className="h-4 w-4" />
+            <span>{new Date(item.createdAt).toLocaleDateString()}</span>
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <p className="whitespace-pre-wrap text-sm">{item.description}</p>
+            {item.images && item.images.length > 0 && (
+              <div className="flex gap-2 overflow-x-auto pb-2">
+                {item.images.map((img, idx) => (
+                  <div
+                    key={idx}
+                    className="relative aspext-square h-24 min-w-24 overflow-hidden rounded-md border"
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={img}
+                      alt="Story content"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
+            <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+              {item.location && (
+                <div className="flex items-center gap-1">
+                  <MapPin className="h-3 w-3" />
+                  {item.location}
+                </div>
+              )}
+              {item.feeling && (
+                <Badge variant="secondary" className="text-xs">
+                  {item.feeling}
+                </Badge>
+              )}
+              {item.activity && (
+                <Badge variant="secondary" className="text-xs">
+                  {item.activity}
+                </Badge>
+              )}
+            </div>
+          </div>
+
+          <div className="flex flex-wrap gap-2 pt-2">
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() => setDialog({ action: "approve", item })}
+            >
+              <CheckCircle2 className="mr-2 h-4 w-4" />
+              {t("approve")}
+            </Button>
+            <Button
+              variant="destructive"
+              size="sm"
+              onClick={() => setDialog({ action: "reject", item })}
+            >
+              <XCircle className="mr-2 h-4 w-4" />
+              {t("reject")}
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  };
+
+  if (isLoading) {
+    return (
+      <div className="grid gap-3">
+        {[1, 2].map((i) => (
+          <Skeleton key={i} className="h-48 w-full rounded-lg" />
+        ))}
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <Card className="border-destructive/40 bg-destructive/5">
+        <CardHeader>
+          <CardTitle className="text-destructive">{t("load_failed")}</CardTitle>
+          <Button variant="outline" onClick={() => refetch()} className="w-fit">
+            <RefreshCw className="mr-2 h-4 w-4" />
+            {t("retry")}
+          </Button>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  if (!stories?.length) {
+    return (
+      <Card className="border-dashed bg-muted/30">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+            {t("story_pending_title")}
+          </CardTitle>
+          <CardDescription>{t("story_pending_body")}</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  return (
+    <div className="space-y-4">
+      <div className="grid gap-4">{stories.map(renderStoryCard)}</div>
+
+      <AlertDialog
+        open={!!dialog}
+        onOpenChange={(open) => !open && setDialog(null)}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {dialog?.action === "approve"
+                ? t("story_dialog_approve_title")
+                : t("story_dialog_reject_title")}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {dialog &&
+                t("story_dialog_message", {
+                  action: t(`dialog_action.${dialog.action}`),
+                  storyName: dialog.item.name || "Untitled",
+                })}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isPending}>
+              {t("cancel")}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmAction}
+              disabled={isPending}
+              className={
+                dialog?.action === "reject"
+                  ? "bg-destructive hover:bg-destructive/90"
+                  : undefined
+              }
+            >
+              {isPending ? t("working") : t("confirm")}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </div>
+  );
+}
+
+export default function AdminDashboard() {
+  const t = useTranslations("AdminDashboard");
+  const [activeTab, setActiveTab] = useState("locations");
+
+  return (
+    <div className="container mx-auto max-w-6xl space-y-6 py-10">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+        <div className="space-y-2">
+          <p className="text-xs uppercase tracking-[0.3em] text-muted-foreground">
+            {t("review_queue")}
+          </p>
+          <h1 className="text-3xl font-semibold">{t("location_approvals")}</h1>
+          <p className="text-sm text-muted-foreground">{t("review_copy")}</p>
+        </div>
+      </div>
+
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <TabsList>
+          <TabsTrigger value="locations">Locations</TabsTrigger>
+          <TabsTrigger value="stories">{t("story_approvals")}</TabsTrigger>
+        </TabsList>
+        <TabsContent value="locations" className="mt-4">
+          <LocationReviews />
+        </TabsContent>
+        <TabsContent value="stories" className="mt-4">
+          <StoryReviews />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

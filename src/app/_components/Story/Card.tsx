@@ -107,7 +107,7 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
 
 		// State
 		const [isLiked, setIsLiked] = useState(item.isHearted);
-		const [isBookmarked, setIsBookmarked] = useState(false);
+		const [isBookmarked, setIsBookmarked] = useState(item.isBookmarked);
 		const [isDeleting, setIsDeleting] = useState(false);
 
 		// Memoized values
@@ -159,6 +159,19 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
 			},
 		});
 
+		const toggleBookmark = api.story.toggleBookmark.useMutation({
+			onMutate: () => {
+				setIsBookmarked(prev => !prev);
+			},
+			onSuccess: async () => {
+				await utils.story.invalidate();
+			},
+			onError: error => {
+				setIsBookmarked(prev => !prev);
+				toast.error(error.message || "Failed to update bookmark");
+			},
+		});
+
 		// Event Handlers
 		const handleDelete = useCallback(() => {
 			if (confirmDelete()) {
@@ -203,15 +216,21 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
 		}, [toggleHeart, item.id, userId]);
 
 		const handleBookmarkStory = useCallback(() => {
-			setIsBookmarked(prev => !prev);
-			// TODO: Implement bookmark functionality
-			toast.info("Bookmark feature coming soon");
-		}, []);
+			if (!userId) {
+				toast.error("Please sign in to bookmark stories");
+				return;
+			}
+			toggleBookmark.mutate({ storyId: item.id });
+		}, [toggleBookmark, item.id, userId]);
 
 		// Sync liked state with item prop
 		useEffect(() => {
 			setIsLiked(item.isHearted);
 		}, [item.isHearted]);
+
+		useEffect(() => {
+			setIsBookmarked(item.isBookmarked);
+		}, [item.isBookmarked]);
 
 		return (
 			<div className="mb-10">
@@ -243,7 +262,7 @@ export const StoryCard: React.FC<StoryCardProps> = memo(
 						<ImageVideoGrid items={mediaItems} story={item} className="mt-4" />
 						<StoryCardActions
 							isLiked={isLiked ?? false}
-							isBookmarked={isBookmarked}
+							isBookmarked={isBookmarked ?? false}
 							onLike={handleLikeStory}
 							onBookmark={handleBookmarkStory}
 						/>

@@ -29,4 +29,5 @@ export interface StoryType {
   user?: UserType;
   heartCount?: number;
   isHearted?: boolean;
+  isBookmarked?: boolean;
 }

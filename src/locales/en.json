@@ -350,5 +350,9 @@
   },
   "Story": {
     "not_found": "Story not found"
+  },
+  "Timeline": {
+    "meta_title": "Timeline",
+    "meta_description": "Explore stories timeline"
   }
 }

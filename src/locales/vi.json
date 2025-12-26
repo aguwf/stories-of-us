@@ -339,5 +339,9 @@
   },
   "Story": {
     "not_found": "Không tìm thấy câu chuyện"
+  },
+  "Timeline": {
+    "meta_title": "Dòng thời gian",
+    "meta_description": "Khám phá dòng thời gian của các câu chuyện"
   }
 }

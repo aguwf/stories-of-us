@@ -344,5 +344,9 @@
   },
   "Story": {
     "not_found": "Histoire non trouvée"
+  },
+  "Timeline": {
+    "meta_title": "Chronologie",
+    "meta_description": "Explorez la chronologie des histoires"
   }
 }

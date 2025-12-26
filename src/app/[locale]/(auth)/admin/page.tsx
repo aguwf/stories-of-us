@@ -9,10 +9,8 @@ import {
   RefreshCw,
   ShieldCheck,
   XCircle,
-  FileText,
   Calendar,
   User,
-  Image as ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -557,7 +555,6 @@ function StoryReviews() {
   const {
     data: stories,
     isLoading,
-    isRefetching,
     refetch,
     isError,
   } = api.story.getPending.useQuery();

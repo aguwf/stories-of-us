@@ -132,6 +132,10 @@ export const protectedProcedure = t.procedure
     return next({
       ctx: {
         ...ctx,
+        auth: {
+          ...ctx.auth,
+          userId,
+        },
       },
     });
   });

@@ -13,7 +13,7 @@ import StoryCardUserInfo, {
 import StoryCardStats from "./Card/StoryCardStats";
 import { MapPin } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+
 
 interface StoryDetailProps {
   story: StoryType;
@@ -64,7 +64,7 @@ export default function StoryDetail({ story }: StoryDetailProps) {
       })),
     [story.images]
   );
-  const searchParams = useSearchParams();
+
 
 
   return (
@@ -72,7 +72,7 @@ export default function StoryDetail({ story }: StoryDetailProps) {
       <CardHeader
         className={cn(
           "relative p-6 rounded-tl-xl rounded-tr-xl",
-          gradient || gradientClasses.gradient_blue // Default until mounted
+          gradient || gradientClasses.blue // Default until mounted
         )}
       >
         <div className="flex justify-between items-start">

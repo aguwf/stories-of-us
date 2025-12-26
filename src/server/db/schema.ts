@@ -59,7 +59,9 @@ export const stories = createTable("story", {
   postFormat: varchar("post_format", { length: 50, enum: postFormatValues })
     .default("standard")
     .notNull(),
-  status: varchar("status", { length: 20 }).default("pending").notNull(),
+  status: varchar("status", { length: 20, enum: ["pending", "approved", "rejected"] })
+    .default("pending")
+    .notNull(),
 });
 
 export const storiesRelations = relations(stories, ({ one, many }) => ({

@@ -1,24 +1,18 @@
 "use client";
 
-import { useUserStore } from "@/app/_store/userStore";
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/trpc/react";
 import type { StoryType } from "@/types";
-import { useAuth } from "@clerk/nextjs";
+
 import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
 import { StoryCard } from "@/app/_components/Story/Card";
 import CreateStoryModal from "@/app/_components/modals/CreateStoryModal";
 import type { CreateStoryModalRef } from "@/app/_components/modals/CreateStoryModal";
 import EmptyTimelineState from "@/app/_components/Story/EmptyTimelineState";
 
 export default function DashboardClient() {
-	const { user } = useUserStore();
-	const { userId: clerkUserId } = useAuth();
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	const currentUserId = user?.id ?? clerkUserId ?? undefined;
-
 	const modalRef = useRef<CreateStoryModalRef>(null);
 	const [selectedStory, setSelectedStory] = useState<StoryType | null>(null);
 	const [createIndex, setCreateIndex] = useState<number | null>(null);

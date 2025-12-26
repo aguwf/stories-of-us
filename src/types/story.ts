@@ -24,6 +24,7 @@ export interface StoryType {
   mentionedUsers?: string[] | null;
   scheduledPublishTime?: Date | null;
   postFormat: "standard" | "background" | "poll";
+  status: "pending" | "approved" | "rejected";
 
   // Virtual fields
   user?: UserType;

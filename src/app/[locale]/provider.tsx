@@ -1,6 +1,7 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { useThemeStore } from "../_store/clientStore";
 import React from "react";
 
@@ -19,7 +20,9 @@ export default function Provider({ children }: { children: React.ReactNode }) {
 			enableSystem={true}
 			forcedTheme={mounted ? (themeStore || undefined) : undefined}
 		>
-			{children}
+			<TooltipProvider>
+				{children}
+			</TooltipProvider>
 		</ThemeProvider>
 	);
 }

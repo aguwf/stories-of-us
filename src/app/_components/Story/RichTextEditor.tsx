@@ -15,6 +15,12 @@ import PostFormattingToolbar, {
   type FormattingAction,
 } from "./PostFormattingToolbar";
 import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface RichTextEditorProps {
   content: string;
@@ -31,23 +37,51 @@ const ToolbarButton = ({
   isActive,
   disabled,
   children,
+  shortcut,
+  tooltip,
 }: {
   onClick: () => void;
   isActive?: boolean;
   disabled?: boolean;
   children: React.ReactNode;
-}) => (
-  <button
-    type="button"
-    onClick={onClick}
-    disabled={disabled}
-    data-active={isActive ? "true" : undefined}
-    aria-pressed={isActive}
-    className="rounded-md border px-2 py-1 text-xs font-medium transition-colors data-[active=true]:border-primary/40 data-[active=true]:bg-primary/10 data-[active=true]:text-primary disabled:cursor-not-allowed disabled:opacity-40"
-  >
-    {children}
-  </button>
-);
+  shortcut?: string;
+  tooltip?: string;
+}) => {
+  const button = (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      data-active={isActive ? "true" : undefined}
+      aria-pressed={isActive}
+      className="rounded-md border px-2 py-1 text-xs font-medium transition-colors data-[active=true]:border-primary/40 data-[active=true]:bg-primary/10 data-[active=true]:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+    >
+      {children}
+    </button>
+  );
+
+  if (!tooltip && !shortcut) {
+    return button;
+  }
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        {button}
+      </TooltipTrigger>
+      <TooltipContent>
+        <p className="flex items-center gap-2">
+          <span>{tooltip || children}</span>
+          {shortcut && (
+            <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+              {shortcut}
+            </kbd>
+          )}
+        </p>
+      </TooltipContent>
+    </Tooltip>
+  );
+};
 
 const MenuBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) {
@@ -60,6 +94,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
         isActive={editor.isActive("bold")}
+        shortcut="⌘B"
       >
         Bold
       </ToolbarButton>
@@ -67,6 +102,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         onClick={() => editor.chain().focus().toggleItalic().run()}
         disabled={!editor.can().chain().focus().toggleItalic().run()}
         isActive={editor.isActive("italic")}
+        shortcut="⌘I"
       >
         Italic
       </ToolbarButton>
@@ -74,6 +110,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         onClick={() => editor.chain().focus().toggleStrike().run()}
         disabled={!editor.can().chain().focus().toggleStrike().run()}
         isActive={editor.isActive("strike")}
+        shortcut="⌘⇧S"
       >
         Strike
       </ToolbarButton>
@@ -81,6 +118,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
         onClick={() => editor.chain().focus().toggleCode().run()}
         disabled={!editor.can().chain().focus().toggleCode().run()}
         isActive={editor.isActive("code")}
+        shortcut="⌘E"
       >
         Code
       </ToolbarButton>
@@ -90,24 +128,28 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       <ToolbarButton
         onClick={() => editor.chain().focus().setParagraph().run()}
         isActive={editor.isActive("paragraph")}
+        shortcut="⌘⌥0"
       >
         Paragraph
       </ToolbarButton>
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         isActive={editor.isActive("heading", { level: 1 })}
+        shortcut="⌘⌥1"
       >
         H1
       </ToolbarButton>
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
         isActive={editor.isActive("heading", { level: 2 })}
+        shortcut="⌘⌥2"
       >
         H2
       </ToolbarButton>
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         isActive={editor.isActive("heading", { level: 3 })}
+        shortcut="⌘⌥3"
       >
         H3
       </ToolbarButton>
@@ -117,24 +159,28 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBulletList().run()}
         isActive={editor.isActive("bulletList")}
+        shortcut="⌘⇧8"
       >
         Bullet List
       </ToolbarButton>
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleOrderedList().run()}
         isActive={editor.isActive("orderedList")}
+        shortcut="⌘⇧7"
       >
         Numbered List
       </ToolbarButton>
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleBlockquote().run()}
         isActive={editor.isActive("blockquote")}
+        shortcut="⌘⇧B"
       >
         Quote
       </ToolbarButton>
       <ToolbarButton
         onClick={() => editor.chain().focus().toggleCodeBlock().run()}
         isActive={editor.isActive("codeBlock")}
+        shortcut="⌘⌥C"
       >
         Code Block
       </ToolbarButton>
@@ -148,6 +194,7 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       </ToolbarButton>
       <ToolbarButton
         onClick={() => editor.chain().focus().setHardBreak().run()}
+        shortcut="⌘Enter"
       >
         Hard Break
       </ToolbarButton>
@@ -157,12 +204,14 @@ const MenuBar = ({ editor }: { editor: Editor | null }) => {
       <ToolbarButton
         onClick={() => editor.chain().focus().undo().run()}
         disabled={!editor.can().chain().focus().undo().run()}
+        shortcut="⌘Z"
       >
         Undo
       </ToolbarButton>
       <ToolbarButton
         onClick={() => editor.chain().focus().redo().run()}
         disabled={!editor.can().chain().focus().redo().run()}
+        shortcut="⌘⇧Z"
       >
         Redo
       </ToolbarButton>
@@ -221,93 +270,101 @@ export default function RichTextEditor({
   }, [content, editor]);
 
   return (
-    <div
-      className={cn(
-        "flex flex-col rounded-xl border bg-card text-card-foreground shadow-sm",
-        containerClassName
-      )}
-    >
-      <MenuBar editor={editor} />
-
-      <PostFormattingToolbar
-        onAction={onSpecialAction}
-        activeActions={activeActions}
-        className="shrink-0 border-b bg-muted/10"
-      />
-
-      <div className="relative flex-1 overflow-hidden">
-        {editor && (
-          <BubbleMenu
-            editor={editor}
-            className="flex items-center gap-1 rounded-md border bg-background px-2 py-1 shadow-md"
-          >
-            <ToolbarButton
-              onClick={() => editor.chain().focus().toggleBold().run()}
-              isActive={editor.isActive("bold")}
-            >
-              Bold
-            </ToolbarButton>
-            <ToolbarButton
-              onClick={() => editor.chain().focus().toggleItalic().run()}
-              isActive={editor.isActive("italic")}
-            >
-              Italic
-            </ToolbarButton>
-            <ToolbarButton
-              onClick={() => editor.chain().focus().toggleStrike().run()}
-              isActive={editor.isActive("strike")}
-            >
-              Strike
-            </ToolbarButton>
-            <ToolbarButton
-              onClick={handleLinkClick}
-              isActive={editor.isActive("link")}
-            >
-              Link
-            </ToolbarButton>
-          </BubbleMenu>
+    <TooltipProvider>
+      <div
+        className={cn(
+          "flex flex-col rounded-xl border bg-card text-card-foreground shadow-sm",
+          containerClassName
         )}
+      >
+        <MenuBar editor={editor} />
 
-        {editor && (
-          <FloatingMenu
-            editor={editor}
-            className="flex flex-col gap-2 rounded-md border bg-background p-2 shadow-md"
-          >
-            <ToolbarButton
-              onClick={() =>
-                editor.chain().focus().toggleHeading({ level: 1 }).run()
-              }
-              isActive={editor.isActive("heading", { level: 1 })}
-            >
-              H1
-            </ToolbarButton>
-            <ToolbarButton
-              onClick={() =>
-                editor.chain().focus().toggleHeading({ level: 2 }).run()
-              }
-              isActive={editor.isActive("heading", { level: 2 })}
-            >
-              H2
-            </ToolbarButton>
-            <ToolbarButton
-              onClick={() => editor.chain().focus().toggleBulletList().run()}
-              isActive={editor.isActive("bulletList")}
-            >
-              List
-            </ToolbarButton>
-          </FloatingMenu>
-        )}
+        <PostFormattingToolbar
+          onAction={onSpecialAction}
+          activeActions={activeActions}
+          className="shrink-0 border-b bg-muted/10"
+        />
 
-        <div className="px-3 py-2 min-h-[140px] overflow-auto">
-          <EditorContent
-            editor={editor}
-            className={cn(
-              "tiptap prose prose-sm max-w-none focus:outline-none",
-              className
-            )}
-          />
+        <div className="relative flex-1 overflow-hidden">
+          {editor && (
+            <BubbleMenu
+              editor={editor}
+              className="flex items-center gap-1 rounded-md border bg-background px-2 py-1 shadow-md"
+            >
+              <ToolbarButton
+                onClick={() => editor.chain().focus().toggleBold().run()}
+                isActive={editor.isActive("bold")}
+                shortcut="⌘B"
+              >
+                Bold
+              </ToolbarButton>
+              <ToolbarButton
+                onClick={() => editor.chain().focus().toggleItalic().run()}
+                isActive={editor.isActive("italic")}
+                shortcut="⌘I"
+              >
+                Italic
+              </ToolbarButton>
+              <ToolbarButton
+                onClick={() => editor.chain().focus().toggleStrike().run()}
+                isActive={editor.isActive("strike")}
+                shortcut="⌘⇧S"
+              >
+                Strike
+              </ToolbarButton>
+              <ToolbarButton
+                onClick={handleLinkClick}
+                isActive={editor.isActive("link")}
+              >
+                Link
+              </ToolbarButton>
+            </BubbleMenu>
+          )}
+
+          {editor && (
+            <FloatingMenu
+              editor={editor}
+              className="flex flex-col gap-2 rounded-md border bg-background p-2 shadow-md"
+            >
+              <ToolbarButton
+                onClick={() =>
+                  editor.chain().focus().toggleHeading({ level: 1 }).run()
+                }
+                isActive={editor.isActive("heading", { level: 1 })}
+                shortcut="⌘⌥1"
+              >
+                H1
+              </ToolbarButton>
+              <ToolbarButton
+                onClick={() =>
+                  editor.chain().focus().toggleHeading({ level: 2 }).run()
+                }
+                isActive={editor.isActive("heading", { level: 2 })}
+                shortcut="⌘⌥2"
+              >
+                H2
+              </ToolbarButton>
+              <ToolbarButton
+                onClick={() => editor.chain().focus().toggleBulletList().run()}
+                isActive={editor.isActive("bulletList")}
+                shortcut="⌘⇧8"
+              >
+                List
+              </ToolbarButton>
+            </FloatingMenu>
+          )}
+
+          <div className="px-3 py-2 min-h-[140px] overflow-auto">
+            <EditorContent
+              editor={editor}
+              className={cn(
+                "tiptap prose prose-sm max-w-none focus:outline-none",
+                className
+              )}
+            />
+          </div>
         </div>
       </div>
-    </div>
+    </TooltipProvider>
   );
 }

@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { Crosshair, Plus, Search, SlidersHorizontal, Star, LayoutList } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface MobileControlsProps {
   mapControlsProps: ComponentProps<typeof MapControls>;
@@ -79,14 +80,21 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
           />
         </button>
 
-        <Button
-            size="icon"
-            className="h-11 w-11 rounded-full shadow-md"
-            onClick={() => router.push("/timeline")}
-            title="Go to Timeline"
-          >
-            <LayoutList className="h-5 w-5" />
-          </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              size="icon"
+              className="h-11 w-11 rounded-full shadow-md"
+              onClick={() => router.push("/timeline")}
+              aria-label="Go to Timeline"
+            >
+              <LayoutList className="h-5 w-5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Go to Timeline</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
 
       <div className="absolute inset-x-4 bottom-4 z-20 grid grid-cols-3 gap-3">

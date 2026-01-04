@@ -11,6 +11,11 @@ import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { LayoutList } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface DesktopSidebarProps {
   isOpen: boolean;
@@ -36,14 +41,21 @@ export const DesktopSidebar: FunctionComponent<DesktopSidebarProps> = ({
       >
         <div className="p-4 border-b flex items-center justify-between">
           <h2 className="font-semibold text-lg">{t("stores_title")}</h2>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => router.push("/timeline")}
-            title="Go to Timeline"
-          >
-            <LayoutList className="h-5 w-5" />
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => router.push("/timeline")}
+                aria-label="Go to Timeline"
+              >
+                <LayoutList className="h-5 w-5" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Go to Timeline</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
         <div className="p-4 border-b">
           <MapControls

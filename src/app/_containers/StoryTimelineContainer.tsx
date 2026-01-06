@@ -36,7 +36,7 @@ const StoryTimelineContainer = () => {
 				setCreateIndex={setCreateIndex}
 				setMaxIndex={setMaxIndex}
 			/>
-			<FloatButton onClick={() => modalRef.current?.openModal()}>
+			<FloatButton onClick={() => modalRef.current?.openModal()} options={{ "aria-label": "Create story" }}>
 				<Plus size={16} suppressHydrationWarning />
 			</FloatButton>
 			<FloatButtonGroup
@@ -46,6 +46,7 @@ const StoryTimelineContainer = () => {
 					{
 						children: <Map size={16} />,
 						onClick: () => router.push("/"),
+						options: { "aria-label": "Go to map" },
 					},
 					{
 						children:
@@ -55,6 +56,7 @@ const StoryTimelineContainer = () => {
 								<Sun size={16} suppressHydrationWarning />
 							),
 						onClick: () => setTheme(theme === "light" ? "dark" : "light"),
+						options: { "aria-label": "Toggle theme" },
 					},
 				]}
 			/>

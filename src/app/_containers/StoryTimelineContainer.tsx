@@ -15,11 +15,13 @@ import Greeting from "../_components/greeting";
 import type { CreateStoryModalRef } from "../_components/modals/CreateStoryModal";
 import { useThemeStore } from "../_store/clientStore";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 
 const StoryTimelineContainer = () => {
 	const { theme, setTheme } = useThemeStore();
 	const router = useRouter();
 	const modalRef = useRef<CreateStoryModalRef>(null);
+	const t = useTranslations("FloatButton");
 
 	const [selectedStory, setSelectedStory] = useState<StoryType | null>(null);
 	const [createIndex, setCreateIndex] = useState<number | null>(null);
@@ -36,16 +38,22 @@ const StoryTimelineContainer = () => {
 				setCreateIndex={setCreateIndex}
 				setMaxIndex={setMaxIndex}
 			/>
-			<FloatButton onClick={() => modalRef.current?.openModal()}>
+			<FloatButton
+				onClick={() => modalRef.current?.openModal()}
+				tooltip={t("create_story")}
+			>
 				<Plus size={16} suppressHydrationWarning />
 			</FloatButton>
 			<FloatButtonGroup
 				openIcon={<Settings size={16} suppressHydrationWarning />}
 				closeIcon={<Settings size={16} suppressHydrationWarning />}
+				openTooltip={t("open_menu")}
+				closeTooltip={t("close_menu")}
 				buttons={[
 					{
 						children: <Map size={16} />,
 						onClick: () => router.push("/"),
+						tooltip: t("view_map"),
 					},
 					{
 						children:
@@ -55,6 +63,7 @@ const StoryTimelineContainer = () => {
 								<Sun size={16} suppressHydrationWarning />
 							),
 						onClick: () => setTheme(theme === "light" ? "dark" : "light"),
+						tooltip: t("toggle_theme"),
 					},
 				]}
 			/>

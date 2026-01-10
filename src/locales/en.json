@@ -348,6 +348,13 @@
     "story_dialog_reject_title": "Reject Story",
     "story_dialog_message": "You are about to {action} the story '{storyName}'."
   },
+  "FloatButton": {
+    "create_story": "Create new story",
+    "view_map": "View map",
+    "toggle_theme": "Toggle theme",
+    "open_menu": "Open menu",
+    "close_menu": "Close menu"
+  },
   "Story": {
     "not_found": "Story not found"
   },

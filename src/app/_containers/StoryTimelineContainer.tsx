@@ -36,16 +36,21 @@ const StoryTimelineContainer = () => {
 				setCreateIndex={setCreateIndex}
 				setMaxIndex={setMaxIndex}
 			/>
-			<FloatButton onClick={() => modalRef.current?.openModal()}>
+			<FloatButton
+				onClick={() => modalRef.current?.openModal()}
+				tooltip="Create Story"
+			>
 				<Plus size={16} suppressHydrationWarning />
 			</FloatButton>
 			<FloatButtonGroup
 				openIcon={<Settings size={16} suppressHydrationWarning />}
 				closeIcon={<Settings size={16} suppressHydrationWarning />}
+				tooltip="Settings"
 				buttons={[
 					{
 						children: <Map size={16} />,
 						onClick: () => router.push("/"),
+						tooltip: "Map",
 					},
 					{
 						children:
@@ -55,6 +60,7 @@ const StoryTimelineContainer = () => {
 								<Sun size={16} suppressHydrationWarning />
 							),
 						onClick: () => setTheme(theme === "light" ? "dark" : "light"),
+						tooltip: "Toggle Theme",
 					},
 				]}
 			/>

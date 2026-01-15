@@ -3,6 +3,11 @@ import { cn } from "@/lib/utils";
 import { AnimatePresence, type Variants, motion } from "framer-motion";
 import type React from "react";
 import { memo, useEffect, useRef, useState } from "react";
+import {
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 // Animation variants for reusability
 const floatButtonVariants: Variants = {
@@ -19,33 +24,54 @@ interface FloatButtonProps {
 	options?: Omit<React.ComponentProps<typeof Button>, keyof FloatButtonProps>;
 	index?: number;
 	className?: string;
+	tooltip?: string;
 }
 
 const FloatButton: React.FC<FloatButtonProps> = memo(
-	({ children, onClick, options, index = 0, className }) => (
-		<motion.div
-			initial="initial"
-			animate="animate"
-			variants={floatButtonVariants}
-			transition={{ duration: 0.5, delay: index * 0.1 }}
-			className={cn("fixed right-5 bottom-24 rounded-full z-[49]", className)}
-		>
-			<AnimatePresence>
-				<motion.button
-					className={
-						"flex items-center justify-center p-0 w-10 h-10 rounded-full bg-primary hover:bg-primary/90"
-					}
-					onClick={onClick}
-					whileTap={{ scale: 0.9 }}
-					transition={{ type: "spring", stiffness: 400, damping: 10 }}
-					// {...options}
-					aria-label={options?.["aria-label"] || "Float button"}
-				>
-					{children}
-				</motion.button>
-			</AnimatePresence>
-		</motion.div>
-	)
+	({ children, onClick, options, index = 0, className, tooltip }) => {
+		const buttonContent = (
+			<motion.div
+				initial="initial"
+				animate="animate"
+				variants={floatButtonVariants}
+				transition={{ duration: 0.5, delay: index * 0.1 }}
+				className={cn(
+					"fixed right-5 bottom-24 rounded-full z-[49]",
+					className
+				)}
+			>
+				<AnimatePresence>
+					<motion.button
+						className={
+							"flex items-center justify-center p-0 w-10 h-10 rounded-full bg-primary hover:bg-primary/90"
+						}
+						onClick={onClick}
+						whileTap={{ scale: 0.9 }}
+						transition={{ type: "spring", stiffness: 400, damping: 10 }}
+						// {...options}
+						aria-label={
+							options?.["aria-label"] || tooltip || "Float button"
+						}
+					>
+						{children}
+					</motion.button>
+				</AnimatePresence>
+			</motion.div>
+		);
+
+		if (tooltip) {
+			return (
+				<Tooltip>
+					<TooltipTrigger asChild>{buttonContent}</TooltipTrigger>
+					<TooltipContent>
+						<p>{tooltip}</p>
+					</TooltipContent>
+				</Tooltip>
+			);
+		}
+
+		return buttonContent;
+	}
 );
 
 FloatButton.displayName = "FloatButton";
@@ -57,6 +83,7 @@ interface FloatButtonGroupProps {
 	buttons: FloatButtonProps[];
 	closeIcon?: React.ReactNode;
 	openIcon?: React.ReactNode;
+	tooltip?: string;
 }
 
 // Type for custom event
@@ -65,7 +92,7 @@ interface CloseFloatButtonGroupEvent extends CustomEvent {
 }
 
 const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
-	({ buttons, closeIcon, openIcon }) => {
+	({ buttons, closeIcon, openIcon, tooltip }) => {
 		const [isOpen, setIsOpen] = useState(false);
 		const [offset, setOffset] = useState(0);
 		const groupRef = useRef<HTMLDivElement>(null);
@@ -95,7 +122,11 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
 		}, []);
 
 		const toggleOpen = () => {
-			if (!isOpen && openGroupId !== null && openGroupId !== groupId.current) {
+			if (
+				!isOpen &&
+				openGroupId !== null &&
+				openGroupId !== groupId.current
+			) {
 				window.dispatchEvent(
 					new CustomEvent("closeFloatButtonGroup", {
 						detail: { groupId: openGroupId },
@@ -165,6 +196,7 @@ const FloatButtonGroup: React.FC<FloatButtonGroupProps> = memo(
 							: "Open float button group",
 					}}
 					className={"static w-full h-full"}
+					tooltip={isOpen ? undefined : tooltip}
 				>
 					{isOpen ? closeIcon : openIcon}
 				</FloatButton>

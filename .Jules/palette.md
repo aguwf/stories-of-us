@@ -1,3 +1,3 @@
-## 2025-02-18 - [Tooltip vs Title]
-**Learning:** Replacing native `title` attributes with custom `Tooltip` components provides a more consistent visual experience and allows for better styling, while `aria-label` ensures robust accessibility. This pattern should be preferred for icon-only buttons.
-**Action:** When auditing icon-only buttons, look for `title` attributes and upgrade them to `Tooltip` + `aria-label`.
+## 2024-05-23 - Icon-only buttons require tooltips
+**Learning:** Icon-only buttons (like Floating Action Buttons) are often ambiguous without context. While `aria-label` supports screen readers, visual users benefit from tooltips to understand the action before clicking.
+**Action:** Always wrap icon-only buttons with a `Tooltip` component that displays the action name on hover. Ensure the button also has an `aria-label` (which can default to the tooltip text).

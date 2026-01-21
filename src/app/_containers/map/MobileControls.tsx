@@ -64,21 +64,28 @@ export const MobileControls: FunctionComponent<MobileControlsProps> = ({
             className="h-11 pl-9 rounded-full bg-white shadow-md border border-gray-200 focus-visible:ring-2 focus-visible:ring-primary/30"
           />
         </div>
-        <button
-          type="button"
-          onClick={() => onShowFavoritesChange(!showFavoritesOnly)}
-          className={cn(
-            "h-11 w-11 rounded-full flex items-center justify-center shadow-md border transition-all",
-            showFavoritesOnly
-              ? "bg-yellow-100 border-yellow-300 text-yellow-700"
-              : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50"
-          )}
-          aria-label={t("toggle_favorites")}
-        >
-          <Star
-            className={cn("h-5 w-5", showFavoritesOnly && "fill-current")}
-          />
-        </button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              type="button"
+              onClick={() => onShowFavoritesChange(!showFavoritesOnly)}
+              className={cn(
+                "h-11 w-11 rounded-full flex items-center justify-center shadow-md border transition-all",
+                showFavoritesOnly
+                  ? "bg-yellow-100 border-yellow-300 text-yellow-700"
+                  : "bg-white border-gray-200 text-gray-500 hover:bg-gray-50"
+              )}
+              aria-label={t("toggle_favorites")}
+            >
+              <Star
+                className={cn("h-5 w-5", showFavoritesOnly && "fill-current")}
+              />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{t("toggle_favorites")}</p>
+          </TooltipContent>
+        </Tooltip>
 
         <Tooltip>
           <TooltipTrigger asChild>

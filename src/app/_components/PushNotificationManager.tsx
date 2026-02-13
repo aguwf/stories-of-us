@@ -2,6 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { Bell, BellOff } from "lucide-react";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
@@ -89,25 +94,39 @@ export function PushNotificationManager() {
   return (
     <div className="fixed bottom-4 right-4 z-50">
       {subscription ? (
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={unsubscribeFromPush}
-          title={t("disable")}
-          className="rounded-full shadow-lg bg-background/80 backdrop-blur-sm"
-        >
-          <BellOff className="h-5 w-5" />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={unsubscribeFromPush}
+              aria-label={t("disable")}
+              className="rounded-full shadow-lg bg-background/80 backdrop-blur-sm"
+            >
+              <BellOff className="h-5 w-5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{t("disable")}</p>
+          </TooltipContent>
+        </Tooltip>
       ) : (
-        <Button
-          variant="default"
-          size="icon"
-          onClick={subscribeToPush}
-          title={t("enable")}
-          className="rounded-full shadow-lg"
-        >
-          <Bell className="h-5 w-5" />
-        </Button>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant="default"
+              size="icon"
+              onClick={subscribeToPush}
+              aria-label={t("enable")}
+              className="rounded-full shadow-lg"
+            >
+              <Bell className="h-5 w-5" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{t("enable")}</p>
+          </TooltipContent>
+        </Tooltip>
       )}
     </div>
   );
